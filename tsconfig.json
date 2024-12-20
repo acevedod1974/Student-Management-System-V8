@@ -16,13 +16,7 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-    "types": [
-      "@types/react",
-      "@types/react-dom",
-      "@types/testing-library__react",
-      "@types/jest",
-      "node"
-    ]
+    "types": ["node"]
   },
   "include": ["src", "src/setupTest.ts"],
   "references": [

@@ -10,12 +10,12 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 beforeAll(async () => {
   // Clean up before tests
   await supabase.from("test_table").delete().eq("email", "test@example.com");
-});
+}, 10000); // Increase timeout to 10 seconds
 
 afterAll(async () => {
   // Clean up after tests
   await supabase.from("test_table").delete().eq("email", "test@example.com");
-});
+}, 10000); // Increase timeout to 10 seconds
 
 describe("Supabase Client Integration", () => {
   it("should insert and retrieve data from the test_table", async () => {
@@ -72,5 +72,5 @@ describe("Supabase Client Integration", () => {
     console.log("Delete Status Text:", deleteStatusText);
 
     expect(deleteError).toBeNull();
-  });
+  }, 10000); // Increase timeout to 10 seconds
 });

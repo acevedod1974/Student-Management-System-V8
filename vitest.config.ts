@@ -1,5 +1,5 @@
 import { defineConfig } from "vitest/config";
-import CustomReporter from "./customReporter";
+import CustomReporter from "./customReporter.mjs";
 
 export default defineConfig({
   test: {

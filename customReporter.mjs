@@ -1,5 +1,5 @@
-const fs = require("fs");
-const path = require("path");
+import fs from "fs";
+import path from "path";
 
 class CustomReporter {
   onInit(context) {
@@ -19,9 +19,23 @@ class CustomReporter {
       error: result.error ? result.error.message : null,
     }));
 
-    fs.writeFileSync(logFilePath, JSON.stringify(logData, null, 2));
+    const jsonString = JSON.stringify(logData, this.circularReplacer(), 2);
+    fs.writeFileSync(logFilePath, jsonString);
     console.log(`Test results saved to ${logFilePath}`);
+  }
+
+  circularReplacer() {
+    const seen = new WeakSet();
+    return (key, value) => {
+      if (typeof value === "object" && value !== null) {
+        if (seen.has(value)) {
+          return;
+        }
+        seen.add(value);
+      }
+      return value;
+    };
   }
 }
 
-module.exports = CustomReporter;
+export default CustomReporter;

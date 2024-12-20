@@ -22,5 +22,5 @@
     "noFallthroughCasesInSwitch": true,
     "composite": true
   },
-  "include": ["src"]
+  "include": ["src", "src/setupTest.ts"]
 }

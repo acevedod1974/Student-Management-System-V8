@@ -15,9 +15,16 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "types": [
+      "@types/react",
+      "@types/react-dom",
+      "@types/testing-library__react",
+      "@types/jest",
+      "node"
+    ]
   },
-  "include": ["src"],
+  "include": ["src", "src/setupTest.ts"],
   "references": [
     { "path": "./tsconfig.app.json" },
     { "path": "./tsconfig.node.json" }

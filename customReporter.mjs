@@ -9,7 +9,13 @@ class CustomReporter {
   onFinished(results) {
     const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
     const logFileName = `test-results-${timestamp}.log`;
-    const logFilePath = path.join(__dirname, logFileName);
+    const logDir = path.join(__dirname, "logs");
+    const logFilePath = path.join(logDir, logFileName);
+
+    // Create the logs directory if it doesn't exist
+    if (!fs.existsSync(logDir)) {
+      fs.mkdirSync(logDir);
+    }
 
     const logData = results.map((result) => ({
       file: result.file,
@@ -19,8 +25,19 @@ class CustomReporter {
       error: result.error ? result.error.message : null,
     }));
 
-    const jsonString = JSON.stringify(logData, this.circularReplacer(), 2);
-    fs.writeFileSync(logFilePath, jsonString);
+    const logString = logData
+      .map((result) => {
+        return `
+Test File: ${result.file}
+Test Name: ${result.name}
+Status: ${result.status}
+Duration: ${result.duration}ms
+${result.error ? `Error: ${result.error}` : ""}
+      `.trim();
+      })
+      .join("\n\n");
+
+    fs.writeFileSync(logFilePath, logString);
     console.log(`Test results saved to ${logFilePath}`);
   }
 

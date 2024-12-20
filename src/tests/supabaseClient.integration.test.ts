@@ -28,6 +28,7 @@ describe("Supabase Client Integration", () => {
     console.log("Insert Data:", insertData);
 
     expect(insertError).toBeNull();
+    expect(insertData).not.toBeNull();
     expect(insertData).toHaveLength(1);
 
     // Retrieve data

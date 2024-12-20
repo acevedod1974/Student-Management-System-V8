@@ -57,9 +57,12 @@ export const DataManagement: React.FC = () => {
       }.json`;
       const blockBlobClient = containerClient.getBlockBlobClient(blobName);
 
+      const content = JSON.stringify(fullBackup, null, 2);
+      const uint8Array = new TextEncoder().encode(content);
+
       const uploadBlobResponse = await blockBlobClient.upload(
-        JSON.stringify(fullBackup, null, 2),
-        Buffer.byteLength(JSON.stringify(fullBackup, null, 2))
+        uint8Array,
+        uint8Array.length
       );
 
       console.log(
@@ -67,10 +70,14 @@ export const DataManagement: React.FC = () => {
       );
       toast.success("Backup exportado a Azure Blob Storage exitosamente");
     } catch (error) {
-      console.error(
-        "Error exporting backup to Azure Blob Storage:",
-        (error as Error).message
-      );
+      if (error instanceof Error) {
+        console.error(
+          "Error exporting backup to Azure Blob Storage:",
+          error.message
+        );
+      } else {
+        console.error("Error exporting backup to Azure Blob Storage:", error);
+      }
       toast.error("Error al exportar el backup a Azure Blob Storage");
     }
 

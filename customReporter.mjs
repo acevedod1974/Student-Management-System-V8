@@ -7,8 +7,6 @@ class CustomReporter {
   }
 
   onFinished(results) {
-    console.log("Results:", results); // Add this line to inspect the results object
-
     const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
     const logFileName = `test-results-${timestamp}.log`;
     const logDir = path.join(__dirname, "logs");
@@ -32,11 +30,13 @@ class CustomReporter {
     const logString = logData
       .map((result) => {
         return `
+==========================
 Test File: ${result.file}
 Test Name: ${result.name}
 Status: ${result.status}
 Duration: ${result.duration}ms
 ${result.error ? `Error: ${result.error}` : ""}
+==========================
       `.trim();
       })
       .join("\n\n");

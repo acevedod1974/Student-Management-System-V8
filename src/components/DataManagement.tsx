@@ -25,7 +25,11 @@ import { Save, Database } from "lucide-react";
 import { useCourseStore } from "../store/useCourseStore";
 import { useAuthStore } from "../store/useAuthStore";
 import toast from "react-hot-toast";
-import { supabase } from "../utils/supabaseClient";
+import { BlobServiceClient } from "@azure/storage-blob";
+
+const AZURE_STORAGE_CONNECTION_STRING =
+  "DefaultEndpointsProtocol=https;AccountName=sms8;AccountKey=3bCED08qpg8aCRB9fTFj0OUGEdPhou5uzmP4/SBgz//PYwetllT8DCFFLuKMOIw2yeDKVlg2WjQf+AStCy5RzA==;EndpointSuffix=core.windows.net";
+const CONTAINER_NAME = "backups";
 
 export const DataManagement: React.FC = () => {
   const { exportData, importData } = useCourseStore();
@@ -41,21 +45,33 @@ export const DataManagement: React.FC = () => {
       timestamp: new Date().toISOString(),
     };
 
-    // Save to Supabase
-    const { error } = await supabase
-      .from("backups")
-      .insert([{ backup_data: fullBackup }]);
-
-    if (error) {
-      console.error(
-        "Error exporting backup to Supabase:",
-        error.message,
-        error.details,
-        error.hint
+    // Save to Azure Blob Storage
+    try {
+      const blobServiceClient = BlobServiceClient.fromConnectionString(
+        AZURE_STORAGE_CONNECTION_STRING
       );
-      toast.error("Error al exportar el backup a Supabase");
-    } else {
-      toast.success("Backup exportado a Supabase exitosamente");
+      const containerClient =
+        blobServiceClient.getContainerClient(CONTAINER_NAME);
+      const blobName = `sistema-calificaciones-backup-${
+        new Date().toISOString().split("T")[0]
+      }.json`;
+      const blockBlobClient = containerClient.getBlockBlobClient(blobName);
+
+      const uploadBlobResponse = await blockBlobClient.upload(
+        JSON.stringify(fullBackup, null, 2),
+        Buffer.byteLength(JSON.stringify(fullBackup, null, 2))
+      );
+
+      console.log(
+        `Backup uploaded to Azure Blob Storage successfully. Request ID: ${uploadBlobResponse.requestId}`
+      );
+      toast.success("Backup exportado a Azure Blob Storage exitosamente");
+    } catch (error) {
+      console.error(
+        "Error exporting backup to Azure Blob Storage:",
+        (error as Error).message
+      );
+      toast.error("Error al exportar el backup a Azure Blob Storage");
     }
 
     // Save to local file
@@ -75,11 +91,11 @@ export const DataManagement: React.FC = () => {
     toast.success("Backup exportado exitosamente");
   };
 
-  const handleImport = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImport = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
       const reader = new FileReader();
-      reader.onload = (e) => {
+      reader.onload = async (e) => {
         try {
           const content = e.target?.result as string;
           const backup = JSON.parse(content);

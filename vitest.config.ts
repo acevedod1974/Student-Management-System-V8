@@ -1,4 +1,5 @@
 import { defineConfig } from "vitest/config";
+import CustomReporter from "./customReporter";
 
 export default defineConfig({
   test: {
@@ -6,5 +7,6 @@ export default defineConfig({
     environment: "jsdom",
     setupFiles: "./src/setupTests.ts",
     include: ["src/tests/**/*.test.tsx"],
+    reporters: [new CustomReporter()],
   },
 });

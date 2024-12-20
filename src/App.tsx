@@ -1,10 +1,10 @@
 /**
- * 
+ *
  * Student Management System
- * 
+ *
  * Description: The Student Management System is a comprehensive web application designed to manage student data efficiently.
  * Built with modern web technologies, this system offers a robust and user-friendly interface for managing courses, students, and their performance.
- * 
+ *
  * Technologies Used:
  * - React
  * - TypeScript
@@ -20,6 +20,7 @@
  * This project is licensed under the MIT License. See the LICENSE file for more details.
  */
 
+import React from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import { Navigation } from "./components/Navigation";
@@ -30,7 +31,7 @@ import { LoginPage } from "./components/LoginPage";
 import { PrivateRoute } from "./components/PrivateRoute";
 import { useAuthStore } from "./store/useAuthStore";
 
-function App() {
+const App: React.FC = () => {
   const { user } = useAuthStore();
 
   return (
@@ -69,8 +70,13 @@ function App() {
         </div>
         <Toaster position="top-right" />
       </div>
+      <div>
+        <a href="https://reactjs.org" target="_blank" rel="noopener noreferrer">
+          Learn React
+        </a>
+      </div>
     </BrowserRouter>
   );
-}
+};
 
 export default App;

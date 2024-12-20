@@ -7,6 +7,8 @@ class CustomReporter {
   }
 
   onFinished(results) {
+    console.log("Results:", results); // Add this line to inspect the results object
+
     const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
     const logFileName = `test-results-${timestamp}.log`;
     const logDir = path.join(__dirname, "logs");
@@ -17,13 +19,15 @@ class CustomReporter {
       fs.mkdirSync(logDir);
     }
 
-    const logData = results.map((result) => ({
-      file: result.file,
-      name: result.name,
-      status: result.status,
-      duration: result.duration,
-      error: result.error ? result.error.message : null,
-    }));
+    const logData = results.flatMap((result) => {
+      return result.tasks.map((task) => ({
+        file: result.filepath,
+        name: task.name,
+        status: task.result?.state,
+        duration: task.result?.duration,
+        error: task.result?.error ? task.result.error.message : null,
+      }));
+    });
 
     const logString = logData
       .map((result) => {

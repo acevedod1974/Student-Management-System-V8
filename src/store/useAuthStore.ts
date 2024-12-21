@@ -47,6 +47,15 @@ export const useAuthStore = create<AuthState>()(
     (set, get) => ({
       user: null,
       studentPasswords: {
+        "jabonaldep@estudiante.unexpo.edu.ve": "student123",
+        "pvgomezm@estudiante.unexpo.edu.ve": "student123",
+        "nrgonzalezd@estudiante.unexpo.edu.ve": "student123",
+        "nclopezm@estudiante.unexpo.edu.ve": "student123",
+        "ammarquezc@estudiante.unexpo.edu.ve": "student123",
+        "ajmatac@estudiante.unexpo.edu.ve": "student123",
+        "pjmejiasb@estudiante.unexpo.edu.ve": "student123",
+        "avpulidoa@estudiante.unexpo.edu.ve": "student123",
+        "rarodriguezr4@estudiante.unexpo.edu.ve": "student123",
         "macamachob@estudiante.unexpo.edu.ve": "student123",
         "hjcamachom@estudiante.unexpo.edu.ve": "student123",
         "gjfebresb@estudiante.unexpo.edu.ve": "student123",

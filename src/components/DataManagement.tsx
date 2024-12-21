@@ -193,34 +193,36 @@ export const DataManagement: React.FC = () => {
   };
 
   return (
-    <div className="flex gap-4">
-      <button
-        onClick={handleExport}
-        className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700"
-        title="Crear backup completo"
-      >
-        <Save className="w-4 h-4" />
-        Backup
-      </button>
-      <label className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 cursor-pointer">
-        <Database className="w-4 h-4" />
-        Restaurar
-        <input
-          ref={fileInputRef}
-          type="file"
-          accept=".json"
-          onChange={handleImport}
-          className="hidden"
-        />
-      </label>
-      <button
-        onClick={fetchBackups}
-        className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-md hover:bg-green-700"
-        title="Fetch backups from Azure"
-      >
-        <Download className="w-4 h-4" />
-        Fetch Backups
-      </button>
+    <div className="flex flex-col gap-4">
+      <div className="flex gap-4">
+        <button
+          onClick={handleExport}
+          className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700"
+          title="Crear backup completo"
+        >
+          <Save className="w-4 h-4" />
+          Backup
+        </button>
+        <label className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 cursor-pointer">
+          <Database className="w-4 h-4" />
+          Restaurar
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept=".json"
+            onChange={handleImport}
+            className="hidden"
+          />
+        </label>
+        <button
+          onClick={fetchBackups}
+          className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-md hover:bg-green-700"
+          title="Fetch backups from Azure"
+        >
+          <Download className="w-4 h-4" />
+          Fetch Backups
+        </button>
+      </div>
       {backups.length > 0 && (
         <div className="flex flex-col gap-2">
           {backups.map((backup) => (

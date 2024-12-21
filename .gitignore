@@ -12,7 +12,7 @@ dist
 dist-ssr
 *.local
 backups/*
-.env
+*.env
 add-notice.js
 
 # Editor directories and files

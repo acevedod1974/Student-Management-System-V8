@@ -44,8 +44,8 @@ const LoginPage: React.FC = () => {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-md">
-        <div className="flex justify-center mb-4">
+      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+        <div className="flex justify-center mb-6">
           <Lock className="w-12 h-12 text-blue-600" />
         </div>
         <h2 className="text-2xl font-bold mb-4 text-center">
@@ -55,14 +55,14 @@ const LoginPage: React.FC = () => {
           Procesos de Fabricación
         </h3>
         <h4 className="text-lg font-medium mb-4 text-center">UNEXPO</h4>
-        <p className="text-sm mb-4">
+        <p className="text-sm mb-6 text-center">
           <strong>Información de Acceso</strong>
           <br />
           Estudiantes: Usar su correo electrónico y contraseña.
           <br />
           Primera vez: usar contraseña "student123"
         </p>
-        <form onSubmit={handleLogin} className="space-y-4">
+        <form onSubmit={handleLogin} className="space-y-6">
           <div>
             <label className="block text-sm font-medium text-gray-700">
               Email

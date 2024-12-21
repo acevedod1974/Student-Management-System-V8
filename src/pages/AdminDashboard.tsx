@@ -1,8 +1,14 @@
 import React from "react";
 import { useAuthStore } from "../store/useAuthStore";
+import { Navigate } from "react-router-dom";
 
 export const AdminDashboard: React.FC = () => {
-  const { loginEnabled, setLoginEnabled } = useAuthStore();
+  const { user, loginEnabled, setLoginEnabled } = useAuthStore();
+
+  // Redirect to login if not an admin
+  if (user?.role !== "admin") {
+    return <Navigate to="/login" />;
+  }
 
   const toggleLoginEnabled = () => {
     setLoginEnabled(!loginEnabled);

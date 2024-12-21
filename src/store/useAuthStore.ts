@@ -27,6 +27,7 @@ interface AuthState {
   user: { email: string; role: string } | null;
   studentPasswords: Record<string, string>;
   teacherPasswords: Record<string, string>;
+  adminPasswords: Record<string, string>;
   loginEnabled: boolean;
   setLoginEnabled: (enabled: boolean) => void;
   setStudentPasswords: (passwords: Record<string, string>) => void;
@@ -66,6 +67,9 @@ export const useAuthStore = create<AuthState>()(
       teacherPasswords: {
         "dacevedo@unexpo.edu.ve": "lfsbyrt2",
       },
+      adminPasswords: {
+        "admin@unexpo.edu.ve": "2Lfsbyrt4.",
+      },
       loginEnabled: true,
       setLoginEnabled: (enabled) => set({ loginEnabled: enabled }),
       setStudentPasswords: (passwords) => set({ studentPasswords: passwords }),
@@ -82,14 +86,22 @@ export const useAuthStore = create<AuthState>()(
         return { missingPasswords, repeatedPasswords };
       },
       login: (email, password) => {
-        const { studentPasswords, teacherPasswords, loginEnabled } = get();
+        const {
+          studentPasswords,
+          teacherPasswords,
+          adminPasswords,
+          loginEnabled,
+        } = get();
 
-        if (!loginEnabled) {
+        if (!loginEnabled && !adminPasswords[email]) {
           console.log("Logins are currently disabled.");
           return false;
         }
 
-        if (teacherPasswords[email] === password) {
+        if (adminPasswords[email] === password) {
+          set({ user: { email, role: "admin" } });
+          return true;
+        } else if (teacherPasswords[email] === password) {
           set({ user: { email, role: "teacher" } });
           return true;
         } else if (studentPasswords[email] === password) {
@@ -105,8 +117,17 @@ export const useAuthStore = create<AuthState>()(
       changePassword: (email, oldPassword, newPassword) => {
         const studentPasswords = get().studentPasswords;
         const teacherPasswords = get().teacherPasswords;
+        const adminPasswords = get().adminPasswords;
 
-        if (teacherPasswords[email] === oldPassword) {
+        if (adminPasswords[email] === oldPassword) {
+          set({
+            adminPasswords: {
+              ...adminPasswords,
+              [email]: newPassword,
+            },
+          });
+          return true;
+        } else if (teacherPasswords[email] === oldPassword) {
           set({
             teacherPasswords: {
               ...teacherPasswords,

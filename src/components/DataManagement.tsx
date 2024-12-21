@@ -46,44 +46,42 @@ export const DataManagement: React.FC = () => {
       timestamp: new Date().toISOString(),
     };
 
-    // Save to Azure Blob Storage
     try {
-      const blobServiceClient = BlobServiceClient.fromConnectionString(
-        AZURE_STORAGE_CONNECTION_STRING
-      );
-      const containerClient =
-        blobServiceClient.getContainerClient(CONTAINER_NAME);
-      const blobName = `sistema-calificaciones-backup-${
-        new Date().toISOString().split("T")[0]
-      }.json`;
-      const blockBlobClient = containerClient.getBlockBlobClient(blobName);
-
-      const content = JSON.stringify(fullBackup, null, 2);
-      const uint8Array = new TextEncoder().encode(content);
-
-      const uploadBlobResponse = await blockBlobClient.upload(
-        uint8Array,
-        uint8Array.length
-      );
-
-      console.log(
-        `Backup uploaded to Azure Blob Storage successfully. Request ID: ${uploadBlobResponse.requestId}`
-      );
-      toast.success("Backup exportado a Azure Blob Storage exitosamente");
+      await uploadToAzure(fullBackup);
+      saveToLocal(fullBackup);
     } catch (error) {
-      if (error instanceof Error) {
-        console.error(
-          "Error exporting backup to Azure Blob Storage:",
-          error.message
-        );
-      } else {
-        console.error("Error exporting backup to Azure Blob Storage:", error);
-      }
-      toast.error("Error al exportar el backup a Azure Blob Storage");
+      console.error("Error exporting backup:", error);
+      toast.error("Error al exportar el backup");
     }
+  };
 
-    // Save to local file
-    const blob = new Blob([JSON.stringify(fullBackup, null, 2)], {
+  const uploadToAzure = async (backup: object) => {
+    const blobServiceClient = BlobServiceClient.fromConnectionString(
+      AZURE_STORAGE_CONNECTION_STRING
+    );
+    const containerClient =
+      blobServiceClient.getContainerClient(CONTAINER_NAME);
+    const blobName = `sistema-calificaciones-backup-${
+      new Date().toISOString().split("T")[0]
+    }.json`;
+    const blockBlobClient = containerClient.getBlockBlobClient(blobName);
+
+    const content = JSON.stringify(backup, null, 2);
+    const uint8Array = new TextEncoder().encode(content);
+
+    const uploadBlobResponse = await blockBlobClient.upload(
+      uint8Array,
+      uint8Array.length
+    );
+
+    console.log(
+      `Backup uploaded to Azure Blob Storage successfully. Request ID: ${uploadBlobResponse.requestId}`
+    );
+    toast.success("Backup exportado a Azure Blob Storage exitosamente");
+  };
+
+  const saveToLocal = (backup: object) => {
+    const blob = new Blob([JSON.stringify(backup, null, 2)], {
       type: "application/json",
     });
     const url = URL.createObjectURL(blob);
@@ -108,17 +106,12 @@ export const DataManagement: React.FC = () => {
           const content = e.target?.result as string;
           const backup = JSON.parse(content);
 
-          // Validate backup format
           if (!backup.courses || !backup.studentPasswords || !backup.version) {
             throw new Error("Formato de backup inválido");
           }
 
-          // Import course data
           importData(JSON.stringify(backup.courses));
-
-          // Import student passwords (you'll need to add this to useAuthStore)
           if (backup.studentPasswords) {
-            // Update the store with the imported passwords
             useAuthStore.setState({
               studentPasswords: backup.studentPasswords,
             });
@@ -146,9 +139,7 @@ export const DataManagement: React.FC = () => {
       for await (const blob of blobs) {
         backupList.push(blob.name);
       }
-      // Sort backups by name (assuming the name includes a timestamp)
       backupList.sort().reverse();
-      // Limit to the 6 most recent backups
       setBackups(backupList.slice(0, 6));
       toast.success("Backups fetched successfully");
     } catch (error) {
@@ -171,20 +162,13 @@ export const DataManagement: React.FC = () => {
       if (downloaded) {
         const backup = JSON.parse(downloaded);
 
-        // Validate backup format
         if (!backup.courses || !backup.studentPasswords || !backup.version) {
           throw new Error("Formato de backup inválido");
         }
 
-        // Import course data
         importData(JSON.stringify(backup.courses));
-
-        // Import student passwords (you'll need to add this to useAuthStore)
         if (backup.studentPasswords) {
-          // Update the store with the imported passwords
-          useAuthStore.setState({
-            studentPasswords: backup.studentPasswords,
-          });
+          useAuthStore.setState({ studentPasswords: backup.studentPasswords });
         }
 
         toast.success("Datos restaurados exitosamente");

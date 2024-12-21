@@ -12,6 +12,8 @@ dist
 dist-ssr
 *.local
 backups/*
+.env
+add-notice.js
 
 # Editor directories and files
 .vscode/*

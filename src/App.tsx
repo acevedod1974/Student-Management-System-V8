@@ -46,9 +46,12 @@ const App: React.FC = () => {
   const { importData } = useCourseStore();
   const { setStudentPasswords } = useAuthStore();
   const [loading, setLoading] = useState(true);
+  const [backupRestored, setBackupRestored] = useState(false);
 
   useEffect(() => {
     const fetchLatestBackup = async () => {
+      if (backupRestored) return;
+
       try {
         const blobServiceClient = BlobServiceClient.fromConnectionString(
           AZURE_STORAGE_CONNECTION_STRING
@@ -85,6 +88,7 @@ const App: React.FC = () => {
             toast.success(
               "Datos restaurados exitosamente desde el último backup"
             );
+            setBackupRestored(true);
           }
         }
       } catch (error) {
@@ -99,7 +103,7 @@ const App: React.FC = () => {
     };
 
     fetchLatestBackup();
-  }, [importData, setStudentPasswords]);
+  }, [importData, setStudentPasswords, backupRestored]);
 
   if (loading) {
     return <div>Loading...</div>;

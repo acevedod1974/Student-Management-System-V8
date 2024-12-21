@@ -21,7 +21,7 @@
  */
 
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useCourseStore } from "../store/useCourseStore";
 import { useAuthStore } from "../store/useAuthStore";
 import PasswordAnalysis from "../components/PasswordAnalysis";
@@ -29,13 +29,7 @@ import { CourseOverviewChart } from "../components/CourseOverviewChart";
 
 export const Dashboard: React.FC = () => {
   const { courses } = useCourseStore();
-  const { user, logout } = useAuthStore();
-  const navigate = useNavigate();
-
-  const handleLogout = () => {
-    logout();
-    navigate("/login");
-  };
+  const { user } = useAuthStore();
 
   const userCourses =
     user?.role === "student"
@@ -47,12 +41,17 @@ export const Dashboard: React.FC = () => {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex justify-between items-center">
           <h1 className="text-2xl font-bold">Dashboard</h1>
-          <button
-            onClick={handleLogout}
-            className="bg-red-500 text-white px-4 py-2 rounded"
-          >
-            Logout
-          </button>
+          <div className="flex gap-4">
+            {userCourses.map((course) => (
+              <Link
+                key={course.id}
+                to={`/course/${course.id}`}
+                className="px-3 py-2 rounded-md text-lg font-medium text-blue-600 hover:bg-blue-50 hover:text-blue-700 transition-colors"
+              >
+                {course.name}
+              </Link>
+            ))}
+          </div>
         </div>
         <div className="bg-white rounded-lg shadow p-6 mt-6">
           <h2 className="text-xl font-semibold mb-4">Comparación de Cursos</h2>
@@ -67,20 +66,6 @@ export const Dashboard: React.FC = () => {
           <h2 className="text-xl font-semibold">Current User Information</h2>
           <p>Email: {user?.email}</p>
           <p>Role: {user?.role}</p>
-        </div>
-        <div className="mt-6">
-          <h2 className="text-xl font-semibold">Courses</h2>
-          <div className="flex gap-4">
-            {userCourses.map((course) => (
-              <a
-                key={course.id}
-                href={`/course/${course.id}`}
-                className="px-3 py-2 rounded-md text-lg font-medium text-blue-600 hover:underline"
-              >
-                {course.name}
-              </a>
-            ))}
-          </div>
         </div>
       </main>
     </div>

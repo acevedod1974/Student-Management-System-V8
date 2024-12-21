@@ -26,14 +26,28 @@ import { persist } from "zustand/middleware";
 interface AuthState {
   studentPasswords: Record<string, string>;
   setStudentPasswords: (passwords: Record<string, string>) => void;
+  analyzePasswords: () => void;
   // other state and actions...
 }
 
 export const useAuthStore = create<AuthState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       studentPasswords: {},
       setStudentPasswords: (passwords) => set({ studentPasswords: passwords }),
+      analyzePasswords: () => {
+        const passwords = get().studentPasswords;
+        const passwordValues = Object.values(passwords);
+        const missingPasswords = Object.keys(passwords).filter(
+          (key) => !passwords[key]
+        );
+        const repeatedPasswords = passwordValues.filter(
+          (password, index, self) => self.indexOf(password) !== index
+        );
+
+        console.log("Missing Passwords:", missingPasswords);
+        console.log("Repeated Passwords:", repeatedPasswords);
+      },
       // other state and actions...
     }),
     {

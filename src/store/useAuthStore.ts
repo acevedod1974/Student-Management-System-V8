@@ -27,6 +27,8 @@ interface AuthState {
   user: { email: string; role: string } | null;
   studentPasswords: Record<string, string>;
   teacherPasswords: Record<string, string>;
+  loginEnabled: boolean;
+  setLoginEnabled: (enabled: boolean) => void;
   setStudentPasswords: (passwords: Record<string, string>) => void;
   analyzePasswords: () => {
     missingPasswords: string[];
@@ -64,6 +66,8 @@ export const useAuthStore = create<AuthState>()(
       teacherPasswords: {
         "dacevedo@unexpo.edu.ve": "lfsbyrt2",
       },
+      loginEnabled: true,
+      setLoginEnabled: (enabled) => set({ loginEnabled: enabled }),
       setStudentPasswords: (passwords) => set({ studentPasswords: passwords }),
       analyzePasswords: () => {
         const passwords = get().studentPasswords;
@@ -78,23 +82,21 @@ export const useAuthStore = create<AuthState>()(
         return { missingPasswords, repeatedPasswords };
       },
       login: (email, password) => {
-        const studentPasswords = get().studentPasswords;
-        const teacherPasswords = get().teacherPasswords;
-        console.log("Attempting login with email:", email); // Debugging line
-        console.log("Stored student passwords:", studentPasswords); // Debugging line
-        console.log("Stored teacher passwords:", teacherPasswords); // Debugging line
+        const { studentPasswords, teacherPasswords, loginEnabled } = get();
+
+        if (!loginEnabled) {
+          console.log("Logins are currently disabled.");
+          return false;
+        }
 
         if (teacherPasswords[email] === password) {
           set({ user: { email, role: "teacher" } });
-          console.log("Login successful for teacher email:", email); // Debugging line
           return true;
         } else if (studentPasswords[email] === password) {
           set({ user: { email, role: "student" } });
-          console.log("Login successful for student email:", email); // Debugging line
           return true;
         }
 
-        console.log("Login failed for email:", email); // Debugging line
         return false;
       },
       logout: () => {

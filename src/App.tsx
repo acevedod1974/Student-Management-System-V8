@@ -37,6 +37,7 @@ import { BlobServiceClient } from "@azure/storage-blob";
 import { useCourseStore } from "./store/useCourseStore";
 import { useAuthStore } from "./store/useAuthStore";
 import toast from "react-hot-toast";
+import { AdminDashboard } from "./pages/AdminDashboard";
 
 const AZURE_STORAGE_CONNECTION_STRING =
   "BlobEndpoint=https://sms8.blob.core.windows.net/;QueueEndpoint=https://sms8.queue.core.windows.net/;FileEndpoint=https://sms8.file.core.windows.net/;TableEndpoint=https://sms8.table.core.windows.net/;SharedAccessSignature=sv=2022-11-02&ss=bfqt&srt=co&sp=rwdlacupiytfx&se=2025-01-21T07:24:03Z&st=2024-12-20T23:24:03Z&spr=https&sig=CRZFhnlOCRTp9MZs8JvT8YNpmn5Z8zxGs%2FC6NuOMhGQ%3D";
@@ -121,6 +122,7 @@ const App: React.FC = () => {
           element={<StudentDetailsPage />}
         />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/admin" element={<AdminDashboard />} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </Router>

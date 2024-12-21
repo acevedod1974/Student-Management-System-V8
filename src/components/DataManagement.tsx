@@ -146,7 +146,10 @@ export const DataManagement: React.FC = () => {
       for await (const blob of blobs) {
         backupList.push(blob.name);
       }
-      setBackups(backupList);
+      // Sort backups by name (assuming the name includes a timestamp)
+      backupList.sort().reverse();
+      // Limit to the 6 most recent backups
+      setBackups(backupList.slice(0, 6));
       toast.success("Backups fetched successfully");
     } catch (error) {
       console.error("Error fetching backups from Azure Blob Storage:", error);

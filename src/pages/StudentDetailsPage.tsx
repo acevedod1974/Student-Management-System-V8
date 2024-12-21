@@ -1,10 +1,10 @@
 /**
- * 
+ *
  * Student Management System
- * 
+ *
  * Description: The Student Management System is a comprehensive web application designed to manage student data efficiently.
  * Built with modern web technologies, this system offers a robust and user-friendly interface for managing courses, students, and their performance.
- * 
+ *
  * Technologies Used:
  * - React
  * - TypeScript
@@ -43,13 +43,13 @@ import {
 } from "recharts";
 import { useCourseStore } from "../store/useCourseStore";
 import { useAuthStore } from "../store/useAuthStore";
-import { PerformanceMetricsEditor } from "../components/PerformanceMetricsEditor"; // Import the editor
+import { PerformanceMetricsEditor } from "../components/PerformanceMetricsEditor";
 
 export const StudentDetailsPage: React.FC = () => {
   const { courseId, studentId } = useParams();
   const courses = useCourseStore((state) => state.courses);
   const { user } = useAuthStore();
-  const [showMetricsEditor, setShowMetricsEditor] = useState(false); // State for showing the editor
+  const [showMetricsEditor, setShowMetricsEditor] = useState(false);
 
   const course = courses.find((c) => c.id === courseId);
   type Student = {
@@ -73,7 +73,6 @@ export const StudentDetailsPage: React.FC = () => {
     return <Navigate to="/" replace />;
   }
 
-  // Check if the logged-in student is trying to access their own grades
   if (user?.role === "student" && user.email !== student.email) {
     return <Navigate to="/" replace />;
   }
@@ -90,7 +89,6 @@ export const StudentDetailsPage: React.FC = () => {
     };
   });
 
-  // Calculate class ranking data
   const rankingData = course.students
     .map((s) => ({
       name: `${s.firstName} ${s.lastName}`,
@@ -99,7 +97,6 @@ export const StudentDetailsPage: React.FC = () => {
     }))
     .sort((a, b) => b.puntaje - a.puntaje);
 
-  // Calculate performance metrics for radar chart
   const performanceData = [
     {
       subject: "Promedio",
@@ -298,7 +295,7 @@ export const StudentDetailsPage: React.FC = () => {
         </div>
       </div>
 
-      {user?.role === "teacher" && ( // Conditionally render the button for teachers only
+      {user?.role === "teacher" && (
         <button
           onClick={() => setShowMetricsEditor(true)}
           className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700"

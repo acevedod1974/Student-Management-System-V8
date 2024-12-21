@@ -48,7 +48,7 @@ export const Dashboard: React.FC = () => {
               <Link
                 key={course.id}
                 to={`/course/${course.id}`}
-                className="text-xl font-bold text-gray-900 hover:text-blue-600 transition-colors"
+                className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700"
               >
                 {course.name}
               </Link>

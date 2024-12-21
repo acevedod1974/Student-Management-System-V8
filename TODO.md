@@ -47,6 +47,9 @@
 - [ ] Provide user feedback for network errors ~1d #bugfix @team
 - [ ] Use `useMemo` and `useCallback` in `CoursePage` to optimize rendering ~1d #performance @team
 - [ ] Profile the application and address any performance issues ~3d #performance @team
+- [ ] Implement "Change Password" feature for users ~2d #feat @team
+- [ ] Add modal for changing passwords ~1d #feat @team
+- [ ] Ensure password change functionality is secure and user-friendly ~1d #feat @team
 
 ### In Progress
 

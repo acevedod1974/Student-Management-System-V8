@@ -25,6 +25,15 @@ const notice = `/**
  * Copyright © 2023 Daniel Acevedo Lopez. All rights reserved.
  *
  * This project is licensed under the MIT License. See the LICENSE file for more details.
+ *
+ * Features:
+ * - Component-Based Architecture
+ * - State Management with Zustand
+ * - Consistent Styling with Tailwind CSS
+ * - User Feedback with react-hot-toast
+ * - Type Safety with TypeScript
+ * - Data Visualization with recharts
+ * - Password Management (Change Password Feature)
  */`;
 
 const fileExtensions = [".ts", ".tsx", ".js", ".jsx", ".html", ".css"];

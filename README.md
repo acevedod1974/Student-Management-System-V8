@@ -10,6 +10,7 @@ This project is a Student Management System built using modern web technologies 
 - **User Feedback**: Clean and non-intrusive notifications using `react-hot-toast`.
 - **Type Safety**: TypeScript for catching errors early during development.
 - **Data Visualization**: Interactive and responsive charts using `recharts`.
+- **Password Management**: Users can change their passwords after logging in.
 
 ## Installation
 

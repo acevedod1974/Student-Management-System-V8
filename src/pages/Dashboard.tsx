@@ -38,6 +38,11 @@ export const Dashboard: React.FC = () => {
     navigate("/login");
   };
 
+  const userCourses =
+    user?.role === "student"
+      ? courses.filter((course) => course.students.includes(user.email))
+      : courses;
+
   return (
     <div className="min-h-screen bg-gray-50">
       <header className="bg-white shadow-sm">
@@ -50,7 +55,7 @@ export const Dashboard: React.FC = () => {
               </Link>
               <div className="h-6 w-px bg-gray-200" />
               <div className="flex gap-4">
-                {courses.map((course) => (
+                {userCourses.map((course) => (
                   <Link
                     key={course.id}
                     to={`/course/${course.id}`}
@@ -82,13 +87,18 @@ export const Dashboard: React.FC = () => {
         <h1 className="text-2xl font-bold">Dashboard</h1>
         <div className="bg-white rounded-lg shadow p-6 mt-6">
           <h2 className="text-xl font-semibold mb-4">Comparación de Cursos</h2>
-          <CourseOverviewChart courses={courses} />
+          <CourseOverviewChart courses={userCourses} />
         </div>
         {user?.role === "teacher" && (
           <div className="mt-6">
             <PasswordAnalysis />
           </div>
         )}
+        <div className="mt-6">
+          <h2 className="text-xl font-semibold">Current User Information</h2>
+          <p>Email: {user?.email}</p>
+          <p>Role: {user?.role}</p>
+        </div>
       </main>
     </div>
   );

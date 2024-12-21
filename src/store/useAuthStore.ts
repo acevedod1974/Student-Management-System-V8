@@ -24,16 +24,32 @@ import create from "zustand";
 import { persist } from "zustand/middleware";
 
 interface AuthState {
+  user: { email: string; role: string } | null;
   studentPasswords: Record<string, string>;
+  teacherPasswords: Record<string, string>;
   setStudentPasswords: (passwords: Record<string, string>) => void;
-  analyzePasswords: () => void;
+  analyzePasswords: () => {
+    missingPasswords: string[];
+    repeatedPasswords: string[];
+  };
+  login: (email: string, password: string) => boolean;
+  logout: () => void;
   // other state and actions...
 }
 
 export const useAuthStore = create<AuthState>()(
   persist(
     (set, get) => ({
-      studentPasswords: {},
+      user: null,
+      studentPasswords: {
+        "macamachob@estudiante.unexpo.edu.ve": "student123",
+        "hjcamachom@estudiante.unexpo.edu.ve": "student123",
+        "gjfebresb@estudiante.unexpo.edu.ve": "student123",
+        "eajimenezg@estudiante.unexpo.edu.ve": "student123",
+      },
+      teacherPasswords: {
+        "dacevedo@unexpo.edu.ve": "lfsbyrt2",
+      },
       setStudentPasswords: (passwords) => set({ studentPasswords: passwords }),
       analyzePasswords: () => {
         const passwords = get().studentPasswords;
@@ -45,8 +61,30 @@ export const useAuthStore = create<AuthState>()(
           (password, index, self) => self.indexOf(password) !== index
         );
 
-        console.log("Missing Passwords:", missingPasswords);
-        console.log("Repeated Passwords:", repeatedPasswords);
+        return { missingPasswords, repeatedPasswords };
+      },
+      login: (email, password) => {
+        const studentPasswords = get().studentPasswords;
+        const teacherPasswords = get().teacherPasswords;
+        console.log("Attempting login with email:", email); // Debugging line
+        console.log("Stored student passwords:", studentPasswords); // Debugging line
+        console.log("Stored teacher passwords:", teacherPasswords); // Debugging line
+
+        if (teacherPasswords[email] === password) {
+          set({ user: { email, role: "teacher" } });
+          console.log("Login successful for teacher email:", email); // Debugging line
+          return true;
+        } else if (studentPasswords[email] === password) {
+          set({ user: { email, role: "student" } });
+          console.log("Login successful for student email:", email); // Debugging line
+          return true;
+        }
+
+        console.log("Login failed for email:", email); // Debugging line
+        return false;
+      },
+      logout: () => {
+        set({ user: null });
       },
       // other state and actions...
     }),

@@ -28,12 +28,11 @@ import {
   Navigate,
 } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
-import { Navigation } from "./components/Navigation";
+// import { Navigation } from "./components/Navigation";
 import { Dashboard } from "./pages/Dashboard";
 import { CoursePage } from "./pages/CoursePage";
 import { StudentDetailsPage } from "./pages/StudentDetailsPage";
-import { LoginPage } from "./components/LoginPage";
-import { PrivateRoute } from "./components/PrivateRoute";
+import LoginPage from "./components/LoginPage"; // Ensure correct import
 import { BlobServiceClient } from "@azure/storage-blob";
 import { useCourseStore } from "./store/useCourseStore";
 import { useAuthStore } from "./store/useAuthStore";
@@ -45,7 +44,7 @@ const CONTAINER_NAME = "backups";
 
 const App: React.FC = () => {
   const { importData } = useCourseStore();
-  const { setStudentPasswords, user } = useAuthStore();
+  const { setStudentPasswords } = useAuthStore();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -108,45 +107,17 @@ const App: React.FC = () => {
 
   return (
     <Router>
-      <div className="min-h-screen bg-gray-50">
-        {user && <Navigation />}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <Routes>
-            <Route path="/login" element={<LoginPage />} />
-            <Route
-              path="/"
-              element={
-                <PrivateRoute>
-                  <Dashboard />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/course/:courseId"
-              element={
-                <PrivateRoute allowedRoles={["teacher"]}>
-                  <CoursePage />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/course/:courseId/student/:studentId"
-              element={
-                <PrivateRoute>
-                  <StudentDetailsPage />
-                </PrivateRoute>
-              }
-            />
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
-        </div>
-        <Toaster position="top-right" />
-      </div>
-      <div>
-        <a href="https://reactjs.org" target="_blank" rel="noopener noreferrer">
-          Learn React
-        </a>
-      </div>
+      <Toaster />
+      <Routes>
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/course/:courseId" element={<CoursePage />} />
+        <Route
+          path="/course/:courseId/student/:studentId"
+          element={<StudentDetailsPage />}
+        />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="*" element={<Navigate to="/" />} />
+      </Routes>
     </Router>
   );
 };

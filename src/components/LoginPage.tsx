@@ -1,10 +1,10 @@
 /**
- * 
+ *
  * Student Management System
- * 
+ *
  * Description: The Student Management System is a comprehensive web application designed to manage student data efficiently.
  * Built with modern web technologies, this system offers a robust and user-friendly interface for managing courses, students, and their performance.
- * 
+ *
  * Technologies Used:
  * - React
  * - TypeScript
@@ -20,104 +20,83 @@
  * This project is licensed under the MIT License. See the LICENSE file for more details.
  */
 
-import React, { useState } from 'react';
-import { Navigate } from 'react-router-dom';
-import { GraduationCap, AlertCircle } from 'lucide-react';
-import { useAuthStore } from '../store/useAuthStore';
-import toast from 'react-hot-toast';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuthStore } from "../store/useAuthStore";
+import toast from "react-hot-toast";
+import { Lock } from "lucide-react";
 
-export const LoginPage: React.FC = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const { login, isAuthenticated } = useAuthStore();
+const LoginPage: React.FC = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const login = useAuthStore((state) => state.login);
+  const navigate = useNavigate();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    const success = await login(email, password);
-    if (success) {
-      toast.success('Inicio de sesión exitoso');
+    if (login(email, password)) {
+      toast.success("Login successful");
+      navigate("/dashboard"); // Redirect to the dashboard or appropriate page
     } else {
-      toast.error('Credenciales inválidas');
+      toast.error("Invalid email or password");
     }
   };
 
-  if (isAuthenticated) {
-    return <Navigate to="/" replace />;
-  }
-
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
-        <div className="text-center">
-          <GraduationCap className="mx-auto h-12 w-12 text-blue-600" />
-          <h2 className="mt-6 text-3xl font-extrabold text-gray-900">
-            Sistema de Calificaciones
-          </h2>
-          <p className="mt-2 text-xl font-semibold text-gray-800">
-            Procesos de Fabricación
-          </p>
-          <p className="mt-1 text-lg font-medium text-gray-700">
-            UNEXPO
-          </p>
+    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-md">
+        <div className="flex justify-center mb-4">
+          <Lock className="w-12 h-12 text-blue-600" />
         </div>
-
-        <div className="bg-blue-50 border border-blue-200 rounded-md p-4">
-          <div className="flex items-start">
-            <AlertCircle className="w-5 h-5 text-blue-500 mt-0.5" />
-            <div className="ml-3">
-              <h3 className="text-sm font-medium text-blue-800">Información de Acceso</h3>
-              <div className="mt-2 text-sm text-blue-700">
-                <p>Estudiantes: Usar su correo electrónico y contraseña.</p>
-                <p className="mt-1">Primera vez: usar contraseña "student123"</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          <div className="rounded-md shadow-sm -space-y-px">
-            <div>
-              <label htmlFor="email" className="sr-only">
-                Email
-              </label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
-                placeholder="Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </div>
-            <div>
-              <label htmlFor="password" className="sr-only">
-                Contraseña
-              </label>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
-                placeholder="Contraseña"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </div>
-          </div>
-
+        <h2 className="text-2xl font-bold mb-4 text-center">
+          Sistema de Calificaciones
+        </h2>
+        <h3 className="text-xl font-semibold mb-2 text-center">
+          Procesos de Fabricación
+        </h3>
+        <h4 className="text-lg font-medium mb-4 text-center">UNEXPO</h4>
+        <p className="text-sm mb-4">
+          <strong>Información de Acceso</strong>
+          <br />
+          Estudiantes: Usar su correo electrónico y contraseña.
+          <br />
+          Primera vez: usar contraseña "student123"
+        </p>
+        <form onSubmit={handleLogin} className="space-y-4">
           <div>
-            <button
-              type="submit"
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-            >
-              Iniciar Sesión
-            </button>
+            <label className="block text-sm font-medium text-gray-700">
+              Email
+            </label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            />
           </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Contraseña
+            </label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            />
+          </div>
+          <button
+            type="submit"
+            className="w-full py-2 px-4 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700"
+          >
+            Iniciar Sesión
+          </button>
         </form>
       </div>
     </div>
   );
 };
+
+export default LoginPage;

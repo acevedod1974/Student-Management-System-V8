@@ -28,7 +28,7 @@ import {
   Navigate,
 } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
-// import { Navigation } from "./components/Navigation";
+import { Navigation } from "./components/Navigation";
 import { Dashboard } from "./pages/Dashboard";
 import { CoursePage } from "./pages/CoursePage";
 import { StudentDetailsPage } from "./pages/StudentDetailsPage";
@@ -108,6 +108,7 @@ const App: React.FC = () => {
   return (
     <Router>
       <Toaster />
+      <Navigation />
       <Routes>
         <Route path="/" element={<Dashboard />} />
         <Route path="/course/:courseId" element={<CoursePage />} />

@@ -20,8 +20,8 @@
  * This project is licensed under the MIT License. See the LICENSE file for more details.
  */
 
-import React, { useRef } from "react";
-import { Save, Database } from "lucide-react";
+import React, { useRef, useState } from "react";
+import { Save, Database, Download } from "lucide-react";
 import { useCourseStore } from "../store/useCourseStore";
 import { useAuthStore } from "../store/useAuthStore";
 import toast from "react-hot-toast";
@@ -35,6 +35,7 @@ export const DataManagement: React.FC = () => {
   const { exportData, importData } = useCourseStore();
   const { studentPasswords } = useAuthStore();
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [backups, setBackups] = useState<string[]>([]);
 
   const handleExport = async () => {
     const courseData = exportData();
@@ -133,6 +134,64 @@ export const DataManagement: React.FC = () => {
     }
   };
 
+  const fetchBackups = async () => {
+    try {
+      const blobServiceClient = BlobServiceClient.fromConnectionString(
+        AZURE_STORAGE_CONNECTION_STRING
+      );
+      const containerClient =
+        blobServiceClient.getContainerClient(CONTAINER_NAME);
+      const blobs = containerClient.listBlobsFlat();
+      const backupList: string[] = [];
+      for await (const blob of blobs) {
+        backupList.push(blob.name);
+      }
+      setBackups(backupList);
+      toast.success("Backups fetched successfully");
+    } catch (error) {
+      console.error("Error fetching backups from Azure Blob Storage:", error);
+      toast.error("Error fetching backups from Azure Blob Storage");
+    }
+  };
+
+  const handleRetrieve = async (blobName: string) => {
+    try {
+      const blobServiceClient = BlobServiceClient.fromConnectionString(
+        AZURE_STORAGE_CONNECTION_STRING
+      );
+      const containerClient =
+        blobServiceClient.getContainerClient(CONTAINER_NAME);
+      const blockBlobClient = containerClient.getBlockBlobClient(blobName);
+      const downloadBlockBlobResponse = await blockBlobClient.download(0);
+      const blobBody = await downloadBlockBlobResponse.blobBody;
+      const downloaded = await blobBody?.text();
+      if (downloaded) {
+        const backup = JSON.parse(downloaded);
+
+        // Validate backup format
+        if (!backup.courses || !backup.studentPasswords || !backup.version) {
+          throw new Error("Formato de backup inválido");
+        }
+
+        // Import course data
+        importData(JSON.stringify(backup.courses));
+
+        // Import student passwords (you'll need to add this to useAuthStore)
+        if (backup.studentPasswords) {
+          // Update the store with the imported passwords
+          useAuthStore.setState({
+            studentPasswords: backup.studentPasswords,
+          });
+        }
+
+        toast.success("Datos restaurados exitosamente");
+      }
+    } catch (error) {
+      console.error("Error retrieving backup from Azure Blob Storage:", error);
+      toast.error("Error retrieving backup from Azure Blob Storage");
+    }
+  };
+
   return (
     <div className="flex gap-4">
       <button
@@ -154,6 +213,29 @@ export const DataManagement: React.FC = () => {
           className="hidden"
         />
       </label>
+      <button
+        onClick={fetchBackups}
+        className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-md hover:bg-green-700"
+        title="Fetch backups from Azure"
+      >
+        <Download className="w-4 h-4" />
+        Fetch Backups
+      </button>
+      {backups.length > 0 && (
+        <div className="flex flex-col gap-2">
+          {backups.map((backup) => (
+            <button
+              key={backup}
+              onClick={() => handleRetrieve(backup)}
+              className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-gray-600 rounded-md hover:bg-gray-700"
+              title={`Retrieve ${backup}`}
+            >
+              <Download className="w-4 h-4" />
+              {backup}
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

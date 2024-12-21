@@ -34,6 +34,11 @@ interface AuthState {
   };
   login: (email: string, password: string) => boolean;
   logout: () => void;
+  changePassword: (
+    email: string,
+    oldPassword: string,
+    newPassword: string
+  ) => boolean;
   // other state and actions...
 }
 
@@ -85,6 +90,30 @@ export const useAuthStore = create<AuthState>()(
       },
       logout: () => {
         set({ user: null });
+      },
+      changePassword: (email, oldPassword, newPassword) => {
+        const studentPasswords = get().studentPasswords;
+        const teacherPasswords = get().teacherPasswords;
+
+        if (teacherPasswords[email] === oldPassword) {
+          set({
+            teacherPasswords: {
+              ...teacherPasswords,
+              [email]: newPassword,
+            },
+          });
+          return true;
+        } else if (studentPasswords[email] === oldPassword) {
+          set({
+            studentPasswords: {
+              ...studentPasswords,
+              [email]: newPassword,
+            },
+          });
+          return true;
+        }
+
+        return false;
       },
       // other state and actions...
     }),

@@ -20,16 +20,18 @@
  * This project is licensed under the MIT License. See the LICENSE file for more details.
  */
 
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useCourseStore } from "../store/useCourseStore";
 import { useAuthStore } from "../store/useAuthStore";
 import PasswordAnalysis from "../components/PasswordAnalysis";
 import { CourseOverviewChart } from "../components/CourseOverviewChart";
+import ChangePasswordModal from "../components/ChangePasswordModal";
 
 export const Dashboard: React.FC = () => {
   const { courses } = useCourseStore();
   const { user } = useAuthStore();
+  const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
 
   const userCourses =
     user?.role === "student"
@@ -67,7 +69,20 @@ export const Dashboard: React.FC = () => {
           <p>Email: {user?.email}</p>
           <p>Role: {user?.role}</p>
         </div>
+        <div className="mt-6">
+          <button
+            onClick={() => setShowChangePasswordModal(true)}
+            className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700"
+          >
+            Cambiar Contraseña
+          </button>
+        </div>
       </main>
+      {showChangePasswordModal && (
+        <ChangePasswordModal
+          onClose={() => setShowChangePasswordModal(false)}
+        />
+      )}
     </div>
   );
 };

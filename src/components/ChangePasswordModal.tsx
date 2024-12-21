@@ -1,10 +1,10 @@
 /**
- * 
+ *
  * Student Management System
- * 
+ *
  * Description: The Student Management System is a comprehensive web application designed to manage student data efficiently.
  * Built with modern web technologies, this system offers a robust and user-friendly interface for managing courses, students, and their performance.
- * 
+ *
  * Technologies Used:
  * - React
  * - TypeScript
@@ -20,45 +20,47 @@
  * This project is licensed under the MIT License. See the LICENSE file for more details.
  */
 
-import React, { useState } from 'react';
-import { X } from 'lucide-react';
-import { useAuthStore } from '../store/useAuthStore';
-import toast from 'react-hot-toast';
+import React, { useState } from "react";
+import { X } from "lucide-react";
+import { useAuthStore } from "../store/useAuthStore";
+import toast from "react-hot-toast";
 
 interface ChangePasswordModalProps {
   onClose: () => void;
 }
 
-export const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({ onClose }) => {
-  const [oldPassword, setOldPassword] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({
+  onClose,
+}) => {
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const { user, changePassword } = useAuthStore();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!user?.email) {
-      toast.error('Error de sesión');
+      toast.error("Error de sesión");
       return;
     }
 
     if (newPassword !== confirmPassword) {
-      toast.error('Las contraseñas no coinciden');
+      toast.error("Las contraseñas no coinciden");
       return;
     }
 
     if (newPassword.length < 6) {
-      toast.error('La nueva contraseña debe tener al menos 6 caracteres');
+      toast.error("La nueva contraseña debe tener al menos 6 caracteres");
       return;
     }
 
     const success = changePassword(user.email, oldPassword, newPassword);
     if (success) {
-      toast.success('Contraseña actualizada exitosamente');
+      toast.success("Contraseña actualizada exitosamente");
       onClose();
     } else {
-      toast.error('Contraseña actual incorrecta');
+      toast.error("Contraseña actual incorrecta");
     }
   };
 
@@ -135,3 +137,5 @@ export const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({ onClos
     </div>
   );
 };
+
+export default ChangePasswordModal;

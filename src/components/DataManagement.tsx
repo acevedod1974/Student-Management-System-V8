@@ -69,14 +69,8 @@ export const DataManagement: React.FC = () => {
     const content = JSON.stringify(backup, null, 2);
     const uint8Array = new TextEncoder().encode(content);
 
-    const uploadBlobResponse = await blockBlobClient.upload(
-      uint8Array,
-      uint8Array.length
-    );
+    await blockBlobClient.upload(uint8Array, uint8Array.length);
 
-    console.log(
-      `Backup uploaded to Azure Blob Storage successfully. Request ID: ${uploadBlobResponse.requestId}`
-    );
     toast.success("Backup exportado a Azure Blob Storage exitosamente");
   };
 

@@ -33,7 +33,6 @@ import { Dashboard } from "./pages/Dashboard";
 import { CoursePage } from "./pages/CoursePage";
 import { StudentDetailsPage } from "./pages/StudentDetailsPage";
 import LoginPage from "./components/LoginPage";
-import { AdminDashboard } from "./pages/AdminDashboard";
 
 const App: React.FC = () => {
   return (
@@ -48,7 +47,6 @@ const App: React.FC = () => {
           element={<StudentDetailsPage />}
         />
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/admin" element={<AdminDashboard />} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </Router>

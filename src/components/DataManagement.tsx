@@ -5,6 +5,7 @@ import { useAuthStore } from "../store/useAuthStore";
 import toast from "react-hot-toast";
 import { BlobServiceClient } from "@azure/storage-blob";
 import { supabase } from "../utils/supabaseClient";
+import { Course, Student, Backup, BackupVersion } from "../types";
 
 const AZURE_STORAGE_CONNECTION_STRING = import.meta.env
   .VITE_AZURE_STORAGE_CONNECTION_STRING;
@@ -18,10 +19,27 @@ export const DataManagement: React.FC = () => {
 
   const handleExportToAzure = async () => {
     const courseData = exportData();
-    const fullBackup = {
-      courses: JSON.parse(courseData),
+    const parsedCourses = JSON.parse(courseData) as Course[];
+
+    // Calculate course averages
+    const coursesWithAverages = parsedCourses.map((course: Course) => {
+      const courseAverage =
+        course.students.reduce(
+          (acc: number, student: Student) => acc + student.finalGrade,
+          0
+        ) / course.students.length;
+
+      return {
+        ...course,
+        courseAverage: Number(courseAverage.toFixed(1)),
+      };
+    });
+
+    const fullBackup: Backup = {
+      courses: coursesWithAverages,
       studentPasswords,
-      version: "1.0",
+      version: "1.0" as BackupVersion,
+      timestamp: new Date().toISOString(),
     };
 
     // Export to Azure
@@ -47,24 +65,42 @@ export const DataManagement: React.FC = () => {
 
   const handleExportToSupabase = async () => {
     const courseData = exportData();
-    const fullBackup = {
-      courses: JSON.parse(courseData),
+    const parsedCourses = JSON.parse(courseData) as Course[];
+
+    // Calculate course averages
+    const coursesWithAverages = parsedCourses.map((course: Course) => {
+      const courseAverage =
+        course.students.reduce(
+          (acc: number, student: Student) => acc + student.finalGrade,
+          0
+        ) / course.students.length;
+
+      return {
+        ...course,
+        courseAverage: Number(courseAverage.toFixed(1)),
+      };
+    });
+
+    const fullBackup: Backup = {
+      courses: coursesWithAverages,
       studentPasswords,
-      version: "1.0",
+      version: "1.0" as BackupVersion,
+      timestamp: new Date().toISOString(),
     };
 
     // Export to Supabase
     await backupToSupabase(fullBackup);
   };
 
-  const backupToSupabase = async (backup: object) => {
+  const backupToSupabase = async (backup: Backup) => {
     try {
       console.log("Starting backup to Supabase...");
-      const { error } = await supabase
-        .from("backups")
-        .insert([
-          { backup_data: JSON.stringify(backup), timestamp: new Date() },
-        ]);
+      const { error } = await supabase.from("backups").insert([
+        {
+          backup_data: backup,
+          timestamp: new Date(),
+        },
+      ]);
 
       if (error) throw error;
 

@@ -17,7 +17,7 @@ export const DataManagement: React.FC = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [backups, setBackups] = useState<string[]>([]);
 
-  const handleExportToAzure = async () => {
+  const createFullBackup = (): Backup => {
     const courseData = exportData();
     const parsedCourses = JSON.parse(courseData) as Course[];
 
@@ -35,12 +35,16 @@ export const DataManagement: React.FC = () => {
       };
     });
 
-    const fullBackup: Backup = {
+    return {
       courses: coursesWithAverages,
-      studentPasswords,
+      studentPasswords: { ...studentPasswords }, // Ensure latest passwords
       version: "1.0" as BackupVersion,
       timestamp: new Date().toISOString(),
     };
+  };
+
+  const handleExportToAzure = async () => {
+    const fullBackup = createFullBackup();
 
     // Export to Azure
     try {
@@ -61,32 +65,22 @@ export const DataManagement: React.FC = () => {
       console.error("Error exporting backup to Azure:", error);
       toast.error("Error exporting backup to Azure");
     }
+
+    // Export to Local
+    const blob = new Blob([JSON.stringify(fullBackup)], {
+      type: "application/json",
+    });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `backup-${Date.now()}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast.success("Backup exportado localmente exitosamente");
   };
 
   const handleExportToSupabase = async () => {
-    const courseData = exportData();
-    const parsedCourses = JSON.parse(courseData) as Course[];
-
-    // Calculate course averages
-    const coursesWithAverages = parsedCourses.map((course: Course) => {
-      const courseAverage =
-        course.students.reduce(
-          (acc: number, student: Student) => acc + student.finalGrade,
-          0
-        ) / course.students.length;
-
-      return {
-        ...course,
-        courseAverage: Number(courseAverage.toFixed(1)),
-      };
-    });
-
-    const fullBackup: Backup = {
-      courses: coursesWithAverages,
-      studentPasswords,
-      version: "1.0" as BackupVersion,
-      timestamp: new Date().toISOString(),
-    };
+    const fullBackup = createFullBackup();
 
     // Export to Supabase
     await backupToSupabase(fullBackup);

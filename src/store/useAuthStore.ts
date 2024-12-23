@@ -24,31 +24,13 @@ import create from "zustand";
 import { persist } from "zustand/middleware";
 
 interface AuthState {
-  user: { email: string; role: string } | null;
   studentPasswords: Record<string, string>;
-  teacherPasswords: Record<string, string>;
-  adminPasswords: Record<string, string>;
-  loginEnabled: boolean;
-  setLoginEnabled: (enabled: boolean) => void;
   setStudentPasswords: (passwords: Record<string, string>) => void;
-  analyzePasswords: () => {
-    missingPasswords: string[];
-    repeatedPasswords: string[];
-  };
-  login: (email: string, password: string) => boolean;
-  logout: () => void;
-  changePassword: (
-    email: string,
-    oldPassword: string,
-    newPassword: string
-  ) => boolean;
-  // other state and actions...
 }
 
 export const useAuthStore = create<AuthState>()(
   persist(
-    (set, get) => ({
-      user: null,
+    (set) => ({
       studentPasswords: {
         "jabonaldep@estudiante.unexpo.edu.ve": "A1b2C3d4E5",
         "pvgomezm@estudiante.unexpo.edu.ve": "F6g7H8i9J0",
@@ -64,90 +46,7 @@ export const useAuthStore = create<AuthState>()(
         "gjfebresb@estudiante.unexpo.edu.ve": "D6e7F8g9H0",
         "eajimenezg@estudiante.unexpo.edu.ve": "I1j2K3l4M5",
       },
-      teacherPasswords: {
-        "dacevedo@unexpo.edu.ve": "lfsbyrt2",
-      },
-      adminPasswords: {
-        "admin@unexpo.edu.ve": "2Lfsbyrt4.",
-      },
-      loginEnabled: true,
-      setLoginEnabled: (enabled) => set({ loginEnabled: enabled }),
       setStudentPasswords: (passwords) => set({ studentPasswords: passwords }),
-      analyzePasswords: () => {
-        const passwords = get().studentPasswords;
-        const passwordValues = Object.values(passwords);
-        const missingPasswords = Object.keys(passwords).filter(
-          (key) => !passwords[key]
-        );
-        const repeatedPasswords = passwordValues.filter(
-          (password, index, self) => self.indexOf(password) !== index
-        );
-
-        return { missingPasswords, repeatedPasswords };
-      },
-      login: (email, password) => {
-        const {
-          studentPasswords,
-          teacherPasswords,
-          adminPasswords,
-          loginEnabled,
-        } = get();
-
-        if (!loginEnabled && !adminPasswords[email]) {
-          console.log("Logins are currently disabled.");
-          return false;
-        }
-
-        if (adminPasswords[email] === password) {
-          set({ user: { email, role: "admin" } });
-          return true;
-        } else if (teacherPasswords[email] === password) {
-          set({ user: { email, role: "teacher" } });
-          return true;
-        } else if (studentPasswords[email] === password) {
-          set({ user: { email, role: "student" } });
-          return true;
-        }
-
-        return false;
-      },
-      logout: () => {
-        set({ user: null });
-      },
-      changePassword: (email, oldPassword, newPassword) => {
-        const studentPasswords = get().studentPasswords;
-        const teacherPasswords = get().teacherPasswords;
-        const adminPasswords = get().adminPasswords;
-
-        if (adminPasswords[email] === oldPassword) {
-          set({
-            adminPasswords: {
-              ...adminPasswords,
-              [email]: newPassword,
-            },
-          });
-          return true;
-        } else if (teacherPasswords[email] === oldPassword) {
-          set({
-            teacherPasswords: {
-              ...teacherPasswords,
-              [email]: newPassword,
-            },
-          });
-          return true;
-        } else if (studentPasswords[email] === oldPassword) {
-          set({
-            studentPasswords: {
-              ...studentPasswords,
-              [email]: newPassword,
-            },
-          });
-          return true;
-        }
-
-        return false;
-      },
-      // other state and actions...
     }),
     {
       name: "auth-storage", // unique name for the storage

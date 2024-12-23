@@ -13,7 +13,7 @@ const CONTAINER_NAME = "backups";
 
 export const DataManagement: React.FC = () => {
   const { exportData, importData } = useCourseStore();
-  const { studentPasswords, setStudentPasswords } = useAuthStore();
+  const { studentPasswords } = useAuthStore();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [backups, setBackups] = useState<string[]>([]);
 

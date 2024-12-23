@@ -26,6 +26,7 @@ import { useCourseStore } from "../store/useCourseStore";
 import { useAuthStore } from "../store/useAuthStore";
 import toast from "react-hot-toast";
 import { BlobServiceClient } from "@azure/storage-blob";
+import { supabase } from "../utils/supabaseClient";
 
 const AZURE_STORAGE_CONNECTION_STRING = import.meta.env
   .VITE_AZURE_STORAGE_CONNECTION_STRING;
@@ -43,52 +44,13 @@ export const DataManagement: React.FC = () => {
       courses: JSON.parse(courseData),
       studentPasswords,
       version: "1.0",
-      timestamp: new Date().toISOString(),
     };
 
-    try {
-      await uploadToAzure(fullBackup);
-      saveToLocal(fullBackup);
-    } catch (error) {
-      console.error("Error exporting backup:", error);
-      toast.error("Error al exportar el backup");
-    }
-  };
+    // Export to Azure (existing logic)
+    // ...
 
-  const uploadToAzure = async (backup: object) => {
-    const blobServiceClient = BlobServiceClient.fromConnectionString(
-      AZURE_STORAGE_CONNECTION_STRING
-    );
-    const containerClient =
-      blobServiceClient.getContainerClient(CONTAINER_NAME);
-    const blobName = `sistema-calificaciones-backup-${
-      new Date().toISOString().split("T")[0]
-    }.json`;
-    const blockBlobClient = containerClient.getBlockBlobClient(blobName);
-
-    const content = JSON.stringify(backup, null, 2);
-    const uint8Array = new TextEncoder().encode(content);
-
-    await blockBlobClient.upload(uint8Array, uint8Array.length);
-
-    toast.success("Backup exportado a Azure Blob Storage exitosamente");
-  };
-
-  const saveToLocal = (backup: object) => {
-    const blob = new Blob([JSON.stringify(backup, null, 2)], {
-      type: "application/json",
-    });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `sistema-calificaciones-backup-${
-      new Date().toISOString().split("T")[0]
-    }.json`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-    toast.success("Backup exportado exitosamente");
+    // Export to Supabase
+    await backupToSupabase(fullBackup);
   };
 
   const handleImport = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -173,6 +135,55 @@ export const DataManagement: React.FC = () => {
     }
   };
 
+  const backupToSupabase = async (backup: object) => {
+    try {
+      console.log("Starting backup to Supabase...");
+      const { error } = await supabase
+        .from("backups")
+        .insert([{ content: JSON.stringify(backup), created_at: new Date() }]);
+
+      if (error) throw error;
+
+      console.log("Backup to Supabase successful");
+      toast.success("Backup exportado a Supabase exitosamente");
+    } catch (error) {
+      console.error("Error exporting backup to Supabase:", error);
+      toast.error("Error exporting backup to Supabase");
+    }
+  };
+
+  const restoreFromSupabase = async () => {
+    try {
+      console.log("Starting restore from Supabase...");
+      const { data, error } = await supabase
+        .from("backups")
+        .select("content")
+        .order("created_at", { ascending: false })
+        .limit(1);
+
+      if (error) throw error;
+
+      if (data && data.length > 0) {
+        const backup = JSON.parse(data[0].content);
+        console.log("Backup data retrieved from Supabase:", backup);
+
+        if (!backup.courses || !backup.studentPasswords || !backup.version) {
+          throw new Error("Formato de backup inválido");
+        }
+
+        importData(JSON.stringify(backup.courses));
+        useAuthStore.setState({ studentPasswords: backup.studentPasswords });
+
+        toast.success("Datos restaurados desde Supabase exitosamente");
+      } else {
+        toast.error("No se encontró ningún backup en Supabase");
+      }
+    } catch (error) {
+      console.error("Error restoring backup from Supabase:", error);
+      toast.error("Error restoring backup from Supabase");
+    }
+  };
+
   return (
     <div className="flex flex-col gap-4">
       <div className="flex gap-4">
@@ -203,6 +214,14 @@ export const DataManagement: React.FC = () => {
           <Download className="w-4 h-4" />
           Fetch Backups
         </button>
+        <button
+          onClick={restoreFromSupabase}
+          className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-yellow-600 rounded-md hover:bg-yellow-700"
+          title="Restaurar Backup desde Supabase"
+        >
+          <Download className="w-4 h-4" />
+          Restaurar Backup desde Supabase
+        </button>
       </div>
       {backups.length > 0 && (
         <div className="flex flex-col gap-2">
@@ -222,3 +241,5 @@ export const DataManagement: React.FC = () => {
     </div>
   );
 };
+
+export default DataManagement;

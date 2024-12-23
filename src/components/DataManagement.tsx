@@ -13,7 +13,7 @@ const CONTAINER_NAME = "backups";
 
 export const DataManagement: React.FC = () => {
   const { exportData, importData } = useCourseStore();
-  const { studentPasswords } = useAuthStore();
+  const { studentPasswords, setStudentPasswords } = useAuthStore();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [backups, setBackups] = useState<string[]>([]);
 
@@ -121,9 +121,7 @@ export const DataManagement: React.FC = () => {
 
           importData(JSON.stringify(backup.courses));
           if (backup.studentPasswords) {
-            useAuthStore.setState({
-              studentPasswords: backup.studentPasswords,
-            });
+            setStudentPasswords(backup.studentPasswords);
           }
 
           toast.success("Datos restaurados exitosamente");
@@ -177,7 +175,7 @@ export const DataManagement: React.FC = () => {
 
         importData(JSON.stringify(backup.courses));
         if (backup.studentPasswords) {
-          useAuthStore.setState({ studentPasswords: backup.studentPasswords });
+          setStudentPasswords(backup.studentPasswords);
         }
 
         toast.success("Datos restaurados exitosamente");

@@ -30,6 +30,10 @@ interface AuthState {
   setStudentPasswords: (passwords: Record<string, string>) => void;
   login: (email: string, password: string) => boolean;
   logout: () => void;
+  analyzePasswords: () => {
+    missingPasswords: string[];
+    repeatedPasswords: string[];
+  };
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -67,6 +71,18 @@ export const useAuthStore = create<AuthState>()(
         return false;
       },
       logout: () => set({ user: null }),
+      analyzePasswords: () => {
+        const { studentPasswords, teacherPasswords } = get();
+        const allPasswords = { ...studentPasswords, ...teacherPasswords };
+        const passwordValues = Object.values(allPasswords);
+        const missingPasswords = Object.keys(allPasswords).filter(
+          (email) => !allPasswords[email]
+        );
+        const repeatedPasswords = passwordValues.filter(
+          (password, index, self) => self.indexOf(password) !== index
+        );
+        return { missingPasswords, repeatedPasswords };
+      },
     }),
     {
       name: "auth-storage", // unique name for the storage

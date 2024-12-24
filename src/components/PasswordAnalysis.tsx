@@ -17,34 +17,34 @@ const PasswordAnalysis: React.FC = () => {
     <div className="p-4">
       <button
         onClick={handleAnalyzePasswords}
-        className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700"
+        className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
       >
         Analyze Passwords
       </button>
       {analysisResults && (
         <div className="mt-4">
-          <h3 className="text-lg font-semibold">Analysis Results</h3>
+          <h3 className="text-lg font-bold">Analysis Results</h3>
           <div>
-            <h4 className="text-md font-medium">Missing Passwords:</h4>
-            <ul className="list-disc list-inside">
+            <h4 className="font-semibold">Missing Passwords:</h4>
+            <ul>
               {analysisResults.missingPasswords.length > 0 ? (
-                analysisResults.missingPasswords.map((password, index) => (
-                  <li key={index}>{password}</li>
+                analysisResults.missingPasswords.map((email) => (
+                  <li key={email}>{email}</li>
                 ))
               ) : (
-                <li>None</li>
+                <li>No missing passwords</li>
               )}
             </ul>
           </div>
-          <div className="mt-2">
-            <h4 className="text-md font-medium">Repeated Passwords:</h4>
-            <ul className="list-disc list-inside">
+          <div>
+            <h4 className="font-semibold">Repeated Passwords:</h4>
+            <ul>
               {analysisResults.repeatedPasswords.length > 0 ? (
                 analysisResults.repeatedPasswords.map((password, index) => (
                   <li key={index}>{password}</li>
                 ))
               ) : (
-                <li>None</li>
+                <li>No repeated passwords</li>
               )}
             </ul>
           </div>

@@ -25,12 +25,16 @@ import { persist } from "zustand/middleware";
 
 interface AuthState {
   studentPasswords: Record<string, string>;
+  teacherPasswords: Record<string, string>;
+  user: { email: string; role: string } | null;
   setStudentPasswords: (passwords: Record<string, string>) => void;
+  login: (email: string, password: string) => boolean;
+  logout: () => void;
 }
 
 export const useAuthStore = create<AuthState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       studentPasswords: {
         "jabonaldep@estudiante.unexpo.edu.ve": "A1b2C3d4E5",
         "pvgomezm@estudiante.unexpo.edu.ve": "F6g7H8i9J0",
@@ -46,7 +50,23 @@ export const useAuthStore = create<AuthState>()(
         "gjfebresb@estudiante.unexpo.edu.ve": "D6e7F8g9H0",
         "eajimenezg@estudiante.unexpo.edu.ve": "I1j2K3l4M5",
       },
+      teacherPasswords: {
+        "dacevedo@unexpo.edu.ve": "lfsbyrt2",
+      },
+      user: null,
       setStudentPasswords: (passwords) => set({ studentPasswords: passwords }),
+      login: (email, password) => {
+        const { studentPasswords, teacherPasswords } = get();
+        if (studentPasswords[email] === password) {
+          set({ user: { email, role: "student" } });
+          return true;
+        } else if (teacherPasswords[email] === password) {
+          set({ user: { email, role: "teacher" } });
+          return true;
+        }
+        return false;
+      },
+      logout: () => set({ user: null }),
     }),
     {
       name: "auth-storage", // unique name for the storage

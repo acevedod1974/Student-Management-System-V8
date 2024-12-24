@@ -21,7 +21,7 @@
  */
 
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Home, LogOut } from "lucide-react";
 import { useAuthStore } from "../store/useAuthStore";
 
@@ -37,47 +37,41 @@ export const Navigation: React.FC = () => {
 
   const handleHomeClick = () => {
     if (user) {
-      navigate("/");
+      if (user.role === "student") {
+        navigate("/student-dashboard");
+      } else {
+        navigate("/dashboard");
+      }
     } else {
       navigate("/login");
     }
   };
 
   return (
-    <nav className="bg-white shadow-sm">
+    <nav className="bg-white shadow">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          <div className="flex items-center gap-6">
+        <div className="flex justify-between h-16">
+          <div className="flex">
             <button
               onClick={handleHomeClick}
-              className="flex items-center gap-2"
+              className="flex items-center px-4 hover:text-blue-600"
             >
-              <Home className="w-6 h-6 text-blue-600" />
-              <span className="text-xl font-bold text-gray-900">Inicio</span>
+              <Home className="w-5 h-5" />
+              <span className="ml-2">Inicio</span>
             </button>
-            <div className="h-6 w-px bg-gray-200" />
           </div>
-          <div className="flex items-center gap-4">
-            {user ? (
-              <>
-                <span className="text-sm text-gray-600">{user.email}</span>
-                <button
-                  onClick={handleLogout}
-                  className="p-2 text-gray-600 hover:bg-gray-100 rounded-full transition-colors"
-                  title="Cerrar sesión"
-                >
-                  <LogOut className="w-5 h-5" />
-                </button>
-              </>
-            ) : (
-              <Link
-                to="/login"
-                className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700"
+          {user && (
+            <div className="flex items-center">
+              <span className="mr-4">{user.email}</span>
+              <button
+                onClick={handleLogout}
+                className="flex items-center px-4 hover:text-red-600"
               >
-                Login
-              </Link>
-            )}
-          </div>
+                <LogOut className="w-5 h-5" />
+                <span className="ml-2">Cerrar Sesión</span>
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </nav>

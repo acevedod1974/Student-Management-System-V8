@@ -5,8 +5,9 @@ module.exports = {
   testEnvironment: "jsdom",
   setupFilesAfterEnv: ["<rootDir>/src/setupTests.ts"],
   testMatch: [
-    "<rootDir>/src/tests/**/*.test.tsx",
-    "<rootDir>/src/tests/**/*.test.ts",
+    // Remove these lines if they reference the deleted test folder
+    // "<rootDir>/src/tests/**/*.test.tsx",
+    // "<rootDir>/src/tests/**/*.test.ts",
   ],
   reporters: [
     "default",

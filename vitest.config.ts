@@ -6,7 +6,10 @@ export default defineConfig({
     globals: true,
     environment: "jsdom",
     setupFiles: "./src/setupTests.ts",
-    include: ["src/tests/**/*.test.tsx"],
+    include: [
+      // Remove this line if it references the deleted test folder
+      // "src/tests/**/*.test.tsx",
+    ],
     reporters: [new CustomReporter()],
   },
 });

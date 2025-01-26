@@ -48,6 +48,7 @@ export const DataManagement: React.FC = () => {
 
     // Export to Azure
     try {
+      console.log("Starting backup to Azure...");
       const blobServiceClient = BlobServiceClient.fromConnectionString(
         AZURE_STORAGE_CONNECTION_STRING
       );
@@ -77,6 +78,32 @@ export const DataManagement: React.FC = () => {
     a.click();
     URL.revokeObjectURL(url);
     toast.success("Backup exportado localmente exitosamente");
+  };
+
+  const fetchBackups = async () => {
+    try {
+      console.log("Fetching backups from Azure Blob Storage...");
+      console.log(
+        "Azure Storage Connection String:",
+        AZURE_STORAGE_CONNECTION_STRING
+      );
+      const blobServiceClient = BlobServiceClient.fromConnectionString(
+        AZURE_STORAGE_CONNECTION_STRING
+      );
+      const containerClient =
+        blobServiceClient.getContainerClient(CONTAINER_NAME);
+      const blobs = containerClient.listBlobsFlat();
+      const backupList: string[] = [];
+      for await (const blob of blobs) {
+        backupList.push(blob.name);
+      }
+      backupList.sort().reverse();
+      setBackups(backupList.slice(0, 6));
+      toast.success("Backups fetched successfully");
+    } catch (error) {
+      console.error("Error fetching backups from Azure Blob Storage:", error);
+      toast.error("Error fetching backups from Azure Blob Storage");
+    }
   };
 
   const handleExportToSupabase = async () => {
@@ -131,27 +158,6 @@ export const DataManagement: React.FC = () => {
         }
       };
       reader.readAsText(file);
-    }
-  };
-
-  const fetchBackups = async () => {
-    try {
-      const blobServiceClient = BlobServiceClient.fromConnectionString(
-        AZURE_STORAGE_CONNECTION_STRING
-      );
-      const containerClient =
-        blobServiceClient.getContainerClient(CONTAINER_NAME);
-      const blobs = containerClient.listBlobsFlat();
-      const backupList: string[] = [];
-      for await (const blob of blobs) {
-        backupList.push(blob.name);
-      }
-      backupList.sort().reverse();
-      setBackups(backupList.slice(0, 6));
-      toast.success("Backups fetched successfully");
-    } catch (error) {
-      console.error("Error fetching backups from Azure Blob Storage:", error);
-      toast.error("Error fetching backups from Azure Blob Storage");
     }
   };
 

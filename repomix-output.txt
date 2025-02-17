@@ -1,0 +1,4072 @@
+This file is a merged representation of the entire codebase, combined into a single document by Repomix.
+
+================================================================
+File Summary
+================================================================
+
+Purpose:
+--------
+This file contains a packed representation of the entire repository's contents.
+It is designed to be easily consumable by AI systems for analysis, code review,
+or other automated processes.
+
+File Format:
+------------
+The content is organized as follows:
+1. This summary section
+2. Repository information
+3. Directory structure
+4. Multiple file entries, each consisting of:
+  a. A separator line (================)
+  b. The file path (File: path/to/file)
+  c. Another separator line
+  d. The full contents of the file
+  e. A blank line
+
+Usage Guidelines:
+-----------------
+- This file should be treated as read-only. Any changes should be made to the
+  original repository files, not this packed version.
+- When processing this file, use the file path to distinguish
+  between different files in the repository.
+- Be aware that this file may contain sensitive information. Handle it with
+  the same level of security as you would the original repository.
+
+Notes:
+------
+- Some files may have been excluded based on .gitignore rules and Repomix's configuration
+- Binary files are not included in this packed representation. Please refer to the Repository Structure section for a complete list of file paths, including binary files
+- Files matching patterns in .gitignore are excluded
+- Files matching default ignore patterns are excluded
+
+Additional Info:
+----------------
+
+================================================================
+Directory Structure
+================================================================
+.gitignore
+.repomix/bundles.json
+eslint.config.js
+index.html
+jest.config.cjs
+LICENSE
+package.json
+postcss.config.js
+README.md
+src/App.test.tsx
+src/App.tsx
+src/Button.tsx
+src/components/ChangePasswordModal.test.tsx
+src/components/ChangePasswordModal.tsx
+src/components/CourseCard.tsx
+src/components/CourseOverviewChart.tsx
+src/components/CourseStats.tsx
+src/components/DataManagement.tsx
+src/components/ExamPerformanceChart.tsx
+src/components/GradeDistributionChart.tsx
+src/components/GradesTable.test.tsx
+src/components/GradesTable.tsx
+src/components/LoginPage.tsx
+src/components/Navigation.tsx
+src/components/PasswordAnalysis.tsx
+src/components/PerformanceMetricsEditor.tsx
+src/components/PrivateRoute.tsx
+src/components/StudentCard.tsx
+src/components/StudentDetailsModal.tsx
+src/components/StudentForm.tsx
+src/index.css
+src/main.tsx
+src/pages/CoursePage.tsx
+src/pages/Dashboard.tsx
+src/pages/StudentDetailsPage.tsx
+src/setupTests.ts
+src/store/useAuthStore.ts
+src/store/useCourseStore.ts
+src/store/useStudentStore.ts
+src/types/course.ts
+src/types/index.ts
+src/types/student.ts
+src/utils/supabaseClient.ts
+src/vite-env.d.ts
+tailwind.config.js
+TODO.md
+tsconfig.app.json
+tsconfig.json
+tsconfig.node.json
+vite.config.ts
+vitest.config.ts
+
+================================================================
+Files
+================================================================
+
+================
+File: .gitignore
+================
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+backups/*
+#*.env
+
+# Editor directories and files
+.vscode/*
+.vs/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+================
+File: .repomix/bundles.json
+================
+{
+  "bundles": {}
+}
+
+================
+File: eslint.config.js
+================
+import js from '@eslint/js';
+import globals from 'globals';
+import reactHooks from 'eslint-plugin-react-hooks';
+import reactRefresh from 'eslint-plugin-react-refresh';
+import tseslint from 'typescript-eslint';
+
+export default tseslint.config(
+  { ignores: ['dist'] },
+  {
+    extends: [js.configs.recommended, ...tseslint.configs.recommended],
+    files: ['**/*.{ts,tsx}'],
+    languageOptions: {
+      ecmaVersion: 2020,
+      globals: globals.browser,
+    },
+    plugins: {
+      'react-hooks': reactHooks,
+      'react-refresh': reactRefresh,
+    },
+    rules: {
+      ...reactHooks.configs.recommended.rules,
+      'react-refresh/only-export-components': [
+        'warn',
+        { allowConstantExport: true },
+      ],
+    },
+  }
+);
+
+================
+File: index.html
+================
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Student Management System</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+
+================
+File: jest.config.cjs
+================
+const { format } = require("date-fns");
+
+module.exports = {
+  preset: "ts-jest",
+  testEnvironment: "jsdom",
+  setupFilesAfterEnv: ["<rootDir>/src/setupTests.ts"],
+  testMatch: ["<rootDir>/src/**/*.test.{ts,tsx}"],
+  reporters: [
+    "default",
+    [
+      "jest-junit",
+      {
+        outputDirectory: "logs",
+        outputName: `junit-${new Date().toISOString()}.xml`,
+      },
+    ],
+  ],
+};
+
+================
+File: LICENSE
+================
+MIT License
+
+Copyright (c) 2024 acevedod1974
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+================
+File: package.json
+================
+{
+  "name": "student-management-system",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint .",
+    "preview": "vite preview",
+    "start": "vite",
+    "serve": "vite preview",
+    "test": "jest --passWithNoTests"
+  },
+  "dependencies": {
+    "@azure/storage-blob": "^12.26.0",
+    "@supabase/supabase-js": "^2.47.8",
+    "dotenv": "^16.4.7",
+    "js-cookie": "^3.0.5",
+    "lucide-react": "^0.344.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-hot-toast": "^2.4.1",
+    "react-router-dom": "^6.22.3",
+    "recharts": "^2.12.2",
+    "zustand": "^4.5.2"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.9.1",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.1.0",
+    "@types/dotenv": "^6.1.1",
+    "@types/jest": "^29.5.14",
+    "@types/js-cookie": "^3.0.6",
+    "@types/node": "^22.10.2",
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5",
+    "@types/testing-library__react": "^10.0.1",
+    "@vitejs/plugin-react": "^4.3.1",
+    "autoprefixer": "^10.4.18",
+    "date-fns": "^4.1.0",
+    "eslint": "^9.9.1",
+    "eslint-plugin-react-hooks": "^5.1.0-rc.0",
+    "eslint-plugin-react-refresh": "^0.4.11",
+    "globals": "^15.9.0",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "jest-junit": "^16.0.0",
+    "postcss": "^8.4.35",
+    "tailwindcss": "^3.4.1",
+    "ts-jest": "^29.2.5",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.2",
+    "typescript-eslint": "^8.3.0",
+    "vite": "^5.4.14"
+  }
+}
+
+================
+File: postcss.config.js
+================
+export default {
+  plugins: {
+    tailwindcss: {},
+    autoprefixer: {},
+  },
+};
+
+================
+File: README.md
+================
+# Student Management System
+
+This project is a Student Management System built using modern web technologies including React, TypeScript, Zustand for state management, Tailwind CSS for styling, and Vite for building and serving the application.
+
+## Features
+
+- **Component-Based Architecture**: Modular and maintainable codebase.
+- **State Management**: Simple and scalable state management using Zustand.
+- **Styling**: Consistent design using Tailwind CSS.
+- **User Feedback**: Clean and non-intrusive notifications using `react-hot-toast`.
+- **Type Safety**: TypeScript for catching errors early during development.
+- **Data Visualization**: Interactive and responsive charts using `recharts`.
+- **Password Management**: Users can change their passwords after logging in.
+
+## Installation
+
+### Prerequisites
+
+- Node.js (version 14 or higher)
+- npm (version 6 or higher)
+
+### Windows
+
+1. **Clone the repository**:
+
+   ```sh
+   git clone https://github.com/acevedod1974/student-management-system-V4.git
+   cd student-management-system-V4
+   ```
+
+2. **Install dependencies**:
+
+   ```sh
+   npm install
+   ```
+
+3. **Start the development server**:
+
+   ```sh
+   npm run dev
+   ```
+
+4. **Open the application**:
+   Open your browser and navigate to `http://localhost:3000`.
+
+### Linux
+
+1. **Clone the repository**:
+
+   ```sh
+   git clone https://github.com/your-username/student-management-system.git
+   cd student-management-system
+   ```
+
+2. **Install dependencies**:
+
+   ```sh
+   npm install
+   ```
+
+3. **Start the development server**:
+
+   ```sh
+   npm run dev
+   ```
+
+4. **Open the application**:
+   Open your browser and navigate to `http://localhost:3000`.
+
+## Scripts
+
+- `npm run dev`: Start the development server.
+- `npm run build`: Build the application for production.
+- `npm run preview`: Preview the production build.
+- `npm run lint`: Run ESLint to check for linting errors.
+
+## Contributing
+
+Contributions are welcome! Please open an issue or submit a pull request for any improvements or bug fixes.
+
+## License
+
+This project is licensed under the MIT License.
+
+================
+File: src/App.test.tsx
+================
+// filepath: /src/App.test.tsx
+import React from "react";
+import { render, screen } from "@testing-library/react";
+import { BrowserRouter as Router } from "react-router-dom";
+import App from "./App";
+
+test("renders the Dashboard page", () => {
+  render(
+    <Router>
+      <App />
+    </Router>
+  );
+  expect(screen.getByText("Dashboard")).toBeInTheDocument();
+});
+
+test("navigates to CoursePage", () => {
+  render(
+    <Router>
+      <App />
+    </Router>
+  );
+  fireEvent.click(screen.getByText("Course 1"));
+  expect(screen.getByText("Course 1")).toBeInTheDocument();
+});
+
+================
+File: src/App.tsx
+================
+/**
+ *
+ * Student Management System
+ *
+ * Description: The Student Management System is a comprehensive web application designed to manage student data efficiently.
+ * Built with modern web technologies, this system offers a robust and user-friendly interface for managing courses, students, and their performance.
+ *
+ * Technologies Used:
+ * - React
+ * - TypeScript
+ * - Zustand (State Management)
+ * - Tailwind CSS (Styling)
+ * - Vite (Building and Serving)
+ *
+ * Author: Daniel Acevedo Lopez
+ * GitHub: https://github.com/acevedod1974/Student-Management-System-V4
+ *
+ * Copyright © 2023 Daniel Acevedo Lopez. All rights reserved.
+ *
+ * This project is licensed under the MIT License. See the LICENSE file for more details.
+ */
+
+import React from "react";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from "react-router-dom";
+import { Toaster } from "react-hot-toast";
+import { Navigation } from "./components/Navigation";
+import { Dashboard } from "./pages/Dashboard";
+import { CoursePage } from "./pages/CoursePage";
+import { StudentDetailsPage } from "./pages/StudentDetailsPage";
+import LoginPage from "./components/LoginPage";
+
+const App: React.FC = () => {
+  return (
+    <Router>
+      <Toaster />
+      <Navigation />
+      <Routes>
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/course/:courseId" element={<CoursePage />} />
+        <Route
+          path="/course/:courseId/student/:studentId"
+          element={<StudentDetailsPage />}
+        />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="*" element={<Navigate to="/" />} />
+      </Routes>
+    </Router>
+  );
+};
+
+export default App;
+
+================
+File: src/Button.tsx
+================
+import React from "react";
+
+interface ButtonProps {
+  label: string;
+  onClick: () => void;
+}
+
+const Button: React.FC<ButtonProps> = ({ label, onClick }) => {
+  return <button onClick={onClick}>{label}</button>;
+};
+
+export default Button;
+
+================
+File: src/components/ChangePasswordModal.test.tsx
+================
+// filepath: /src/components/ChangePasswordModal.test.tsx
+import React from "react";
+import { render, screen, fireEvent } from "@testing-library/react";
+import ChangePasswordModal from "./ChangePasswordModal";
+import { useAuthStore } from "../store/useAuthStore";
+
+jest.mock("../store/useAuthStore");
+
+const mockChangePassword = jest.fn();
+
+beforeEach(() => {
+  (useAuthStore as jest.Mock).mockReturnValue({
+    user: { email: "test@example.com", role: "student" },
+    changePassword: mockChangePassword,
+  });
+});
+
+test("renders ChangePasswordModal component", () => {
+  render(<ChangePasswordModal onClose={jest.fn()} />);
+  expect(screen.getByText("Cambiar Contraseña")).toBeInTheDocument();
+});
+
+test("changes password successfully", () => {
+  render(<ChangePasswordModal onClose={jest.fn()} />);
+  fireEvent.change(screen.getByLabelText("Contraseña Actual"), {
+    target: { value: "oldPassword" },
+  });
+  fireEvent.change(screen.getByLabelText("Nueva Contraseña"), {
+    target: { value: "newPassword" },
+  });
+  fireEvent.change(screen.getByLabelText("Confirmar Nueva Contraseña"), {
+    target: { value: "newPassword" },
+  });
+  fireEvent.click(screen.getByText("Cambiar Contraseña"));
+  expect(mockChangePassword).toHaveBeenCalledWith(
+    "test@example.com",
+    "oldPassword",
+    "newPassword"
+  );
+});
+
+================
+File: src/components/ChangePasswordModal.tsx
+================
+/**
+ *
+ * Student Management System
+ *
+ * Description: The Student Management System is a comprehensive web application designed to manage student data efficiently.
+ * Built with modern web technologies, this system offers a robust and user-friendly interface for managing courses, students, and their performance.
+ *
+ * Technologies Used:
+ * - React
+ * - TypeScript
+ * - Zustand (State Management)
+ * - Tailwind CSS (Styling)
+ * - Vite (Building and Serving)
+ *
+ * Author: Daniel Acevedo Lopez
+ * GitHub: https://github.com/acevedod1974/Student-Management-System-V4
+ *
+ * Copyright © 2023 Daniel Acevedo Lopez. All rights reserved.
+ *
+ * This project is licensed under the MIT License. See the LICENSE file for more details.
+ */
+
+import React, { useState } from "react";
+import { X } from "lucide-react";
+import { useAuthStore } from "../store/useAuthStore";
+import toast from "react-hot-toast";
+
+interface ChangePasswordModalProps {
+  onClose: () => void;
+}
+
+const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({
+  onClose,
+}) => {
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const { user, changePassword } = useAuthStore();
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!user?.email) {
+      toast.error("Error de sesión");
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      toast.error("Las contraseñas no coinciden");
+      return;
+    }
+
+    if (newPassword.length < 6) {
+      toast.error("La nueva contraseña debe tener al menos 6 caracteres");
+      return;
+    }
+
+    const success = changePassword(user.email, oldPassword, newPassword);
+    if (success) {
+      toast.success("Contraseña actualizada exitosamente");
+      onClose();
+    } else {
+      toast.error("Contraseña actual incorrecta");
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+      <div className="bg-white rounded-lg w-full max-w-md p-6">
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-xl font-semibold">Cambiar Contraseña</h2>
+          <button
+            onClick={onClose}
+            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Contraseña Actual
+            </label>
+            <input
+              type="password"
+              required
+              value={oldPassword}
+              onChange={(e) => setOldPassword(e.target.value)}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Nueva Contraseña
+            </label>
+            <input
+              type="password"
+              required
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Confirmar Nueva Contraseña
+            </label>
+            <input
+              type="password"
+              required
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            />
+          </div>
+
+          <div className="flex justify-end gap-2 mt-6">
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
+            >
+              Cancelar
+            </button>
+            <button
+              type="submit"
+              className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700"
+            >
+              Cambiar Contraseña
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+export default ChangePasswordModal;
+
+================
+File: src/components/CourseCard.tsx
+================
+/**
+ * 
+ * Student Management System
+ * 
+ * Description: The Student Management System is a comprehensive web application designed to manage student data efficiently.
+ * Built with modern web technologies, this system offers a robust and user-friendly interface for managing courses, students, and their performance.
+ * 
+ * Technologies Used:
+ * - React
+ * - TypeScript
+ * - Zustand (State Management)
+ * - Tailwind CSS (Styling)
+ * - Vite (Building and Serving)
+ *
+ * Author: Daniel Acevedo Lopez
+ * GitHub: https://github.com/acevedod1974/Student-Management-System-V4
+ *
+ * Copyright © 2023 Daniel Acevedo Lopez. All rights reserved.
+ *
+ * This project is licensed under the MIT License. See the LICENSE file for more details.
+ */
+
+import React from 'react';
+import { Course } from '../types/course';
+import { Users, GraduationCap } from 'lucide-react';
+
+interface CourseCardProps {
+  course: Course;
+  isSelected: boolean;
+  onClick: () => void;
+  studentView?: boolean;
+  studentGrades?: { score: number }[];
+}
+
+export const CourseCard: React.FC<CourseCardProps> = ({
+  course,
+  isSelected,
+  onClick,
+  studentView = false,
+  studentGrades = []
+}) => {
+  const averageGrade = studentView
+    ? studentGrades.reduce((acc, grade) => acc + grade.score, 0)
+    : course.students.reduce((acc, student) => acc + student.finalGrade, 0) / course.students.length;
+
+  return (
+    <div
+      onClick={onClick}
+      className={`p-6 rounded-lg cursor-pointer transition-all ${
+        isSelected
+          ? 'bg-blue-50 border-2 border-blue-500'
+          : 'bg-white border border-gray-200 hover:border-blue-300'
+      }`}
+    >
+      <div className="flex items-center gap-3 mb-4">
+        <GraduationCap className="w-6 h-6 text-blue-600" />
+        <h3 className="text-lg font-semibold">{course.name}</h3>
+      </div>
+      
+      {!studentView && (
+        <div className="flex items-center gap-2 text-gray-600 mb-2">
+          <Users className="w-4 h-4" />
+          <span>{course.students.length} estudiantes</span>
+        </div>
+      )}
+      
+      <div className="mt-4">
+        <p className="text-sm text-gray-600">
+          {studentView ? 'Tu puntaje total:' : 'Promedio del curso:'}
+        </p>
+        <p className="text-2xl font-bold text-blue-600">
+          {averageGrade.toFixed(1)}
+        </p>
+      </div>
+    </div>
+  );
+};
+
+================
+File: src/components/CourseOverviewChart.tsx
+================
+/**
+ * 
+ * Student Management System
+ * 
+ * Description: The Student Management System is a comprehensive web application designed to manage student data efficiently.
+ * Built with modern web technologies, this system offers a robust and user-friendly interface for managing courses, students, and their performance.
+ * 
+ * Technologies Used:
+ * - React
+ * - TypeScript
+ * - Zustand (State Management)
+ * - Tailwind CSS (Styling)
+ * - Vite (Building and Serving)
+ *
+ * Author: Daniel Acevedo Lopez
+ * GitHub: https://github.com/acevedod1974/Student-Management-System-V4
+ *
+ * Copyright © 2023 Daniel Acevedo Lopez. All rights reserved.
+ *
+ * This project is licensed under the MIT License. See the LICENSE file for more details.
+ */
+
+import React from 'react';
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from 'recharts';
+import { Course } from '../types/course';
+
+interface CourseOverviewChartProps {
+  courses: Course[];
+}
+
+export const CourseOverviewChart: React.FC<CourseOverviewChartProps> = ({ courses }) => {
+  const data = courses.map((course) => {
+    const averageGrade = course.students.reduce(
+      (acc, student) => acc + student.finalGrade,
+      0
+    ) / course.students.length;
+
+    const passingStudents = course.students.filter(
+      (student) => student.finalGrade >= 6
+    ).length;
+
+    return {
+      name: course.name,
+      promedio: Number(averageGrade.toFixed(1)),
+      aprobados: (passingStudents / course.students.length) * 100,
+    };
+  });
+
+  return (
+    <ResponsiveContainer width="100%" height={300}>
+      <BarChart data={data}>
+        <CartesianGrid strokeDasharray="3 3" />
+        <XAxis dataKey="name" />
+        <YAxis yAxisId="left" />
+        <YAxis yAxisId="right" orientation="right" />
+        <Tooltip />
+        <Legend />
+        <Bar
+          yAxisId="left"
+          dataKey="promedio"
+          name="Promedio"
+          fill="#3b82f6"
+        />
+        <Bar
+          yAxisId="right"
+          dataKey="aprobados"
+          name="% Aprobados"
+          fill="#10b981"
+        />
+      </BarChart>
+    </ResponsiveContainer>
+  );
+};
+
+================
+File: src/components/CourseStats.tsx
+================
+/**
+ *
+ * Student Management System
+ *
+ * Description: The Student Management System is a comprehensive web application designed to manage student data efficiently.
+ * Built with modern web technologies, this system offers a robust and user-friendly interface for managing courses, students, and their performance.
+ *
+ * Technologies Used:
+ * - React
+ * - TypeScript
+ * - Zustand (State Management)
+ * - Tailwind CSS (Styling)
+ * - Vite (Building and Serving)
+ *
+ * Author: Daniel Acevedo Lopez
+ * GitHub: https://github.com/acevedod1974/Student-Management-System-V4
+ *
+ * Copyright © 2023 Daniel Acevedo Lopez. All rights reserved.
+ *
+ * This project is licensed under the MIT License. See the LICENSE file for more details.
+ */
+
+import React from "react";
+import { Users, Award, TrendingUp } from "lucide-react";
+import { Course } from "../types/course";
+
+interface CourseStatsProps {
+  course: Course;
+}
+
+export const CourseStats: React.FC<CourseStatsProps> = ({ course }) => {
+  const passingThreshold = 250;
+
+  const averageGrade =
+    course.students.reduce((acc, student) => acc + student.finalGrade, 0) /
+    course.students.length;
+
+  const highestGrade = Math.max(
+    ...course.students.map((student) => student.finalGrade)
+  );
+
+  const passingStudents = course.students.filter(
+    (student) => student.finalGrade >= passingThreshold
+  ).length;
+
+  const stats = [
+    {
+      label: "Promedio del Curso",
+      value: averageGrade.toFixed(1),
+      icon: TrendingUp,
+      color: "text-blue-600",
+    },
+    {
+      label: "Nota Más Alta",
+      value: highestGrade.toFixed(1),
+      icon: Award,
+      color: "text-green-600",
+    },
+    {
+      label: "Estudiantes Aprobados",
+      value: `${passingStudents}/${course.students.length}`,
+      icon: Users,
+      color: "text-purple-600",
+    },
+  ];
+
+  return (
+    <>
+      {stats.map((stat) => (
+        <div key={stat.label} className="bg-white rounded-lg shadow p-6 mb-4">
+          <div className="flex items-center gap-4">
+            <div
+              className={`p-3 rounded-full bg-opacity-10 ${stat.color} bg-current`}
+            >
+              <stat.icon className={`w-6 h-6 ${stat.color}`} />
+            </div>
+            <div>
+              <p className="text-sm text-gray-600">{stat.label}</p>
+              <p className="text-2xl font-bold">{stat.value}</p>
+            </div>
+          </div>
+        </div>
+      ))}
+    </>
+  );
+};
+
+================
+File: src/components/DataManagement.tsx
+================
+import React, { useRef, useState } from "react";
+import { Save, Database, Download } from "lucide-react";
+import { useCourseStore } from "../store/useCourseStore";
+import { useAuthStore } from "../store/useAuthStore";
+import toast from "react-hot-toast";
+import { BlobServiceClient } from "@azure/storage-blob";
+import { supabase } from "../utils/supabaseClient";
+import { Course, Student, Backup, BackupVersion } from "../types";
+
+const AZURE_STORAGE_CONNECTION_STRING = import.meta.env
+  .VITE_AZURE_STORAGE_CONNECTION_STRING;
+const CONTAINER_NAME = "backups";
+
+export const DataManagement: React.FC = () => {
+  const { exportData, importData } = useCourseStore();
+  const { studentPasswords } = useAuthStore();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [backups, setBackups] = useState<string[]>([]);
+
+  const createFullBackup = (): Backup => {
+    const courseData = exportData();
+    const parsedCourses = JSON.parse(courseData) as Course[];
+
+    // Calculate course averages
+    const coursesWithAverages = parsedCourses.map((course: Course) => {
+      const courseAverage =
+        course.students.reduce(
+          (acc: number, student: Student) => acc + student.finalGrade,
+          0
+        ) / course.students.length;
+
+      return {
+        ...course,
+        courseAverage: Number(courseAverage.toFixed(1)),
+      };
+    });
+
+    return {
+      courses: coursesWithAverages,
+      studentPasswords: { ...studentPasswords }, // Ensure latest passwords
+      version: "1.0" as BackupVersion,
+      timestamp: new Date().toISOString(),
+    };
+  };
+
+  const handleExportToAzure = async () => {
+    const fullBackup = createFullBackup();
+
+    // Export to Azure
+    try {
+      console.log("Starting backup to Azure...");
+      const blobServiceClient = BlobServiceClient.fromConnectionString(
+        AZURE_STORAGE_CONNECTION_STRING
+      );
+      const containerClient =
+        blobServiceClient.getContainerClient(CONTAINER_NAME);
+      const blockBlobClient = containerClient.getBlockBlobClient(
+        `backup-${Date.now()}.json`
+      );
+      await blockBlobClient.upload(
+        JSON.stringify(fullBackup),
+        JSON.stringify(fullBackup).length
+      );
+      toast.success("Backup exportado a Azure exitosamente");
+    } catch (error) {
+      console.error("Error exporting backup to Azure:", error);
+      toast.error("Error exporting backup to Azure");
+    }
+
+    // Export to Local
+    const blob = new Blob([JSON.stringify(fullBackup)], {
+      type: "application/json",
+    });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `backup-${Date.now()}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast.success("Backup exportado localmente exitosamente");
+  };
+
+  const fetchBackups = async () => {
+    try {
+      console.log("Fetching backups from Azure Blob Storage...");
+      console.log(
+        "Azure Storage Connection String:",
+        AZURE_STORAGE_CONNECTION_STRING
+      );
+      const blobServiceClient = BlobServiceClient.fromConnectionString(
+        AZURE_STORAGE_CONNECTION_STRING
+      );
+      const containerClient =
+        blobServiceClient.getContainerClient(CONTAINER_NAME);
+      const blobs = containerClient.listBlobsFlat();
+      const backupList: string[] = [];
+      for await (const blob of blobs) {
+        backupList.push(blob.name);
+      }
+      backupList.sort().reverse();
+      setBackups(backupList.slice(0, 6));
+      toast.success("Backups fetched successfully");
+    } catch (error) {
+      console.error("Error fetching backups from Azure Blob Storage:", error);
+      toast.error("Error fetching backups from Azure Blob Storage");
+    }
+  };
+
+  const handleExportToSupabase = async () => {
+    const fullBackup = createFullBackup();
+
+    // Export to Supabase
+    await backupToSupabase(fullBackup);
+  };
+
+  const backupToSupabase = async (backup: Backup) => {
+    try {
+      console.log("Starting backup to Supabase...");
+      const { error } = await supabase.from("backups").insert([
+        {
+          backup_data: backup,
+          timestamp: new Date(),
+        },
+      ]);
+
+      if (error) throw error;
+
+      console.log("Backup to Supabase successful");
+      toast.success("Backup exportado a Supabase exitosamente");
+    } catch (error) {
+      console.error("Error exporting backup to Supabase:", error);
+      toast.error("Error exporting backup to Supabase");
+    }
+  };
+
+  const handleImport = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        try {
+          const content = e.target?.result as string;
+          const backup = JSON.parse(content);
+
+          if (!backup.courses || !backup.studentPasswords || !backup.version) {
+            throw new Error("Formato de backup inválido");
+          }
+
+          importData(JSON.stringify(backup.courses));
+          if (backup.studentPasswords) {
+            setStudentPasswords(backup.studentPasswords);
+          }
+
+          toast.success("Datos restaurados exitosamente");
+        } catch (error) {
+          console.error("Error importing backup:", error);
+          toast.error("Error al importar el backup");
+        }
+      };
+      reader.readAsText(file);
+    }
+  };
+
+  const handleRetrieve = async (blobName: string) => {
+    try {
+      const blobServiceClient = BlobServiceClient.fromConnectionString(
+        AZURE_STORAGE_CONNECTION_STRING
+      );
+      const containerClient =
+        blobServiceClient.getContainerClient(CONTAINER_NAME);
+      const blockBlobClient = containerClient.getBlockBlobClient(blobName);
+      const downloadBlockBlobResponse = await blockBlobClient.download(0);
+      const blobBody = await downloadBlockBlobResponse.blobBody;
+      const downloaded = await blobBody?.text();
+      if (downloaded) {
+        const backup = JSON.parse(downloaded);
+
+        if (!backup.courses || !backup.studentPasswords || !backup.version) {
+          throw new Error("Formato de backup inválido");
+        }
+
+        importData(JSON.stringify(backup.courses));
+        if (backup.studentPasswords) {
+          setStudentPasswords(backup.studentPasswords);
+        }
+
+        toast.success("Datos restaurados exitosamente");
+      }
+    } catch (error) {
+      console.error("Error retrieving backup from Azure Blob Storage:", error);
+      toast.error("Error retrieving backup from Azure Blob Storage");
+    }
+  };
+
+  return (
+    <div className="flex flex-col gap-4">
+      <div className="flex gap-4">
+        <button
+          onClick={handleExportToAzure}
+          className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700"
+          title="Crear backup completo"
+        >
+          <Save className="w-4 h-4" />
+          Backup
+        </button>
+        <label className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 cursor-pointer">
+          <Database className="w-4 h-4" />
+          Restaurar
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept=".json"
+            onChange={handleImport}
+            className="hidden"
+          />
+        </label>
+        <button
+          onClick={fetchBackups}
+          className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-md hover:bg-green-700"
+          title="Fetch backups from Azure"
+        >
+          <Download className="w-4 h-4" />
+          Fetch Backups
+        </button>
+        <button
+          onClick={handleExportToSupabase}
+          className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-yellow-600 rounded-md hover:bg-yellow-700"
+          title="Exportar Backup a Supabase"
+        >
+          <Download className="w-4 h-4" />
+          Exportar Backup a Supabase
+        </button>
+      </div>
+      {backups.length > 0 && (
+        <div className="flex flex-col gap-2">
+          {backups.map((backup) => (
+            <button
+              key={backup}
+              onClick={() => handleRetrieve(backup)}
+              className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-gray-600 rounded-md hover:bg-gray-700"
+              title={`Retrieve ${backup}`}
+            >
+              <Download className="w-4 h-4" />
+              {backup}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default DataManagement;
+
+================
+File: src/components/ExamPerformanceChart.tsx
+================
+/**
+ * 
+ * Student Management System
+ * 
+ * Description: The Student Management System is a comprehensive web application designed to manage student data efficiently.
+ * Built with modern web technologies, this system offers a robust and user-friendly interface for managing courses, students, and their performance.
+ * 
+ * Technologies Used:
+ * - React
+ * - TypeScript
+ * - Zustand (State Management)
+ * - Tailwind CSS (Styling)
+ * - Vite (Building and Serving)
+ *
+ * Author: Daniel Acevedo Lopez
+ * GitHub: https://github.com/acevedod1974/Student-Management-System-V4
+ *
+ * Copyright © 2023 Daniel Acevedo Lopez. All rights reserved.
+ *
+ * This project is licensed under the MIT License. See the LICENSE file for more details.
+ */
+
+import React from 'react';
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from 'recharts';
+import { Course } from '../types/course';
+
+interface ExamPerformanceChartProps {
+  course: Course;
+}
+
+export const ExamPerformanceChart: React.FC<ExamPerformanceChartProps> = ({ course }) => {
+  const data = course.exams.map((exam, index) => {
+    const examGrades = course.students.map(
+      (student) => student.grades[index].score
+    );
+    const average =
+      examGrades.reduce((acc, grade) => acc + grade, 0) / examGrades.length;
+    const passing = examGrades.filter((grade) => grade >= 6).length;
+    const passingPercentage = (passing / examGrades.length) * 100;
+
+    return {
+      name: exam,
+      promedio: Number(average.toFixed(1)),
+      aprobados: Number(passingPercentage.toFixed(1)),
+    };
+  });
+
+  return (
+    <ResponsiveContainer width="100%" height={300}>
+      <LineChart data={data}>
+        <CartesianGrid strokeDasharray="3 3" />
+        <XAxis dataKey="name" />
+        <YAxis yAxisId="left" />
+        <YAxis yAxisId="right" orientation="right" />
+        <Tooltip />
+        <Legend />
+        <Line
+          yAxisId="left"
+          type="monotone"
+          dataKey="promedio"
+          name="Promedio"
+          stroke="#3b82f6"
+          strokeWidth={2}
+        />
+        <Line
+          yAxisId="right"
+          type="monotone"
+          dataKey="aprobados"
+          name="% Aprobados"
+          stroke="#10b981"
+          strokeWidth={2}
+        />
+      </LineChart>
+    </ResponsiveContainer>
+  );
+};
+
+================
+File: src/components/GradeDistributionChart.tsx
+================
+/**
+ * 
+ * Student Management System
+ * 
+ * Description: The Student Management System is a comprehensive web application designed to manage student data efficiently.
+ * Built with modern web technologies, this system offers a robust and user-friendly interface for managing courses, students, and their performance.
+ * 
+ * Technologies Used:
+ * - React
+ * - TypeScript
+ * - Zustand (State Management)
+ * - Tailwind CSS (Styling)
+ * - Vite (Building and Serving)
+ *
+ * Author: Daniel Acevedo Lopez
+ * GitHub: https://github.com/acevedod1974/Student-Management-System-V4
+ *
+ * Copyright © 2023 Daniel Acevedo Lopez. All rights reserved.
+ *
+ * This project is licensed under the MIT License. See the LICENSE file for more details.
+ */
+
+import React from 'react';
+import {
+  PieChart,
+  Pie,
+  Cell,
+  ResponsiveContainer,
+  Tooltip,
+  Legend,
+} from 'recharts';
+import { Course } from '../types/course';
+
+interface GradeDistributionChartProps {
+  course: Course;
+}
+
+export const GradeDistributionChart: React.FC<GradeDistributionChartProps> = ({ course }) => {
+  const gradeRanges = [
+    { name: '0-100', range: [0, 100], color: '#ef4444' },
+    { name: '101-200', range: [101, 200], color: '#f97316' },
+    { name: '201-300', range: [201, 300], color: '#eab308' },
+    { name: '301-400', range: [301, 400], color: '#22c55e' },
+    { name: '401-500', range: [401, 500], color: '#3b82f6' },
+  ];
+
+  const data = gradeRanges.map((range) => ({
+    name: `${range.name} pts`,
+    value: course.students.filter(
+      (student) =>
+        student.finalGrade >= range.range[0] &&
+        student.finalGrade < range.range[1]
+    ).length,
+    color: range.color,
+  }));
+
+  return (
+    <ResponsiveContainer width="100%" height={300}>
+      <PieChart>
+        <Pie
+          data={data}
+          dataKey="value"
+          nameKey="name"
+          cx="50%"
+          cy="50%"
+          outerRadius={100}
+          label={({ name, percent }) => 
+            percent > 0 ? `${name} (${(percent * 100).toFixed(0)}%)` : ''
+          }
+        >
+          {data.map((entry, index) => (
+            <Cell key={index} fill={entry.color} />
+          ))}
+        </Pie>
+        <Tooltip />
+        <Legend />
+      </PieChart>
+    </ResponsiveContainer>
+  );
+};
+
+================
+File: src/components/GradesTable.test.tsx
+================
+// filepath: /src/components/GradesTable.test.tsx
+import React from "react";
+import { render, screen, fireEvent } from "@testing-library/react";
+import { GradesTable } from "./GradesTable";
+import { useCourseStore } from "../store/useCourseStore";
+import { Course } from "../types/course";
+
+jest.mock("../store/useCourseStore");
+
+const mockCourse: Course = {
+  id: "course1",
+  name: "Course 1",
+  exams: ["Exam 1", "Exam 2"],
+  students: [
+    {
+      id: "student1",
+      firstName: "John",
+      lastName: "Doe",
+      email: "john.doe@example.com",
+      grades: [
+        { id: "grade1", examName: "Exam 1", score: 80 },
+        { id: "grade2", examName: "Exam 2", score: 90 },
+      ],
+      finalGrade: 170,
+    },
+  ],
+};
+
+const mockUpdateGrade = jest.fn();
+const mockUpdateExamName = jest.fn();
+const mockAddExam = jest.fn();
+const mockDeleteExam = jest.fn();
+
+beforeEach(() => {
+  (useCourseStore as jest.Mock).mockReturnValue({
+    updateGrade: mockUpdateGrade,
+    updateExamName: mockUpdateExamName,
+    addExam: mockAddExam,
+    deleteExam: mockDeleteExam,
+  });
+});
+
+test("renders GradesTable component", () => {
+  render(<GradesTable course={mockCourse} onDeleteStudent={jest.fn()} />);
+  expect(screen.getByText("John Doe")).toBeInTheDocument();
+  expect(screen.getByText("Exam 1")).toBeInTheDocument();
+  expect(screen.getByText("80")).toBeInTheDocument();
+});
+
+test("allows editing a grade", () => {
+  render(<GradesTable course={mockCourse} onDeleteStudent={jest.fn()} />);
+  fireEvent.click(screen.getByText("80"));
+  fireEvent.change(screen.getByDisplayValue("80"), { target: { value: "85" } });
+  fireEvent.keyDown(screen.getByDisplayValue("85"), { key: "Enter" });
+  expect(mockUpdateGrade).toHaveBeenCalledWith(
+    "course1",
+    "student1",
+    "grade1",
+    85
+  );
+});
+
+test("adds a new exam", () => {
+  render(<GradesTable course={mockCourse} onDeleteStudent={jest.fn()} />);
+  fireEvent.click(screen.getByText("Agregar Examen"));
+  fireEvent.change(screen.getByPlaceholderText("Nombre del nuevo examen"), {
+    target: { value: "Exam 3" },
+  });
+  fireEvent.click(screen.getByText("Agregar"));
+  expect(mockAddExam).toHaveBeenCalledWith("course1", "Exam 3");
+});
+
+================
+File: src/components/GradesTable.tsx
+================
+/**
+ * 
+ * Student Management System
+ * 
+ * Description: The Student Management System is a comprehensive web application designed to manage student data efficiently.
+ * Built with modern web technologies, this system offers a robust and user-friendly interface for managing courses, students, and their performance.
+ * 
+ * Technologies Used:
+ * - React
+ * - TypeScript
+ * - Zustand (State Management)
+ * - Tailwind CSS (Styling)
+ * - Vite (Building and Serving)
+ *
+ * Author: Daniel Acevedo Lopez
+ * GitHub: https://github.com/acevedod1974/Student-Management-System-V4
+ *
+ * Copyright © 2023 Daniel Acevedo Lopez. All rights reserved.
+ *
+ * This project is licensed under the MIT License. See the LICENSE file for more details.
+ */
+
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { Trash2, Save, X, Plus, Edit2 } from 'lucide-react';
+import { Course } from '../types/course';
+import { useCourseStore } from '../store/useCourseStore';
+import toast from 'react-hot-toast';
+
+interface GradesTableProps {
+  course: Course;
+  onDeleteStudent: (studentId: string) => void;
+}
+
+export const GradesTable: React.FC<GradesTableProps> = ({ course, onDeleteStudent }) => {
+  const { updateGrade, updateExamName, addExam, deleteExam } = useCourseStore();
+  const [editingCell, setEditingCell] = useState<{
+    studentId: string;
+    gradeId: string;
+    currentValue: number;
+  } | null>(null);
+  const [editingExam, setEditingExam] = useState<{
+    index: number;
+    name: string;
+  } | null>(null);
+  const [newExamName, setNewExamName] = useState('');
+  const [showAddExam, setShowAddExam] = useState(false);
+
+  const handleEditStart = (studentId: string, gradeId: string, currentValue: number) => {
+    setEditingCell({ studentId, gradeId, currentValue });
+  };
+
+  const handleEditSave = () => {
+    if (!editingCell) return;
+
+    const newScore = Number(editingCell.currentValue);
+    if (isNaN(newScore) || newScore < 0 || newScore > 100) {
+      toast.error('La calificación debe ser un número entre 0 y 100');
+      return;
+    }
+    updateGrade(course.id, editingCell.studentId, editingCell.gradeId, newScore);
+    setEditingCell(null);
+    toast.success('Calificación actualizada');
+  };
+
+  const handleExamEditSave = () => {
+    if (!editingExam) return;
+    if (!editingExam.name.trim()) {
+      toast.error('El nombre del examen no puede estar vacío');
+      return;
+    }
+    updateExamName(course.id, editingExam.index, editingExam.name);
+    setEditingExam(null);
+    toast.success('Nombre del examen actualizado');
+  };
+
+  const handleAddExam = () => {
+    if (!newExamName.trim()) {
+      toast.error('El nombre del examen no puede estar vacío');
+      return;
+    }
+    addExam(course.id, newExamName);
+    setNewExamName('');
+    setShowAddExam(false);
+    toast.success('Examen agregado exitosamente');
+  };
+
+  const handleDeleteExam = (index: number) => {
+    if (window.confirm('¿Está seguro de eliminar este examen? Esta acción no se puede deshacer.')) {
+      deleteExam(course.id, index);
+      toast.success('Examen eliminado exitosamente');
+    }
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent, type: 'grade' | 'exam' | 'new') => {
+    if (e.key === 'Enter') {
+      if (type === 'grade') {
+        handleEditSave();
+      } else if (type === 'exam') {
+        handleExamEditSave();
+      } else {
+        handleAddExam();
+      }
+    } else if (e.key === 'Escape') {
+      if (type === 'grade') {
+        setEditingCell(null);
+      } else if (type === 'exam') {
+        setEditingExam(null);
+      } else {
+        setShowAddExam(false);
+        setNewExamName('');
+      }
+    }
+  };
+
+  return (
+    <div className="overflow-x-auto">
+      <table className="min-w-full bg-white border border-gray-200">
+        <thead>
+          <tr className="bg-gray-50">
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Estudiante
+            </th>
+            {course.exams.map((exam, index) => (
+              <th
+                key={index}
+                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
+                <div className="flex items-center gap-2">
+                  {editingExam?.index === index ? (
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="text"
+                        value={editingExam.name}
+                        onChange={(e) => setEditingExam({ ...editingExam, name: e.target.value })}
+                        onKeyDown={(e) => handleKeyPress(e, 'exam')}
+                        className="w-32 px-2 py-1 text-xs border rounded"
+                        autoFocus
+                      />
+                      <button
+                        onClick={handleExamEditSave}
+                        className="p-1 text-green-600 hover:bg-green-50 rounded-full transition-colors"
+                      >
+                        <Save className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => setEditingExam(null)}
+                        className="p-1 text-red-600 hover:bg-red-50 rounded-full transition-colors"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                    </div>
+                  ) : (
+                    <>
+                      <span>{exam}</span>
+                      <div className="flex gap-1">
+                        <button
+                          onClick={() => setEditingExam({ index, name: exam })}
+                          className="p-1 text-blue-600 hover:bg-blue-50 rounded-full transition-colors"
+                        >
+                          <Edit2 className="w-3 h-3" />
+                        </button>
+                        <button
+                          onClick={() => handleDeleteExam(index)}
+                          className="p-1 text-red-600 hover:bg-red-50 rounded-full transition-colors"
+                        >
+                          <Trash2 className="w-3 h-3" />
+                        </button>
+                      </div>
+                    </>
+                  )}
+                </div>
+              </th>
+            ))}
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Total
+            </th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Acciones
+            </th>
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-gray-200">
+          {course.students.map((student) => (
+            <tr key={student.id} className="hover:bg-gray-50">
+              <td className="px-6 py-4 whitespace-nowrap">
+                <Link
+                  to={`/course/${course.id}/student/${student.id}`}
+                  className="font-medium text-gray-900 hover:text-blue-600"
+                >
+                  {student.firstName} {student.lastName}
+                </Link>
+                <div className="text-sm text-gray-500">{student.email}</div>
+              </td>
+              {student.grades.map((grade) => (
+                <td
+                  key={grade.id}
+                  className="px-6 py-4 whitespace-nowrap text-gray-900"
+                >
+                  {editingCell?.studentId === student.id && editingCell?.gradeId === grade.id ? (
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="number"
+                        min="0"
+                        max="100"
+                        value={editingCell.currentValue}
+                        onChange={(e) => setEditingCell({
+                          ...editingCell,
+                          currentValue: Number(e.target.value)
+                        })}
+                        onKeyDown={(e) => handleKeyPress(e, 'grade')}
+                        className="w-20 px-2 py-1 border rounded"
+                        autoFocus
+                      />
+                      <button
+                        onClick={handleEditSave}
+                        className="p-1 text-green-600 hover:bg-green-50 rounded-full transition-colors"
+                      >
+                        <Save className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => setEditingCell(null)}
+                        className="p-1 text-red-600 hover:bg-red-50 rounded-full transition-colors"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                    </div>
+                  ) : (
+                    <div
+                      className={`inline-block px-3 py-1 rounded-full cursor-pointer transition-colors ${
+                        grade.score >= 50
+                          ? 'bg-green-100 text-green-800 hover:bg-green-200'
+                          : 'bg-red-100 text-red-800 hover:bg-red-200'
+                      }`}
+                      onClick={() => handleEditStart(student.id, grade.id, grade.score)}
+                    >
+                      {grade.score}
+                    </div>
+                  )}
+                </td>
+              ))}
+              <td className="px-6 py-4 whitespace-nowrap">
+                <span className={`inline-block px-3 py-1 rounded-full font-semibold ${
+                  student.finalGrade >= 250
+                    ? 'bg-green-100 text-green-800'
+                    : 'bg-red-100 text-red-800'
+                }`}>
+                  {student.finalGrade}
+                </span>
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap">
+                <button
+                  onClick={() => onDeleteStudent(student.id)}
+                  className="p-2 text-red-600 hover:bg-red-50 rounded-full transition-colors"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      <div className="mt-4">
+        {showAddExam ? (
+          <div className="flex items-center gap-2">
+            <input
+              type="text"
+              value={newExamName}
+              onChange={(e) => setNewExamName(e.target.value)}
+              onKeyDown={(e) => handleKeyPress(e, 'new')}
+              placeholder="Nombre del nuevo examen"
+              className="px-3 py-2 border rounded-md"
+              autoFocus
+            />
+            <button
+              onClick={handleAddExam}
+              className="px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-md hover:bg-green-700"
+            >
+              Agregar
+            </button>
+            <button
+              onClick={() => {
+                setShowAddExam(false);
+                setNewExamName('');
+              }}
+              className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
+            >
+              Cancelar
+            </button>
+          </div>
+        ) : (
+          <button
+            onClick={() => setShowAddExam(true)}
+            className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700"
+          >
+            <Plus className="w-4 h-4" />
+            Agregar Examen
+          </button>
+        )}
+      </div>
+    </div>
+  );
+};
+
+================
+File: src/components/LoginPage.tsx
+================
+/**
+ *
+ * Student Management System
+ *
+ * Description: The Student Management System is a comprehensive web application designed to manage student data efficiently.
+ * Built with modern web technologies, this system offers a robust and user-friendly interface for managing courses, students, and their performance.
+ *
+ * Technologies Used:
+ * - React
+ * - TypeScript
+ * - Zustand (State Management)
+ * - Tailwind CSS (Styling)
+ * - Vite (Building and Serving)
+ *
+ * Author: Daniel Acevedo Lopez
+ * GitHub: https://github.com/acevedod1974/Student-Management-System-V4
+ *
+ * Copyright © 2023 Daniel Acevedo Lopez. All rights reserved.
+ *
+ * This project is licensed under the MIT License. See the LICENSE file for more details.
+ */
+
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuthStore } from "../store/useAuthStore";
+import toast from "react-hot-toast";
+import { Lock } from "lucide-react";
+
+const LoginPage: React.FC = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const login = useAuthStore((state) => state.login);
+  const navigate = useNavigate();
+
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (login(email, password)) {
+      toast.success("Login successful");
+      navigate("/dashboard"); // Redirect to the dashboard or appropriate page
+    } else {
+      toast.error("Invalid email or password");
+    }
+  };
+
+  return (
+    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+        <div className="flex justify-center mb-6">
+          <Lock className="w-12 h-12 text-blue-600" />
+        </div>
+        <h2 className="text-2xl font-bold mb-4 text-center">
+          Sistema de Calificaciones
+        </h2>
+        <h3 className="text-xl font-semibold mb-2 text-center">
+          Procesos de Fabricación
+        </h3>
+        <h4 className="text-lg font-medium mb-4 text-center">UNEXPO</h4>
+        <p className="text-sm mb-6 text-center">
+          <strong>Información de Acceso</strong>
+          <br />
+          Estudiantes: Usar su correo electrónico y contraseña.
+          <br />
+          Primera vez: usar contraseña "student123"
+        </p>
+        <form onSubmit={handleLogin} className="space-y-6">
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Email
+            </label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Contraseña
+            </label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            />
+          </div>
+          <button
+            type="submit"
+            className="w-full py-2 px-4 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700"
+          >
+            Iniciar Sesión
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+export default LoginPage;
+
+================
+File: src/components/Navigation.tsx
+================
+/**
+ *
+ * Student Management System
+ *
+ * Description: The Student Management System is a comprehensive web application designed to manage student data efficiently.
+ * Built with modern web technologies, this system offers a robust and user-friendly interface for managing courses, students, and their performance.
+ *
+ * Technologies Used:
+ * - React
+ * - TypeScript
+ * - Zustand (State Management)
+ * - Tailwind CSS (Styling)
+ * - Vite (Building and Serving)
+ *
+ * Author: Daniel Acevedo Lopez
+ * GitHub: https://github.com/acevedod1974/Student-Management-System-V4
+ *
+ * Copyright © 2023 Daniel Acevedo Lopez. All rights reserved.
+ *
+ * This project is licensed under the MIT License. See the LICENSE file for more details.
+ */
+
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import { Home, LogOut } from "lucide-react";
+import { useAuthStore } from "../store/useAuthStore";
+
+export const Navigation: React.FC = () => {
+  const user = useAuthStore((state) => state.user);
+  const logout = useAuthStore((state) => state.logout);
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
+
+  const handleHomeClick = () => {
+    if (user) {
+      if (user.role === "student") {
+        navigate("/student-dashboard");
+      } else {
+        navigate("/dashboard");
+      }
+    } else {
+      navigate("/login");
+    }
+  };
+
+  return (
+    <nav className="bg-white shadow">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between h-16">
+          <div className="flex">
+            <button
+              onClick={handleHomeClick}
+              className="flex items-center px-4 hover:text-blue-600"
+            >
+              <Home className="w-5 h-5" />
+              <span className="ml-2">Inicio</span>
+            </button>
+          </div>
+          {user && (
+            <div className="flex items-center">
+              <span className="mr-4">{user.email}</span>
+              <button
+                onClick={handleLogout}
+                className="flex items-center px-4 hover:text-red-600"
+              >
+                <LogOut className="w-5 h-5" />
+                <span className="ml-2">Cerrar Sesión</span>
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+    </nav>
+  );
+};
+
+================
+File: src/components/PasswordAnalysis.tsx
+================
+import React, { useState } from "react";
+import { useAuthStore } from "../store/useAuthStore";
+
+const PasswordAnalysis: React.FC = () => {
+  const analyzePasswords = useAuthStore((state) => state.analyzePasswords);
+  const [analysisResults, setAnalysisResults] = useState<{
+    missingPasswords: string[];
+    repeatedPasswords: string[];
+  } | null>(null);
+
+  const handleAnalyzePasswords = () => {
+    const results = analyzePasswords();
+    setAnalysisResults(results);
+  };
+
+  return (
+    <div className="p-4">
+      <button
+        onClick={handleAnalyzePasswords}
+        className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+      >
+        Analyze Passwords
+      </button>
+      {analysisResults && (
+        <div className="mt-4">
+          <h3 className="text-lg font-bold">Analysis Results</h3>
+          <div>
+            <h4 className="font-semibold">Missing Passwords:</h4>
+            <ul>
+              {analysisResults.missingPasswords.length > 0 ? (
+                analysisResults.missingPasswords.map((email) => (
+                  <li key={email}>{email}</li>
+                ))
+              ) : (
+                <li>No missing passwords</li>
+              )}
+            </ul>
+          </div>
+          <div>
+            <h4 className="font-semibold">Repeated Passwords:</h4>
+            <ul>
+              {analysisResults.repeatedPasswords.length > 0 ? (
+                analysisResults.repeatedPasswords.map((password, index) => (
+                  <li key={index}>{password}</li>
+                ))
+              ) : (
+                <li>No repeated passwords</li>
+              )}
+            </ul>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default PasswordAnalysis;
+
+================
+File: src/components/PerformanceMetricsEditor.tsx
+================
+/**
+ * 
+ * Student Management System
+ * 
+ * Description: The Student Management System is a comprehensive web application designed to manage student data efficiently.
+ * Built with modern web technologies, this system offers a robust and user-friendly interface for managing courses, students, and their performance.
+ * 
+ * Technologies Used:
+ * - React
+ * - TypeScript
+ * - Zustand (State Management)
+ * - Tailwind CSS (Styling)
+ * - Vite (Building and Serving)
+ *
+ * Author: Daniel Acevedo Lopez
+ * GitHub: https://github.com/acevedod1974/Student-Management-System-V4
+ *
+ * Copyright © 2023 Daniel Acevedo Lopez. All rights reserved.
+ *
+ * This project is licensed under the MIT License. See the LICENSE file for more details.
+ */
+
+import React, { useState } from "react";
+import { Save } from "lucide-react";
+import { useCourseStore } from "../store/useCourseStore";
+import toast from "react-hot-toast";
+
+interface PerformanceMetricsEditorProps {
+  courseId: string;
+  studentId: string;
+  currentMetrics: {
+    attendance: number;
+    participation: number;
+  };
+  onClose: () => void; // Add this line
+}
+
+export const PerformanceMetricsEditor: React.FC<
+  PerformanceMetricsEditorProps
+> = ({
+  courseId,
+  studentId,
+  currentMetrics,
+  onClose, // Add this line
+}) => {
+  const [metrics, setMetrics] = useState(currentMetrics);
+  const { updatePerformanceMetrics } = useCourseStore();
+
+  const handleSave = () => {
+    if (
+      metrics.attendance < 0 ||
+      metrics.attendance > 100 ||
+      metrics.participation < 0 ||
+      metrics.participation > 100
+    ) {
+      toast.error("Los valores deben estar entre 0 y 100");
+      return;
+    }
+
+    updatePerformanceMetrics(courseId, studentId, metrics);
+    toast.success("Métricas actualizadas exitosamente");
+    onClose(); // Call onClose after saving
+  };
+
+  return (
+    <div className="space-y-4">
+      <div>
+        <label className="block text-sm font-medium text-gray-700">
+          Asistencia (%)
+        </label>
+        <input
+          type="number"
+          min="0"
+          max="100"
+          value={metrics.attendance}
+          onChange={(e) =>
+            setMetrics({ ...metrics, attendance: Number(e.target.value) })
+          }
+          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+        />
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-gray-700">
+          Participación (%)
+        </label>
+        <input
+          type="number"
+          min="0"
+          max="100"
+          value={metrics.participation}
+          onChange={(e) =>
+            setMetrics({ ...metrics, participation: Number(e.target.value) })
+          }
+          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+        />
+      </div>
+
+      <button
+        onClick={handleSave}
+        className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700"
+      >
+        <Save className="w-4 h-4" />
+        Guardar Métricas
+      </button>
+    </div>
+  );
+};
+
+================
+File: src/components/PrivateRoute.tsx
+================
+/**
+ * 
+ * Student Management System
+ * 
+ * Description: The Student Management System is a comprehensive web application designed to manage student data efficiently.
+ * Built with modern web technologies, this system offers a robust and user-friendly interface for managing courses, students, and their performance.
+ * 
+ * Technologies Used:
+ * - React
+ * - TypeScript
+ * - Zustand (State Management)
+ * - Tailwind CSS (Styling)
+ * - Vite (Building and Serving)
+ *
+ * Author: Daniel Acevedo Lopez
+ * GitHub: https://github.com/acevedod1974/Student-Management-System-V4
+ *
+ * Copyright © 2023 Daniel Acevedo Lopez. All rights reserved.
+ *
+ * This project is licensed under the MIT License. See the LICENSE file for more details.
+ */
+
+import React from 'react';
+import { Navigate, useLocation } from 'react-router-dom';
+import { useAuthStore } from '../store/useAuthStore';
+
+interface PrivateRouteProps {
+  children: React.ReactNode;
+  allowedRoles?: ('student' | 'teacher')[];
+}
+
+export const PrivateRoute: React.FC<PrivateRouteProps> = ({
+  children,
+  allowedRoles = ['teacher', 'student'],
+}) => {
+  const { isAuthenticated, user } = useAuthStore();
+  const location = useLocation();
+
+  if (!isAuthenticated) {
+    return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+
+  if (user && !allowedRoles.includes(user.role)) {
+    return <Navigate to="/" replace />;
+  }
+
+  return <>{children}</>;
+};
+
+================
+File: src/components/StudentCard.tsx
+================
+/**
+ * 
+ * Student Management System
+ * 
+ * Description: The Student Management System is a comprehensive web application designed to manage student data efficiently.
+ * Built with modern web technologies, this system offers a robust and user-friendly interface for managing courses, students, and their performance.
+ * 
+ * Technologies Used:
+ * - React
+ * - TypeScript
+ * - Zustand (State Management)
+ * - Tailwind CSS (Styling)
+ * - Vite (Building and Serving)
+ *
+ * Author: Daniel Acevedo Lopez
+ * GitHub: https://github.com/acevedod1974/Student-Management-System-V4
+ *
+ * Copyright © 2023 Daniel Acevedo Lopez. All rights reserved.
+ *
+ * This project is licensed under the MIT License. See the LICENSE file for more details.
+ */
+
+import React from 'react';
+import { Student } from '../types/student';
+import { Edit2, Trash2, GraduationCap, Mail, Calendar } from 'lucide-react';
+
+interface StudentCardProps {
+  student: Student;
+  onEdit: (student: Student) => void;
+  onDelete: (id: string) => void;
+}
+
+export const StudentCard: React.FC<StudentCardProps> = ({ student, onEdit, onDelete }) => {
+  return (
+    <div className="bg-white rounded-lg shadow-md overflow-hidden transition-transform hover:scale-[1.02] hover:shadow-lg">
+      <div className="relative h-48 overflow-hidden">
+        <img
+          src={student.profileImage}
+          alt={`${student.firstName} ${student.lastName}`}
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4">
+          <h3 className="text-white text-xl font-semibold">
+            {student.firstName} {student.lastName}
+          </h3>
+          <p className="text-white/80">{student.major}</p>
+        </div>
+      </div>
+      
+      <div className="p-4">
+        <div className="flex items-center gap-2 text-gray-600 mb-2">
+          <Mail className="w-4 h-4" />
+          <span className="text-sm">{student.email}</span>
+        </div>
+        <div className="flex items-center gap-2 text-gray-600 mb-2">
+          <GraduationCap className="w-4 h-4" />
+          <span className="text-sm">GPA: {student.gpa}</span>
+        </div>
+        <div className="flex items-center gap-2 text-gray-600 mb-4">
+          <Calendar className="w-4 h-4" />
+          <span className="text-sm">Enrolled: {new Date(student.enrollmentDate).toLocaleDateString()}</span>
+        </div>
+        
+        <div className="flex justify-between items-center mt-4">
+          <span className={`px-3 py-1 rounded-full text-sm ${
+            student.status === 'active' ? 'bg-green-100 text-green-800' :
+            student.status === 'graduated' ? 'bg-blue-100 text-blue-800' :
+            'bg-gray-100 text-gray-800'
+          }`}>
+            {student.status.charAt(0).toUpperCase() + student.status.slice(1)}
+          </span>
+          <div className="flex gap-2">
+            <button
+              onClick={() => onEdit(student)}
+              className="p-2 text-blue-600 hover:bg-blue-50 rounded-full transition-colors"
+            >
+              <Edit2 className="w-4 h-4" />
+            </button>
+            <button
+              onClick={() => onDelete(student.id)}
+              className="p-2 text-red-600 hover:bg-red-50 rounded-full transition-colors"
+            >
+              <Trash2 className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+================
+File: src/components/StudentDetailsModal.tsx
+================
+/**
+ * 
+ * Student Management System
+ * 
+ * Description: The Student Management System is a comprehensive web application designed to manage student data efficiently.
+ * Built with modern web technologies, this system offers a robust and user-friendly interface for managing courses, students, and their performance.
+ * 
+ * Technologies Used:
+ * - React
+ * - TypeScript
+ * - Zustand (State Management)
+ * - Tailwind CSS (Styling)
+ * - Vite (Building and Serving)
+ *
+ * Author: Daniel Acevedo Lopez
+ * GitHub: https://github.com/acevedod1974/Student-Management-System-V4
+ *
+ * Copyright © 2023 Daniel Acevedo Lopez. All rights reserved.
+ *
+ * This project is licensed under the MIT License. See the LICENSE file for more details.
+ */
+
+import React from 'react';
+import { X } from 'lucide-react';
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+} from 'recharts';
+import { Course, Student } from '../types/course';
+
+interface StudentDetailsModalProps {
+  student: Student;
+  course: Course;
+  onClose: () => void;
+}
+
+export const StudentDetailsModal: React.FC<StudentDetailsModalProps> = ({
+  student,
+  course,
+  onClose,
+}) => {
+  const data = student.grades.map((grade, index) => {
+    const examAverage =
+      course.students.reduce(
+        (acc, s) => acc + s.grades[index].score,
+        0
+      ) / course.students.length;
+
+    return {
+      name: grade.examName,
+      calificacion: grade.score,
+      promedioCurso: Number(examAverage.toFixed(1)),
+    };
+  });
+
+  const gradeRanges = [
+    { name: '0-100', range: [0, 100], color: '#ef4444' },
+    { name: '101-200', range: [101, 200], color: '#f97316' },
+    { name: '201-300', range: [201, 300], color: '#eab308' },
+    { name: '301-400', range: [301, 400], color: '#22c55e' },
+    { name: '401-500', range: [401, 500], color: '#3b82f6' },
+  ];
+
+  const distributionData = gradeRanges.map((range) => ({
+    name: `${range.name} pts`,
+    value: course.students.filter(
+      (s) =>
+        s.finalGrade >= range.range[0] &&
+        s.finalGrade < range.range[1]
+    ).length,
+    color: range.color,
+  }));
+
+  return (
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 overflow-y-auto py-8">
+      <div className="bg-white rounded-lg w-full max-w-4xl mx-4 relative">
+        <div className="sticky top-0 bg-white z-10 px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+          <h2 className="text-2xl font-bold">
+            {student.firstName} {student.lastName}
+          </h2>
+          <button
+            onClick={onClose}
+            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+            title="Cerrar"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        <div className="p-6 space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <p className="text-sm text-gray-600">Total de Puntos</p>
+              <p className={`text-3xl font-bold ${
+                student.finalGrade >= 300 ? 'text-green-600' : 'text-red-600'
+              }`}>
+                {student.finalGrade}
+              </p>
+            </div>
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <p className="text-sm text-gray-600">Promedio del Curso</p>
+              <p className="text-3xl font-bold text-blue-600">
+                {(
+                  course.students.reduce((acc, s) => acc + s.finalGrade, 0) /
+                  course.students.length
+                ).toFixed(1)}
+              </p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 gap-4">
+            <div className="bg-gray-50 p-4 rounded-lg overflow-x-auto">
+              <h3 className="text-lg font-semibold mb-4">Calificaciones por Examen</h3>
+              <div className="flex gap-4">
+                {data.map((exam) => (
+                  <div key={exam.name} className="min-w-[200px] bg-white p-4 rounded-lg shadow">
+                    <h4 className="font-medium text-gray-900 mb-2">{exam.name}</h4>
+                    <div className="space-y-2">
+                      <div>
+                        <p className="text-sm text-gray-600">Calificación</p>
+                        <p className="text-xl font-bold text-blue-600">{exam.calificacion}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-gray-600">Promedio del Curso</p>
+                        <p className="text-lg text-gray-900">{exam.promedioCurso}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-gray-600">Diferencia</p>
+                        <p className={`text-lg font-medium ${
+                          exam.calificacion > exam.promedioCurso
+                            ? 'text-green-600'
+                            : exam.calificacion < exam.promedioCurso
+                            ? 'text-red-600'
+                            : 'text-gray-600'
+                        }`}>
+                          {(exam.calificacion - exam.promedioCurso).toFixed(1)}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <h3 className="text-lg font-semibold mb-4">Rendimiento por Examen</h3>
+              <div className="h-[300px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart data={data}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="name" />
+                    <YAxis domain={[0, 100]} />
+                    <Tooltip />
+                    <Legend />
+                    <Line
+                      type="monotone"
+                      dataKey="calificacion"
+                      name="Calificación"
+                      stroke="#3b82f6"
+                      strokeWidth={2}
+                      dot={{ r: 6 }}
+                    />
+                    <Line
+                      type="monotone"
+                      dataKey="promedioCurso"
+                      name="Promedio del Curso"
+                      stroke="#10b981"
+                      strokeWidth={2}
+                      dot={{ r: 6 }}
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-semibold mb-4">Distribución de Notas del Curso</h3>
+              <div className="h-[300px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie
+                      data={distributionData}
+                      dataKey="value"
+                      nameKey="name"
+                      cx="50%"
+                      cy="50%"
+                      outerRadius={100}
+                      label={({ name, percent }) => 
+                        percent > 0 ? `${name} (${(percent * 100).toFixed(0)}%)` : ''
+                      }
+                    >
+                      {distributionData.map((entry, index) => (
+                        <Cell key={index} fill={entry.color} />
+                      ))}
+                    </Pie>
+                    <Tooltip />
+                    <Legend />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="sticky bottom-0 bg-white px-6 py-4 border-t border-gray-200">
+          <div className="flex justify-end">
+            <button
+              onClick={onClose}
+              className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700"
+            >
+              Volver al Curso
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+================
+File: src/components/StudentForm.tsx
+================
+/**
+ * 
+ * Student Management System
+ * 
+ * Description: The Student Management System is a comprehensive web application designed to manage student data efficiently.
+ * Built with modern web technologies, this system offers a robust and user-friendly interface for managing courses, students, and their performance.
+ * 
+ * Technologies Used:
+ * - React
+ * - TypeScript
+ * - Zustand (State Management)
+ * - Tailwind CSS (Styling)
+ * - Vite (Building and Serving)
+ *
+ * Author: Daniel Acevedo Lopez
+ * GitHub: https://github.com/acevedod1974/Student-Management-System-V4
+ *
+ * Copyright © 2023 Daniel Acevedo Lopez. All rights reserved.
+ *
+ * This project is licensed under the MIT License. See the LICENSE file for more details.
+ */
+
+import React, { useState } from 'react';
+import { X } from 'lucide-react';
+import toast from 'react-hot-toast';
+
+interface StudentFormProps {
+  courseId: string;
+  onSubmit: (courseId: string, student: { firstName: string; lastName: string; email: string }) => void;
+  onClose: () => void;
+}
+
+export const StudentForm: React.FC<StudentFormProps> = ({ courseId, onSubmit, onClose }) => {
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    email: ''
+  });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onSubmit(courseId, formData);
+    toast.success('Estudiante agregado exitosamente');
+    onClose();
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+      <div className="bg-white rounded-lg w-full max-w-md p-6">
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-xl font-semibold">Agregar Nuevo Estudiante</h2>
+          <button
+            onClick={onClose}
+            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Nombre
+            </label>
+            <input
+              type="text"
+              required
+              value={formData.firstName}
+              onChange={(e) =>
+                setFormData({ ...formData, firstName: e.target.value })
+              }
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Apellido
+            </label>
+            <input
+              type="text"
+              required
+              value={formData.lastName}
+              onChange={(e) =>
+                setFormData({ ...formData, lastName: e.target.value })
+              }
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Email
+            </label>
+            <input
+              type="email"
+              required
+              value={formData.email}
+              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            />
+          </div>
+
+          <div className="flex justify-end gap-2 mt-6">
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
+            >
+              Cancelar
+            </button>
+            <button
+              type="submit"
+              className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700"
+            >
+              Agregar Estudiante
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+================
+File: src/index.css
+================
+/**
+ * 
+ * Student Management System
+ * 
+ * Description: The Student Management System is a comprehensive web application designed to manage student data efficiently.
+ * Built with modern web technologies, this system offers a robust and user-friendly interface for managing courses, students, and their performance.
+ * 
+ * Technologies Used:
+ * - React
+ * - TypeScript
+ * - Zustand (State Management)
+ * - Tailwind CSS (Styling)
+ * - Vite (Building and Serving)
+ *
+ * Author: Daniel Acevedo Lopez
+ * GitHub: https://github.com/acevedod1974/Student-Management-System-V4
+ *
+ * Copyright © 2023 Daniel Acevedo Lopez. All rights reserved.
+ *
+ * This project is licensed under the MIT License. See the LICENSE file for more details.
+ */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply antialiased text-gray-900;
+  }
+}
+
+@layer components {
+  input, select {
+    @apply border-gray-300 rounded-md shadow-sm;
+  }
+  
+  input:focus, select:focus {
+    @apply ring-2 ring-blue-500 border-blue-500;
+  }
+}
+
+================
+File: src/main.tsx
+================
+/**
+ * 
+ * Student Management System
+ * 
+ * Description: The Student Management System is a comprehensive web application designed to manage student data efficiently.
+ * Built with modern web technologies, this system offers a robust and user-friendly interface for managing courses, students, and their performance.
+ * 
+ * Technologies Used:
+ * - React
+ * - TypeScript
+ * - Zustand (State Management)
+ * - Tailwind CSS (Styling)
+ * - Vite (Building and Serving)
+ *
+ * Author: Daniel Acevedo Lopez
+ * GitHub: https://github.com/acevedod1974/Student-Management-System-V4
+ *
+ * Copyright © 2023 Daniel Acevedo Lopez. All rights reserved.
+ *
+ * This project is licensed under the MIT License. See the LICENSE file for more details.
+ */
+
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import App from './App.tsx';
+import './index.css';
+
+createRoot(document.getElementById('root')!).render(
+  <StrictMode>
+    <App />
+  </StrictMode>
+);
+
+================
+File: src/pages/CoursePage.tsx
+================
+/**
+ * 
+ * Student Management System
+ * 
+ * Description: The Student Management System is a comprehensive web application designed to manage student data efficiently.
+ * Built with modern web technologies, this system offers a robust and user-friendly interface for managing courses, students, and their performance.
+ * 
+ * Technologies Used:
+ * - React
+ * - TypeScript
+ * - Zustand (State Management)
+ * - Tailwind CSS (Styling)
+ * - Vite (Building and Serving)
+ *
+ * Author: Daniel Acevedo Lopez
+ * GitHub: https://github.com/acevedod1974/Student-Management-System-V4
+ *
+ * Copyright © 2023 Daniel Acevedo Lopez. All rights reserved.
+ *
+ * This project is licensed under the MIT License. See the LICENSE file for more details.
+ */
+
+import React, { useState } from 'react';
+import { useParams, Navigate, Link } from 'react-router-dom';
+import { UserPlus, ArrowLeft } from 'lucide-react';
+import { GradesTable } from '../components/GradesTable';
+import { CourseStats } from '../components/CourseStats';
+import { GradeDistributionChart } from '../components/GradeDistributionChart';
+import { ExamPerformanceChart } from '../components/ExamPerformanceChart';
+import { StudentForm } from '../components/StudentForm';
+import { DataManagement } from '../components/DataManagement';
+import { useCourseStore } from '../store/useCourseStore';
+import toast from 'react-hot-toast';
+
+export const CoursePage: React.FC = () => {
+  const { courseId } = useParams();
+  const [showAddStudent, setShowAddStudent] = useState(false);
+  const { courses, addStudent, deleteStudent } = useCourseStore();
+  const course = courses.find((c) => c.id === courseId);
+
+  if (!course) {
+    return <Navigate to="/" replace />;
+  }
+
+  const handleDeleteStudent = (studentId: string) => {
+    if (window.confirm('¿Está seguro de eliminar este estudiante?')) {
+      deleteStudent(course.id, studentId);
+      toast.success('Estudiante eliminado exitosamente');
+    }
+  };
+
+  return (
+    <div className="space-y-8">
+      <div className="flex justify-between items-center">
+        <div className="flex items-center gap-4">
+          <Link
+            to="/"
+            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+          >
+            <ArrowLeft className="w-5 h-5" />
+          </Link>
+          <h1 className="text-2xl font-bold text-gray-900">{course.name}</h1>
+        </div>
+        <div className="flex gap-4">
+          <DataManagement />
+          <button
+            onClick={() => setShowAddStudent(true)}
+            className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-md hover:bg-green-700"
+          >
+            <UserPlus className="w-4 h-4" />
+            Agregar Estudiante
+          </button>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <CourseStats course={course} />
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="bg-white rounded-lg shadow p-6">
+          <h2 className="text-xl font-semibold mb-4">Distribución de Notas</h2>
+          <GradeDistributionChart course={course} />
+        </div>
+        <div className="bg-white rounded-lg shadow p-6">
+          <h2 className="text-xl font-semibold mb-4">Rendimiento por Examen</h2>
+          <ExamPerformanceChart course={course} />
+        </div>
+      </div>
+
+      <div className="bg-white rounded-lg shadow">
+        <div className="px-6 py-4 border-b border-gray-200">
+          <h2 className="text-xl font-semibold">Calificaciones Detalladas</h2>
+        </div>
+        <div className="p-6">
+          <GradesTable course={course} onDeleteStudent={handleDeleteStudent} />
+        </div>
+      </div>
+
+      {showAddStudent && (
+        <StudentForm
+          courseId={course.id}
+          onSubmit={addStudent}
+          onClose={() => setShowAddStudent(false)}
+        />
+      )}
+    </div>
+  );
+};
+
+================
+File: src/pages/Dashboard.tsx
+================
+/**
+ *
+ * Student Management System
+ *
+ * Description: The Student Management System is a comprehensive web application designed to manage student data efficiently.
+ * Built with modern web technologies, this system offers a robust and user-friendly interface for managing courses, students, and their performance.
+ *
+ * Technologies Used:
+ * - React
+ * - TypeScript
+ * - Zustand (State Management)
+ * - Tailwind CSS (Styling)
+ * - Vite (Building and Serving)
+ *
+ * Author: Daniel Acevedo Lopez
+ * GitHub: https://github.com/acevedod1974/Student-Management-System-V4
+ *
+ * Copyright © 2023 Daniel Acevedo Lopez. All rights reserved.
+ *
+ * This project is licensed under the MIT License. See the LICENSE file for more details.
+ */
+
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import { useCourseStore } from "../store/useCourseStore";
+import { useAuthStore } from "../store/useAuthStore";
+import PasswordAnalysis from "../components/PasswordAnalysis";
+import { CourseOverviewChart } from "../components/CourseOverviewChart";
+import ChangePasswordModal from "../components/ChangePasswordModal";
+
+export const Dashboard: React.FC = () => {
+  const { courses } = useCourseStore();
+  const { user } = useAuthStore();
+  const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
+
+  const userCourses =
+    user?.role === "student"
+      ? courses.filter((course) => course.students.includes(user.email))
+      : courses;
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="flex justify-between items-center">
+          <h1 className="text-2xl font-bold">Dashboard</h1>
+          <div className="flex gap-4">
+            {userCourses.map((course) => (
+              <Link
+                key={course.id}
+                to={`/course/${course.id}`}
+                className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700"
+              >
+                {course.name}
+              </Link>
+            ))}
+          </div>
+        </div>
+        <div className="bg-white rounded-lg shadow p-6 mt-6">
+          <h2 className="text-xl font-semibold mb-4">Comparación de Cursos</h2>
+          <CourseOverviewChart courses={userCourses} />
+        </div>
+        {user?.role === "teacher" && (
+          <div className="mt-6">
+            <PasswordAnalysis />
+          </div>
+        )}
+        <div className="mt-6">
+          <h2 className="text-xl font-semibold">Current User Information</h2>
+          <p>Email: {user?.email}</p>
+          <p>Role: {user?.role}</p>
+        </div>
+        <div className="mt-6">
+          <button
+            onClick={() => setShowChangePasswordModal(true)}
+            className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700"
+          >
+            Cambiar Contraseña
+          </button>
+        </div>
+      </main>
+      {showChangePasswordModal && (
+        <ChangePasswordModal
+          onClose={() => setShowChangePasswordModal(false)}
+        />
+      )}
+    </div>
+  );
+};
+
+================
+File: src/pages/StudentDetailsPage.tsx
+================
+/**
+ *
+ * Student Management System
+ *
+ * Description: The Student Management System is a comprehensive web application designed to manage student data efficiently.
+ * Built with modern web technologies, this system offers a robust and user-friendly interface for managing courses, students, and their performance.
+ *
+ * Technologies Used:
+ * - React
+ * - TypeScript
+ * - Zustand (State Management)
+ * - Tailwind CSS (Styling)
+ * - Vite (Building and Serving)
+ *
+ * Author: Daniel Acevedo Lopez
+ * GitHub: https://github.com/acevedod1974/Student-Management-System-V4
+ *
+ * Copyright © 2023 Daniel Acevedo Lopez. All rights reserved.
+ *
+ * This project is licensed under the MIT License. See the LICENSE file for more details.
+ */
+
+import React, { useState } from "react";
+import { useParams, Navigate, Link } from "react-router-dom";
+import { ArrowLeft } from "lucide-react";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  RadarChart,
+  PolarGrid,
+  PolarAngleAxis,
+  PolarRadiusAxis,
+  Radar,
+  Cell,
+} from "recharts";
+import { useCourseStore } from "../store/useCourseStore";
+import { useAuthStore } from "../store/useAuthStore";
+import { PerformanceMetricsEditor } from "../components/PerformanceMetricsEditor";
+
+export const StudentDetailsPage: React.FC = () => {
+  const { courseId, studentId } = useParams();
+  const courses = useCourseStore((state) => state.courses);
+  const { user } = useAuthStore();
+  const [showMetricsEditor, setShowMetricsEditor] = useState(false);
+
+  const course = courses.find((c) => c.id === courseId);
+  type Student = {
+    id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    grades: { examName: string; score: number }[];
+    finalGrade: number;
+    performanceMetrics?: {
+      attendance: number;
+      participation: number;
+    };
+  };
+
+  const student: Student | undefined = course?.students.find(
+    (s) => s.id === studentId
+  );
+
+  if (!course || !student) {
+    return <Navigate to="/" replace />;
+  }
+
+  if (user?.role === "student" && user.email !== student.email) {
+    return <Navigate to="/" replace />;
+  }
+
+  const data = student.grades.map((grade, index) => {
+    const examAverage =
+      course.students.reduce((acc, s) => acc + s.grades[index].score, 0) /
+      course.students.length;
+
+    return {
+      name: grade.examName,
+      calificacion: grade.score,
+      promedioCurso: Number(examAverage.toFixed(1)),
+    };
+  });
+
+  const rankingData = course.students
+    .map((s) => ({
+      name: `${s.firstName} ${s.lastName}`,
+      puntaje: s.finalGrade,
+      isCurrentStudent: s.id === student.id,
+    }))
+    .sort((a, b) => b.puntaje - a.puntaje);
+
+  const performanceData = [
+    {
+      subject: "Promedio",
+      score:
+        student.grades.reduce((acc, grade) => acc + grade.score, 0) /
+        student.grades.length,
+      fullMark: 100,
+    },
+    {
+      subject: "Máxima Nota",
+      score: Math.max(...student.grades.map((g) => g.score)),
+      fullMark: 100,
+    },
+    {
+      subject: "Mínima Nota",
+      score: Math.min(...student.grades.map((g) => g.score)),
+      fullMark: 100,
+    },
+    {
+      subject: "Asistencia",
+      score: student.performanceMetrics?.attendance || 0,
+      fullMark: 100,
+    },
+    {
+      subject: "Participación",
+      score: student.performanceMetrics?.participation || 0,
+      fullMark: 100,
+    },
+  ];
+
+  return (
+    <div className="space-y-6">
+      <div className="flex items-center gap-4 mb-6">
+        <Link
+          to={user?.role === "teacher" ? `/course/${courseId}` : "/"}
+          className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+        >
+          <ArrowLeft className="w-5 h-5" />
+        </Link>
+        <div>
+          <h1 className="text-2xl font-bold">
+            {student.firstName} {student.lastName}
+          </h1>
+          <p className="text-gray-600">{course.name}</p>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="bg-white p-6 rounded-lg shadow">
+          <p className="text-sm text-gray-600">Total de Puntos</p>
+          <p
+            className={`text-3xl font-bold ${
+              student.finalGrade >= 250 ? "text-green-600" : "text-red-600"
+            }`}
+          >
+            {student.finalGrade}
+          </p>
+        </div>
+        <div className="bg-white p-6 rounded-lg shadow">
+          <p className="text-sm text-gray-600">Promedio del Curso</p>
+          <p className="text-3xl font-bold text-blue-600">
+            {(
+              course.students.reduce((acc, s) => acc + s.finalGrade, 0) /
+              course.students.length
+            ).toFixed(1)}
+          </p>
+        </div>
+      </div>
+
+      <div className="bg-white rounded-lg shadow p-6">
+        <h3 className="text-lg font-semibold mb-4">
+          Calificaciones por Examen
+        </h3>
+        <div className="overflow-x-auto">
+          <div className="flex gap-4 pb-4">
+            {data.map((exam) => (
+              <div
+                key={exam.name}
+                className="min-w-[200px] bg-gray-50 p-4 rounded-lg"
+              >
+                <h4 className="font-medium text-gray-900 mb-2">{exam.name}</h4>
+                <div className="space-y-2">
+                  <div>
+                    <p className="text-sm text-gray-600">Calificación</p>
+                    <p className="text-xl font-bold text-blue-600">
+                      {exam.calificacion}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-600">Promedio del Curso</p>
+                    <p className="text-lg text-gray-900">
+                      {exam.promedioCurso}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-600">Diferencia</p>
+                    <p
+                      className={`text-lg font-medium ${
+                        exam.calificacion > exam.promedioCurso
+                          ? "text-green-600"
+                          : exam.calificacion < exam.promedioCurso
+                          ? "text-red-600"
+                          : "text-gray-600"
+                      }`}
+                    >
+                      {(exam.calificacion - exam.promedioCurso).toFixed(1)}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="bg-white rounded-lg shadow p-6">
+          <h3 className="text-lg font-semibold mb-4">Progreso en el Curso</h3>
+          <div className="h-[300px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={data}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" />
+                <YAxis domain={[0, 100]} />
+                <Tooltip />
+                <Legend />
+                <Line
+                  type="monotone"
+                  dataKey="calificacion"
+                  name="Tu Calificación"
+                  stroke="#3b82f6"
+                  strokeWidth={2}
+                  dot={{ r: 6 }}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="promedioCurso"
+                  name="Promedio del Curso"
+                  stroke="#10b981"
+                  strokeWidth={2}
+                  dot={{ r: 6 }}
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+
+        <div className="bg-white rounded-lg shadow p-6">
+          <h3 className="text-lg font-semibold mb-4">
+            Análisis de Rendimiento
+          </h3>
+          <div className="h-[300px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <RadarChart
+                cx="50%"
+                cy="50%"
+                outerRadius="80%"
+                data={performanceData}
+              >
+                <PolarGrid />
+                <PolarAngleAxis dataKey="subject" />
+                <PolarRadiusAxis angle={30} domain={[0, 100]} />
+                <Radar
+                  name="Rendimiento"
+                  dataKey="score"
+                  stroke="#3b82f6"
+                  fill="#3b82f6"
+                  fillOpacity={0.6}
+                />
+              </RadarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+      </div>
+
+      <div className="bg-white rounded-lg shadow p-6">
+        <h3 className="text-lg font-semibold mb-4">Posición en el Curso</h3>
+        <div className="h-[300px]">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={rankingData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Bar dataKey="puntaje" name="Puntaje Total">
+                {rankingData.map((entry, index) => (
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={entry.isCurrentStudent ? "#3b82f6" : "#94a3b8"}
+                  />
+                ))}
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+
+      {user?.role === "teacher" && (
+        <button
+          onClick={() => setShowMetricsEditor(true)}
+          className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700"
+        >
+          Editar Métricas de Rendimiento
+        </button>
+      )}
+
+      {showMetricsEditor && (
+        <PerformanceMetricsEditor
+          courseId={course.id}
+          studentId={student.id}
+          currentMetrics={
+            student.performanceMetrics || { attendance: 0, participation: 0 }
+          }
+          onClose={() => setShowMetricsEditor(false)}
+        />
+      )}
+    </div>
+  );
+};
+
+================
+File: src/setupTests.ts
+================
+import "@testing-library/jest-dom";
+
+================
+File: src/store/useAuthStore.ts
+================
+/**
+ *
+ * Student Management System
+ *
+ * Description: The Student Management System is a comprehensive web application designed to manage student data efficiently.
+ * Built with modern web technologies, this system offers a robust and user-friendly interface for managing courses, students, and their performance.
+ *
+ * Technologies Used:
+ * - React
+ * - TypeScript
+ * - Zustand (State Management)
+ * - Tailwind CSS (Styling)
+ * - Vite (Building and Serving)
+ *
+ * Author: Daniel Acevedo Lopez
+ * GitHub: https://github.com/acevedod1974/Student-Management-System-V4
+ *
+ * Copyright © 2023 Daniel Acevedo Lopez. All rights reserved.
+ *
+ * This project is licensed under the MIT License. See the LICENSE file for more details.
+ */
+
+import create from "zustand";
+import { persist } from "zustand/middleware";
+
+interface AuthState {
+  studentPasswords: Record<string, string>;
+  teacherPasswords: Record<string, string>;
+  user: { email: string; role: string } | null;
+  setStudentPasswords: (passwords: Record<string, string>) => void;
+  login: (email: string, password: string) => boolean;
+  logout: () => void;
+  analyzePasswords: () => {
+    missingPasswords: string[];
+    repeatedPasswords: string[];
+  };
+}
+
+export const useAuthStore = create<AuthState>()(
+  persist(
+    (set, get) => ({
+      studentPasswords: {
+        "jabonaldep@estudiante.unexpo.edu.ve": "A1b2C3d4E5",
+        "pvgomezm@estudiante.unexpo.edu.ve": "F6g7H8i9J0",
+        "nrgonzalezd@estudiante.unexpo.edu.ve": "K1l2M3n4O5",
+        "nclopezm@estudiante.unexpo.edu.ve": "P6q7R8s9T0",
+        "ammarquezc@estudiante.unexpo.edu.ve": "U1v2W3x4Y5",
+        "ajmatac@estudiante.unexpo.edu.ve": "Z6a7B8c9D0",
+        "pjmejiasb@estudiante.unexpo.edu.ve": "E1f2G3h4I5",
+        "avpulidoa@estudiante.unexpo.edu.ve": "J6k7L8m9N0",
+        "rarodriguezr4@estudiante.unexpo.edu.ve": "O1p2Q3r4S5",
+        "macamachob@estudiante.unexpo.edu.ve": "T6u7V8w9X0",
+        "hjcamachom@estudiante.unexpo.edu.ve": "Y1z2A3b4C5",
+        "gjfebresb@estudiante.unexpo.edu.ve": "D6e7F8g9H0",
+        "eajimenezg@estudiante.unexpo.edu.ve": "I1j2K3l4M5",
+      },
+      teacherPasswords: {
+        "dacevedo@unexpo.edu.ve": "lfsbyrt2",
+      },
+      user: null,
+      setStudentPasswords: (passwords) => set({ studentPasswords: passwords }),
+      login: (email, password) => {
+        const { studentPasswords, teacherPasswords } = get();
+        if (studentPasswords[email] === password) {
+          set({ user: { email, role: "student" } });
+          return true;
+        } else if (teacherPasswords[email] === password) {
+          set({ user: { email, role: "teacher" } });
+          return true;
+        }
+        return false;
+      },
+      logout: () => set({ user: null }),
+      analyzePasswords: () => {
+        const { studentPasswords, teacherPasswords } = get();
+        const allPasswords = { ...studentPasswords, ...teacherPasswords };
+        const passwordValues = Object.values(allPasswords);
+        const missingPasswords = Object.keys(allPasswords).filter(
+          (email) => !allPasswords[email]
+        );
+        const repeatedPasswords = passwordValues.filter(
+          (password, index, self) => self.indexOf(password) !== index
+        );
+        return { missingPasswords, repeatedPasswords };
+      },
+    }),
+    {
+      name: "auth-storage", // unique name for the storage
+    }
+  )
+);
+
+================
+File: src/store/useCourseStore.ts
+================
+/**
+ * 
+ * Student Management System
+ * 
+ * Description: The Student Management System is a comprehensive web application designed to manage student data efficiently.
+ * Built with modern web technologies, this system offers a robust and user-friendly interface for managing courses, students, and their performance.
+ * 
+ * Technologies Used:
+ * - React
+ * - TypeScript
+ * - Zustand (State Management)
+ * - Tailwind CSS (Styling)
+ * - Vite (Building and Serving)
+ *
+ * Author: Daniel Acevedo Lopez
+ * GitHub: https://github.com/acevedod1974/Student-Management-System-V4
+ *
+ * Copyright © 2023 Daniel Acevedo Lopez. All rights reserved.
+ *
+ * This project is licensed under the MIT License. See the LICENSE file for more details.
+ */
+
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
+import { Course, Student } from "../types/course";
+
+interface CourseStore {
+  courses: Course[];
+  selectedCourse: string | null;
+  setSelectedCourse: (courseId: string | null) => void;
+  addStudent: (
+    courseId: string,
+    student: Omit<Student, "id" | "grades" | "finalGrade">
+  ) => void;
+  deleteStudent: (courseId: string, studentId: string) => void;
+  updateGrade: (
+    courseId: string,
+    studentId: string,
+    gradeId: string,
+    newScore: number
+  ) => void;
+  updateStudent: (
+    courseId: string,
+    studentId: string,
+    updates: Partial<Omit<Student, "id" | "grades" | "finalGrade">>
+  ) => void;
+  updateExamName: (
+    courseId: string,
+    examIndex: number,
+    newName: string
+  ) => void;
+  addExam: (courseId: string, examName: string) => void;
+  deleteExam: (courseId: string, examIndex: number) => void;
+  exportData: () => string;
+  importData: (jsonData: string) => void;
+  updatePerformanceMetrics: (
+    courseId: string,
+    studentId: string,
+    metrics: { attendance: number; participation: number }
+  ) => void;
+}
+
+const calculateFinalGrade = (grades: { score: number }[]): number => {
+  return grades.reduce((acc, grade) => acc + grade.score, 0);
+};
+
+const generateDummyData = (): Course[] => {
+  const exams = ["Examen 1", "Examen 2", "Examen 3", "Examen 4", "Examen 5"];
+
+  const generateStudent = (index: number, prefix: string) => {
+    const grades = exams.map((exam, i) => ({
+      id: `grade-${i}`,
+      examName: exam,
+      score: Math.floor(Math.random() * 100),
+    }));
+
+    return {
+      id: `${prefix}-student-${index + 1}`,
+      firstName: ["Juan", "María", "Carlos", "Ana", "Pedro"][index],
+      lastName: ["García", "Rodríguez", "Martínez", "López", "González"][index],
+      email: `student${index + 1}@universidad.edu`,
+      grades,
+      finalGrade: calculateFinalGrade(grades),
+    };
+  };
+
+  return [
+    {
+      id: "pf1",
+      name: "PROCESOS DE FABRICACION 1",
+      students: Array.from({ length: 5 }, (_, i) => generateStudent(i, "pf1")),
+      exams,
+    },
+    {
+      id: "pf2",
+      name: "PROCESOS DE FABRICACION 2",
+      students: Array.from({ length: 5 }, (_, i) => generateStudent(i, "pf2")),
+      exams,
+    },
+  ];
+};
+
+export const useCourseStore = create<CourseStore>()(
+  persist(
+    (set, get) => ({
+      courses: generateDummyData(),
+      selectedCourse: null,
+      setSelectedCourse: (courseId) => set({ selectedCourse: courseId }),
+      addStudent: (courseId, studentData) =>
+        set((state) => {
+          const course = state.courses.find((c) => c.id === courseId);
+          if (!course) return state;
+
+          const grades = course.exams.map((exam) => ({
+            id: `grade-${crypto.randomUUID()}`,
+            examName: exam,
+            score: 0,
+          }));
+
+          const newStudent: Student = {
+            id: crypto.randomUUID(),
+            ...studentData,
+            grades,
+            finalGrade: 0,
+          };
+
+          return {
+            courses: state.courses.map((c) =>
+              c.id === courseId
+                ? { ...c, students: [...c.students, newStudent] }
+                : c
+            ),
+          };
+        }),
+      deleteStudent: (courseId, studentId) =>
+        set((state) => ({
+          courses: state.courses.map((course) =>
+            course.id === courseId
+              ? {
+                  ...course,
+                  students: course.students.filter((s) => s.id !== studentId),
+                }
+              : course
+          ),
+        })),
+      updateGrade: (courseId, studentId, gradeId, newScore) =>
+        set((state) => ({
+          courses: state.courses.map((course) =>
+            course.id === courseId
+              ? {
+                  ...course,
+                  students: course.students.map((student) =>
+                    student.id === studentId
+                      ? {
+                          ...student,
+                          grades: student.grades.map((grade) =>
+                            grade.id === gradeId
+                              ? { ...grade, score: newScore }
+                              : grade
+                          ),
+                          finalGrade: calculateFinalGrade(
+                            student.grades.map((grade) =>
+                              grade.id === gradeId
+                                ? { ...grade, score: newScore }
+                                : grade
+                            )
+                          ),
+                        }
+                      : student
+                  ),
+                }
+              : course
+          ),
+        })),
+      updateStudent: (courseId, studentId, updates) =>
+        set((state) => ({
+          courses: state.courses.map((course) =>
+            course.id === courseId
+              ? {
+                  ...course,
+                  students: course.students.map((student) =>
+                    student.id === studentId
+                      ? { ...student, ...updates }
+                      : student
+                  ),
+                }
+              : course
+          ),
+        })),
+      updateExamName: (courseId, examIndex, newName) =>
+        set((state) => ({
+          courses: state.courses.map((course) =>
+            course.id === courseId
+              ? {
+                  ...course,
+                  exams: course.exams.map((exam, index) =>
+                    index === examIndex ? newName : exam
+                  ),
+                  students: course.students.map((student) => ({
+                    ...student,
+                    grades: student.grades.map((grade, index) =>
+                      index === examIndex
+                        ? { ...grade, examName: newName }
+                        : grade
+                    ),
+                  })),
+                }
+              : course
+          ),
+        })),
+      addExam: (courseId, examName) =>
+        set((state) => ({
+          courses: state.courses.map((course) =>
+            course.id === courseId
+              ? {
+                  ...course,
+                  exams: [...course.exams, examName],
+                  students: course.students.map((student) => ({
+                    ...student,
+                    grades: [
+                      ...student.grades,
+                      {
+                        id: `grade-${crypto.randomUUID()}`,
+                        examName,
+                        score: 0,
+                      },
+                    ],
+                    finalGrade: student.finalGrade,
+                  })),
+                }
+              : course
+          ),
+        })),
+      deleteExam: (courseId, examIndex) =>
+        set((state) => ({
+          courses: state.courses.map((course) =>
+            course.id === courseId
+              ? {
+                  ...course,
+                  exams: course.exams.filter((_, index) => index !== examIndex),
+                  students: course.students.map((student) => {
+                    const newGrades = student.grades.filter(
+                      (_, index) => index !== examIndex
+                    );
+                    return {
+                      ...student,
+                      grades: newGrades,
+                      finalGrade: calculateFinalGrade(newGrades),
+                    };
+                  }),
+                }
+              : course
+          ),
+        })),
+      exportData: () => JSON.stringify(get().courses, null, 2),
+      importData: (jsonData) => {
+        try {
+          const courses = JSON.parse(jsonData);
+          if (Array.isArray(courses)) {
+            set({ courses });
+          }
+        } catch (error) {
+          console.error("Error importing data:", error);
+        }
+      },
+      updatePerformanceMetrics: (
+        courseId: string,
+        studentId: string,
+        metrics: { attendance: number; participation: number }
+      ) => {
+        set((state) => ({
+          courses: state.courses.map((course) => {
+            if (course.id === courseId) {
+              return {
+                ...course,
+                students: course.students.map((student) => {
+                  if (student.id === studentId) {
+                    return {
+                      ...student,
+                      performanceMetrics: metrics,
+                    };
+                  }
+                  return student;
+                }),
+              };
+            }
+            return course;
+          }),
+        }));
+      },
+    }),
+    {
+      name: "course-storage",
+    }
+  )
+);
+
+================
+File: src/store/useStudentStore.ts
+================
+/**
+ * 
+ * Student Management System
+ * 
+ * Description: The Student Management System is a comprehensive web application designed to manage student data efficiently.
+ * Built with modern web technologies, this system offers a robust and user-friendly interface for managing courses, students, and their performance.
+ * 
+ * Technologies Used:
+ * - React
+ * - TypeScript
+ * - Zustand (State Management)
+ * - Tailwind CSS (Styling)
+ * - Vite (Building and Serving)
+ *
+ * Author: Daniel Acevedo Lopez
+ * GitHub: https://github.com/acevedod1974/Student-Management-System-V4
+ *
+ * Copyright © 2023 Daniel Acevedo Lopez. All rights reserved.
+ *
+ * This project is licensed under the MIT License. See the LICENSE file for more details.
+ */
+
+import { create } from 'zustand';
+import { Student } from '../types/student';
+
+interface StudentStore {
+  students: Student[];
+  searchQuery: string;
+  setSearchQuery: (query: string) => void;
+  addStudent: (student: Omit<Student, 'id'>) => void;
+  updateStudent: (id: string, student: Partial<Student>) => void;
+  deleteStudent: (id: string) => void;
+}
+
+export const useStudentStore = create<StudentStore>((set) => ({
+  students: [
+    {
+      id: '1',
+      firstName: 'John',
+      lastName: 'Doe',
+      email: 'john.doe@example.com',
+      dateOfBirth: '1999-05-15',
+      grade: 'Senior',
+      profileImage: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7',
+      major: 'Computer Science',
+      gpa: 3.8,
+      enrollmentDate: '2020-09-01',
+      status: 'active'
+    },
+    // Add more sample students here
+  ],
+  searchQuery: '',
+  setSearchQuery: (query) => set({ searchQuery: query }),
+  addStudent: (student) =>
+    set((state) => ({
+      students: [...state.students, { ...student, id: crypto.randomUUID() }]
+    })),
+  updateStudent: (id, updatedStudent) =>
+    set((state) => ({
+      students: state.students.map((student) =>
+        student.id === id ? { ...student, ...updatedStudent } : student
+      )
+    })),
+  deleteStudent: (id) =>
+    set((state) => ({
+      students: state.students.filter((student) => student.id !== id)
+    }))
+}));
+
+================
+File: src/types/course.ts
+================
+/**
+ * 
+ * Student Management System
+ * 
+ * Description: The Student Management System is a comprehensive web application designed to manage student data efficiently.
+ * Built with modern web technologies, this system offers a robust and user-friendly interface for managing courses, students, and their performance.
+ * 
+ * Technologies Used:
+ * - React
+ * - TypeScript
+ * - Zustand (State Management)
+ * - Tailwind CSS (Styling)
+ * - Vite (Building and Serving)
+ *
+ * Author: Daniel Acevedo Lopez
+ * GitHub: https://github.com/acevedod1974/Student-Management-System-V4
+ *
+ * Copyright © 2023 Daniel Acevedo Lopez. All rights reserved.
+ *
+ * This project is licensed under the MIT License. See the LICENSE file for more details.
+ */
+
+export interface Grade {
+  id: string;
+  examName: string;
+  score: number;
+}
+
+export interface Student {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  grades: Grade[];
+  finalGrade: number;
+}
+
+export interface Course {
+  id: string;
+  name: string;
+  students: Student[];
+  exams: string[];
+}
+
+================
+File: src/types/index.ts
+================
+export interface Student {
+  id: string;
+  email: string;
+  name: string;
+  finalGrade: number;
+}
+
+export interface Course {
+  id: string;
+  name: string;
+  teacher: string;
+  students: Student[];
+  courseAverage?: number;
+}
+
+export type BackupVersion = "1.0";
+
+export interface Backup {
+  courses: Course[];
+  studentPasswords: Record<string, string>;
+  version: BackupVersion;
+  timestamp?: string;
+}
+
+================
+File: src/types/student.ts
+================
+/**
+ * 
+ * Student Management System
+ * 
+ * Description: The Student Management System is a comprehensive web application designed to manage student data efficiently.
+ * Built with modern web technologies, this system offers a robust and user-friendly interface for managing courses, students, and their performance.
+ * 
+ * Technologies Used:
+ * - React
+ * - TypeScript
+ * - Zustand (State Management)
+ * - Tailwind CSS (Styling)
+ * - Vite (Building and Serving)
+ *
+ * Author: Daniel Acevedo Lopez
+ * GitHub: https://github.com/acevedod1974/Student-Management-System-V4
+ *
+ * Copyright © 2023 Daniel Acevedo Lopez. All rights reserved.
+ *
+ * This project is licensed under the MIT License. See the LICENSE file for more details.
+ */
+
+export interface Student {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  dateOfBirth: string;
+  grade: string;
+  profileImage: string;
+  major: string;
+  gpa: number;
+  enrollmentDate: string;
+  status: 'active' | 'inactive' | 'graduated';
+}
+
+================
+File: src/utils/supabaseClient.ts
+================
+import { createClient } from "@supabase/supabase-js";
+
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseKey = import.meta.env.VITE_SUPABASE_KEY;
+
+if (!supabaseUrl || !supabaseKey) {
+  throw new Error("Supabase URL and Key are required");
+}
+
+export const supabase = createClient(supabaseUrl, supabaseKey);
+
+================
+File: src/vite-env.d.ts
+================
+/**
+ * 
+ * Student Management System
+ * 
+ * Description: The Student Management System is a comprehensive web application designed to manage student data efficiently.
+ * Built with modern web technologies, this system offers a robust and user-friendly interface for managing courses, students, and their performance.
+ * 
+ * Technologies Used:
+ * - React
+ * - TypeScript
+ * - Zustand (State Management)
+ * - Tailwind CSS (Styling)
+ * - Vite (Building and Serving)
+ *
+ * Author: Daniel Acevedo Lopez
+ * GitHub: https://github.com/acevedod1974/Student-Management-System-V4
+ *
+ * Copyright © 2023 Daniel Acevedo Lopez. All rights reserved.
+ *
+ * This project is licensed under the MIT License. See the LICENSE file for more details.
+ */
+
+/// <reference types="vite/client" />
+
+================
+File: tailwind.config.js
+================
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+};
+
+================
+File: TODO.md
+================
+# TODO.md
+
+#### Strengths to Maintain
+
+- [ ] Continue to follow a modular approach for new features ~3d #feat @team
+- [ ] Ensure clear separation of concerns in new components ~2d #feat @team
+- [ ] Maintain the use of Zustand for state management ~1d #feat @team
+- [ ] Ensure new state logic is added in a scalable manner ~1d #feat @team
+- [ ] Continue using Tailwind CSS for consistent design ~1d #feat @team
+- [ ] Ensure new styles follow the existing design system ~1d #feat @team
+- [ ] Use `react-hot-toast` for new user notifications ~1d #feat @team
+- [ ] Ensure notifications are non-intrusive and informative ~1d #feat @team
+- [ ] Maintain TypeScript for type safety ~1d #feat @team
+- [ ] Ensure new code is strongly typed and follows TypeScript best practices ~1d #feat @team
+- [ ] Use `recharts` for new data visualizations ~2d #feat @team
+- [ ] Ensure charts are interactive and responsive ~2d #feat @team
+
+#### Areas for Improvement
+
+- [ ] Refactor event handlers in `GradesTable` to reduce duplication ~2d #refactor @team
+- [ ] Identify and refactor other duplicated code across the project ~3d #refactor @team
+- [ ] Ensure comprehensive validation for all user inputs ~2d #feat @team
+- [ ] Add validation for new forms and inputs ~2d #feat @team
+- [ ] Add `aria-label` attributes to all interactive elements ~1d #accessibility @team
+- [ ] Ensure forms and buttons are accessible ~1d #accessibility @team
+- [ ] Conduct an accessibility audit and address any issues ~3d #accessibility @team
+- [ ] Wrap API calls in try-catch blocks ~1d #bugfix @team
+- [ ] Provide user feedback in case of errors ~1d #bugfix @team
+- [ ] Ensure new features handle errors gracefully ~1d #bugfix @team
+- [ ] Set up a testing framework (e.g., Jest) ~2d #testing @team
+- [ ] Add unit tests for critical components ~3d #testing @team
+- [ ] Add integration tests for key functionalities ~3d #testing @team
+- [ ] Ensure new features are covered by tests ~2d #testing @team
+- [ ] Use React's `useMemo` and `useCallback` hooks to optimize rendering ~1d #performance @team
+- [ ] Avoid unnecessary re-renders in new components ~1d #performance @team
+- [ ] Conduct performance profiling and address any bottlenecks ~3d #performance @team
+
+#### Specific Tasks
+
+- [ ] Refactor `handleEditStart` and `handleEditSave` in `GradesTable` to reduce duplication ~2d #refactor @team
+- [ ] Set up Jest for testing ~2d #testing @team
+- [ ] Write unit tests for `GradesTable` ~3d #testing @team
+- [ ] Write integration tests for the main user flows ~3d #testing @team
+- [ ] Add `aria-label` attributes to buttons in `GradesTable` ~1d #accessibility @team
+- [ ] Ensure forms in `StudentForm` are accessible ~1d #accessibility @team
+- [ ] Wrap API calls in `useCourseStore` with try-catch blocks ~1d #bugfix @team
+- [ ] Provide user feedback for network errors ~1d #bugfix @team
+- [ ] Use `useMemo` and `useCallback` in `CoursePage` to optimize rendering ~1d #performance @team
+- [ ] Profile the application and address any performance issues ~3d #performance @team
+- [ ] Implement "Change Password" feature for users ~2d #feat @team
+- [ ] Add modal for changing passwords ~1d #feat @team
+- [ ] Ensure password change functionality is secure and user-friendly ~1d #feat @team
+
+### In Progress
+
+- [ ] Work on Github Repo
+
+### Done ✓
+
+- [ ] Create DEV branch
+
+================
+File: tsconfig.app.json
+================
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+
+    /* Bundler mode */
+    "moduleResolution": "node",
+    "allowImportingTsExtensions": true,
+    "isolatedModules": true,
+    "moduleDetection": "force",
+    "emitDeclarationOnly": true,
+    "jsx": "react-jsx",
+    "esModuleInterop": true,
+
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "composite": true
+  },
+  "include": ["src", "src/setupTest.ts"]
+}
+
+================
+File: tsconfig.json
+================
+{
+  "compilerOptions": {
+    "target": "ES6",
+    "useDefineForClassFields": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "commonjs",
+    "skipLibCheck": true,
+    "moduleResolution": "node",
+    "allowImportingTsExtensions": true,
+    "isolatedModules": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "esModuleInterop": true,
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "types": ["node", "jest"],
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": ["src"],
+  "references": [
+    { "path": "./tsconfig.app.json" },
+    { "path": "./tsconfig.node.json" }
+  ]
+}
+
+================
+File: tsconfig.node.json
+================
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2023"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+
+    /* Bundler mode */
+    "moduleResolution": "node",
+    "allowImportingTsExtensions": true,
+    "emitDeclarationOnly": true,
+    "isolatedModules": true,
+    "moduleDetection": "force",
+    "esModuleInterop": true,
+
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+
+    /* Project References */
+    "composite": true
+  },
+  "include": ["vite.config.ts"]
+}
+
+================
+File: vite.config.ts
+================
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import dotenv from "dotenv";
+
+dotenv.config();
+
+// https://vitejs.dev/config/
+export default defineConfig({
+  plugins: [react()],
+  optimizeDeps: {
+    exclude: ["lucide-react"],
+  },
+  define: {
+    "process.env": process.env,
+  },
+});
+
+================
+File: vitest.config.ts
+================
+import { defineConfig } from "vitest/config";
+import CustomReporter from "./customReporter.mjs";
+
+export default defineConfig({
+  test: {
+    globals: true,
+    environment: "jsdom",
+    setupFiles: "./src/setupTests.ts",
+    include: [
+      // Remove this line if it references the deleted test folder
+      // "src/tests/**/*.test.tsx",
+    ],
+    reporters: [new CustomReporter()],
+  },
+});
+
+
+
+================================================================
+End of Codebase
+================================================================

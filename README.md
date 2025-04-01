@@ -1,6 +1,6 @@
 # Student Management System
 
-This project is a Student Management System built using modern web technologies including React, TypeScript, Zustand for state management, Tailwind CSS for styling, and Vite for building and serving the application.
+This project is a comprehensive **Student Management System** built using modern web technologies. It provides a robust and user-friendly interface for managing courses, students, and their performance.
 
 ## Features
 
@@ -10,7 +10,17 @@ This project is a Student Management System built using modern web technologies 
 - **User Feedback**: Clean and non-intrusive notifications using `react-hot-toast`.
 - **Type Safety**: TypeScript for catching errors early during development.
 - **Data Visualization**: Interactive and responsive charts using `recharts`.
-- **Password Management**: Users can change their passwords after logging in.
+- **Password Management**: Secure password management for users.
+
+## Technologies Used
+
+- **React**: Frontend framework.
+- **TypeScript**: For type safety.
+- **Zustand**: State management.
+- **Tailwind CSS**: Styling.
+- **Vite**: Build and development tool.
+- **Azure Blob Storage**: Backup storage.
+- **Supabase**: Database and authentication.
 
 ## Installation
 
@@ -19,37 +29,13 @@ This project is a Student Management System built using modern web technologies 
 - Node.js (version 14 or higher)
 - npm (version 6 or higher)
 
-### Windows
+### Steps
 
 1. **Clone the repository**:
 
    ```sh
    git clone https://github.com/acevedod1974/student-management-system-V4.git
    cd student-management-system-V4
-   ```
-
-2. **Install dependencies**:
-
-   ```sh
-   npm install
-   ```
-
-3. **Start the development server**:
-
-   ```sh
-   npm run dev
-   ```
-
-4. **Open the application**:
-   Open your browser and navigate to `http://localhost:3000`.
-
-### Linux
-
-1. **Clone the repository**:
-
-   ```sh
-   git clone https://github.com/your-username/student-management-system.git
-   cd student-management-system
    ```
 
 2. **Install dependencies**:

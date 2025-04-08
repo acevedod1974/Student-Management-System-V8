@@ -1,10 +1,10 @@
 /**
- * 
+ *
  * Student Management System
- * 
+ *
  * Description: The Student Management System is a comprehensive web application designed to manage student data efficiently.
  * Built with modern web technologies, this system offers a robust and user-friendly interface for managing courses, students, and their performance.
- * 
+ *
  * Technologies Used:
  * - React
  * - TypeScript
@@ -20,17 +20,17 @@
  * This project is licensed under the MIT License. See the LICENSE file for more details.
  */
 
-import React, { useState } from 'react';
-import { useParams, Navigate, Link } from 'react-router-dom';
-import { UserPlus, ArrowLeft } from 'lucide-react';
-import { GradesTable } from '../components/GradesTable';
-import { CourseStats } from '../components/CourseStats';
-import { GradeDistributionChart } from '../components/GradeDistributionChart';
-import { ExamPerformanceChart } from '../components/ExamPerformanceChart';
-import { StudentForm } from '../components/StudentForm';
-import { DataManagement } from '../components/DataManagement';
-import { useCourseStore } from '../store/useCourseStore';
-import toast from 'react-hot-toast';
+import React, { useState } from "react";
+import { useParams, Navigate, Link } from "react-router-dom";
+import { UserPlus, ArrowLeft } from "lucide-react";
+import { GradesTable } from "../components/GradesTable";
+import { CourseStats } from "../components/CourseStats";
+import { GradeDistributionChart } from "../components/GradeDistributionChart";
+import { ExamPerformanceChart } from "../components/ExamPerformanceChart";
+import { StudentForm } from "../components/StudentForm";
+import { DataManagement } from "../components/DataManagement";
+import { useCourseStore } from "../store/useCourseStore";
+import toast from "react-hot-toast";
 
 export const CoursePage: React.FC = () => {
   const { courseId } = useParams();
@@ -43,9 +43,9 @@ export const CoursePage: React.FC = () => {
   }
 
   const handleDeleteStudent = (studentId: string) => {
-    if (window.confirm('¿Está seguro de eliminar este estudiante?')) {
+    if (window.confirm("¿Está seguro de eliminar este estudiante?")) {
       deleteStudent(course.id, studentId);
-      toast.success('Estudiante eliminado exitosamente');
+      toast.success("Estudiante eliminado exitosamente");
     }
   };
 

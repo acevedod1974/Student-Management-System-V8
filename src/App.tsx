@@ -20,37 +20,69 @@
  * This project is licensed under the MIT License. See the LICENSE file for more details.
  */
 
-import React from "react";
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  Navigate,
-} from "react-router-dom";
-import { Toaster } from "react-hot-toast";
-import { Navigation } from "./components/Navigation";
-import { Dashboard } from "./pages/Dashboard";
-import { CoursePage } from "./pages/CoursePage";
-import { StudentDetailsPage } from "./pages/StudentDetailsPage";
+import React, { Suspense } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import ErrorBoundary from "./components/ErrorBoundary";
+import Navigation from "./components/Navigation";
 import LoginPage from "./components/LoginPage";
+import PrivateRoute from "./components/PrivateRoute";
 
-const App: React.FC = () => {
+// Lazy load components for better performance
+const Dashboard = React.lazy(() => import("./pages/Dashboard"));
+const CoursePage = React.lazy(() => import("./pages/CoursePage"));
+const StudentDetailsPage = React.lazy(
+  () => import("./pages/StudentDetailsPage")
+);
+
+function LoadingSpinner() {
   return (
-    <Router>
-      <Toaster />
-      <Navigation />
-      <Routes>
-        <Route path="/" element={<Dashboard />} />
-        <Route path="/course/:courseId" element={<CoursePage />} />
-        <Route
-          path="/course/:courseId/student/:studentId"
-          element={<StudentDetailsPage />}
-        />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="*" element={<Navigate to="/" />} />
-      </Routes>
-    </Router>
+    <div className="min-h-screen flex items-center justify-center">
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+    </div>
   );
-};
+}
+
+function App() {
+  return (
+    <ErrorBoundary>
+      <Router>
+        <div className="min-h-screen bg-gray-50">
+          <Navigation />
+          <main className="container mx-auto px-4 py-8">
+            <Suspense fallback={<LoadingSpinner />}>
+              <Routes>
+                <Route path="/login" element={<LoginPage />} />
+                <Route
+                  path="/"
+                  element={
+                    <PrivateRoute>
+                      <Dashboard />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path="/course/:id"
+                  element={
+                    <PrivateRoute>
+                      <CoursePage />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path="/student/:id"
+                  element={
+                    <PrivateRoute>
+                      <StudentDetailsPage />
+                    </PrivateRoute>
+                  }
+                />
+              </Routes>
+            </Suspense>
+          </main>
+        </div>
+      </Router>
+    </ErrorBoundary>
+  );
+}
 
 export default App;

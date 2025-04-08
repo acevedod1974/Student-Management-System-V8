@@ -20,13 +20,19 @@
  * This project is licensed under the MIT License. See the LICENSE file for more details.
  */
 
-import { StrictMode } from 'react';
-import { createRoot } from 'react-dom/client';
-import App from './App.tsx';
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App';
+import { applySecurityHeaders } from './middleware/security';
+import { Toaster } from 'react-hot-toast';
 import './index.css';
 
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
+// Apply security headers before rendering the application
+applySecurityHeaders();
+
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
     <App />
-  </StrictMode>
+    <Toaster position="top-right" />
+  </React.StrictMode>
 );

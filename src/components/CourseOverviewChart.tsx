@@ -20,63 +20,69 @@
  * This project is licensed under the MIT License. See the LICENSE file for more details.
  */
 
-import React from 'react';
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-} from 'recharts';
-import { Course } from '../types/course';
+import React, { useMemo } from 'react';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
-interface CourseOverviewChartProps {
-  courses: Course[];
+interface Props {
+  data: Array<{
+    date: string;
+    averageGrade: number;
+    attendance: number;
+  }>;
 }
 
-export const CourseOverviewChart: React.FC<CourseOverviewChartProps> = ({ courses }) => {
-  const data = courses.map((course) => {
-    const averageGrade = course.students.reduce(
-      (acc, student) => acc + student.finalGrade,
-      0
-    ) / course.students.length;
+function CourseOverviewChart({ data }: Props) {
+  const formattedData = useMemo(() => {
+    return data.map(item => ({
+      ...item,
+      date: new Date(item.date).toLocaleDateString(),
+    }));
+  }, [data]);
 
-    const passingStudents = course.students.filter(
-      (student) => student.finalGrade >= 6
-    ).length;
+  const metrics = useMemo(() => {
+    if (data.length === 0) return { avgGrade: 0, trend: 'stable' };
 
-    return {
-      name: course.name,
-      promedio: Number(averageGrade.toFixed(1)),
-      aprobados: (passingStudents / course.students.length) * 100,
-    };
-  });
+    const avgGrade = data.reduce((sum, item) => sum + item.averageGrade, 0) / data.length;
+    const trend = data[data.length - 1].averageGrade > avgGrade ? 'improving' : 'declining';
+
+    return { avgGrade, trend };
+  }, [data]);
 
   return (
-    <ResponsiveContainer width="100%" height={300}>
-      <BarChart data={data}>
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="name" />
-        <YAxis yAxisId="left" />
-        <YAxis yAxisId="right" orientation="right" />
-        <Tooltip />
-        <Legend />
-        <Bar
-          yAxisId="left"
-          dataKey="promedio"
-          name="Promedio"
-          fill="#3b82f6"
-        />
-        <Bar
-          yAxisId="right"
-          dataKey="aprobados"
-          name="% Aprobados"
-          fill="#10b981"
-        />
-      </BarChart>
-    </ResponsiveContainer>
+    <div className="bg-white p-6 rounded-lg shadow-md">
+      <div className="mb-4">
+        <h3 className="text-lg font-semibold">Course Performance Overview</h3>
+        <p className="text-sm text-gray-600">
+          Average Grade: {metrics.avgGrade.toFixed(2)} | Trend: {metrics.trend}
+        </p>
+      </div>
+      <div className="h-64">
+        <ResponsiveContainer>
+          <LineChart data={formattedData}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="date" />
+            <YAxis yAxisId="left" />
+            <YAxis yAxisId="right" orientation="right" />
+            <Tooltip />
+            <Line
+              yAxisId="left"
+              type="monotone"
+              dataKey="averageGrade"
+              stroke="#4f46e5"
+              name="Average Grade"
+            />
+            <Line
+              yAxisId="right"
+              type="monotone"
+              dataKey="attendance"
+              stroke="#10b981"
+              name="Attendance"
+            />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
+    </div>
   );
-};
+}
+
+export default React.memo(CourseOverviewChart);

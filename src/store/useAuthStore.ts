@@ -20,72 +20,114 @@
  * This project is licensed under the MIT License. See the LICENSE file for more details.
  */
 
-import create from "zustand";
-import { persist } from "zustand/middleware";
+import { create } from "zustand";
+import { supabase } from "../utils/supabaseClient";
+import { User } from "@supabase/supabase-js";
+import { SecurityMiddleware } from "../middleware/security";
 
-interface AuthState {
-  studentPasswords: Record<string, string>;
-  teacherPasswords: Record<string, string>;
-  user: { email: string; role: string } | null;
-  setStudentPasswords: (passwords: Record<string, string>) => void;
-  login: (email: string, password: string) => boolean;
-  logout: () => void;
-  analyzePasswords: () => {
-    missingPasswords: string[];
-    repeatedPasswords: string[];
-  };
+interface AuthStore {
+  user: User | null;
+  loading: boolean;
+  error: string | null;
+  login: (email: string, password: string) => Promise<void>;
+  logout: () => Promise<void>;
+  changePassword: (oldPassword: string, newPassword: string) => Promise<void>;
 }
 
-export const useAuthStore = create<AuthState>()(
-  persist(
-    (set, get) => ({
-      studentPasswords: {
-        "jabonaldep@estudiante.unexpo.edu.ve": "A1b2C3d4E5",
-        "pvgomezm@estudiante.unexpo.edu.ve": "F6g7H8i9J0",
-        "nrgonzalezd@estudiante.unexpo.edu.ve": "K1l2M3n4O5",
-        "nclopezm@estudiante.unexpo.edu.ve": "P6q7R8s9T0",
-        "ammarquezc@estudiante.unexpo.edu.ve": "U1v2W3x4Y5",
-        "ajmatac@estudiante.unexpo.edu.ve": "Z6a7B8c9D0",
-        "pjmejiasb@estudiante.unexpo.edu.ve": "E1f2G3h4I5",
-        "avpulidoa@estudiante.unexpo.edu.ve": "J6k7L8m9N0",
-        "rarodriguezr4@estudiante.unexpo.edu.ve": "O1p2Q3r4S5",
-        "macamachob@estudiante.unexpo.edu.ve": "T6u7V8w9X0",
-        "hjcamachom@estudiante.unexpo.edu.ve": "Y1z2A3b4C5",
-        "gjfebresb@estudiante.unexpo.edu.ve": "D6e7F8g9H0",
-        "eajimenezg@estudiante.unexpo.edu.ve": "I1j2K3l4M5",
-      },
-      teacherPasswords: {
-        "dacevedo@unexpo.edu.ve": "lfsbyrt2",
-      },
-      user: null,
-      setStudentPasswords: (passwords) => set({ studentPasswords: passwords }),
-      login: (email, password) => {
-        const { studentPasswords, teacherPasswords } = get();
-        if (studentPasswords[email] === password) {
-          set({ user: { email, role: "student" } });
-          return true;
-        } else if (teacherPasswords[email] === password) {
-          set({ user: { email, role: "teacher" } });
-          return true;
-        }
-        return false;
-      },
-      logout: () => set({ user: null }),
-      analyzePasswords: () => {
-        const { studentPasswords, teacherPasswords } = get();
-        const allPasswords = { ...studentPasswords, ...teacherPasswords };
-        const passwordValues = Object.values(allPasswords);
-        const missingPasswords = Object.keys(allPasswords).filter(
-          (email) => !allPasswords[email]
-        );
-        const repeatedPasswords = passwordValues.filter(
-          (password, index, self) => self.indexOf(password) !== index
-        );
-        return { missingPasswords, repeatedPasswords };
-      },
-    }),
-    {
-      name: "auth-storage", // unique name for the storage
+const security = SecurityMiddleware.getInstance();
+
+export const useAuthStore = create<AuthStore>((set) => ({
+  user: null,
+  loading: false,
+  error: null,
+
+  login: async (email: string, password: string) => {
+    try {
+      set({ loading: true, error: null });
+
+      // Check rate limiting
+      const identifier = `auth:${email}`;
+      if (!security.checkRateLimit(identifier)) {
+        throw new Error("Too many login attempts. Please try again later.");
+      }
+
+      // Sanitize input
+      const sanitizedEmail = security.sanitizeRequestData({ email }).email;
+
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: sanitizedEmail,
+        password,
+      });
+
+      if (error) throw error;
+
+      // Reset rate limit on successful login
+      security.resetRateLimit(identifier);
+      set({ user: data.user });
+    } catch (error) {
+      set({
+        error:
+          error instanceof Error
+            ? error.message
+            : "An error occurred during login",
+      });
+      throw error;
+    } finally {
+      set({ loading: false });
     }
-  )
-);
+  },
+
+  logout: async () => {
+    try {
+      set({ loading: true, error: null });
+      const { error } = await supabase.auth.signOut();
+      if (error) throw error;
+      set({ user: null });
+    } catch (error) {
+      set({
+        error:
+          error instanceof Error
+            ? error.message
+            : "An error occurred during logout",
+      });
+      throw error;
+    } finally {
+      set({ loading: false });
+    }
+  },
+
+  changePassword: async (oldPassword: string, newPassword: string) => {
+    try {
+      set({ loading: true, error: null });
+
+      // Verify current password first
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (!user?.email) throw new Error("User not found");
+
+      const { error: verifyError } = await supabase.auth.signInWithPassword({
+        email: user.email,
+        password: oldPassword,
+      });
+
+      if (verifyError) throw new Error("Current password is incorrect");
+
+      const { error } = await supabase.auth.updateUser({
+        password: newPassword,
+      });
+
+      if (error) throw error;
+    } catch (error) {
+      set({
+        error:
+          error instanceof Error
+            ? error.message
+            : "An error occurred while changing password",
+      });
+      throw error;
+    } finally {
+      set({ loading: false });
+    }
+  },
+}));

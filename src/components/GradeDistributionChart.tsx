@@ -1,10 +1,10 @@
 /**
- * 
+ *
  * Student Management System
- * 
+ *
  * Description: The Student Management System is a comprehensive web application designed to manage student data efficiently.
  * Built with modern web technologies, this system offers a robust and user-friendly interface for managing courses, students, and their performance.
- * 
+ *
  * Technologies Used:
  * - React
  * - TypeScript
@@ -20,61 +20,104 @@
  * This project is licensed under the MIT License. See the LICENSE file for more details.
  */
 
-import React from 'react';
-import {
-  PieChart,
-  Pie,
-  Cell,
-  ResponsiveContainer,
-  Tooltip,
-  Legend,
-} from 'recharts';
-import { Course } from '../types/course';
+import React, { useMemo } from "react";
+import { Bar } from "react-chartjs-2";
+import { 
+  ChartEvent, 
+  ActiveElement,
+  TooltipItem
+} from "chart.js";
+import { usePerformanceMonitoring } from "../hooks/usePerformanceMonitoring";
 
-interface GradeDistributionChartProps {
-  course: Course;
+interface Props {
+  grades: number[];
+  title?: string;
 }
 
-export const GradeDistributionChart: React.FC<GradeDistributionChartProps> = ({ course }) => {
-  const gradeRanges = [
-    { name: '0-100', range: [0, 100], color: '#ef4444' },
-    { name: '101-200', range: [101, 200], color: '#f97316' },
-    { name: '201-300', range: [201, 300], color: '#eab308' },
-    { name: '301-400', range: [301, 400], color: '#22c55e' },
-    { name: '401-500', range: [401, 500], color: '#3b82f6' },
-  ];
+export function GradeDistributionChart({
+  grades,
+  title = "Grade Distribution",
+}: Props) {
+  const { trackInteraction } = usePerformanceMonitoring(
+    "GradeDistributionChart"
+  );
 
-  const data = gradeRanges.map((range) => ({
-    name: `${range.name} pts`,
-    value: course.students.filter(
-      (student) =>
-        student.finalGrade >= range.range[0] &&
-        student.finalGrade < range.range[1]
-    ).length,
-    color: range.color,
-  }));
+  const data = useMemo(() => {
+    const distribution = Array(10).fill(0); // 0-9, 10-19, ..., 90-99
+
+    grades.forEach((grade) => {
+      const index = Math.min(Math.floor(grade / 10), 9);
+      distribution[index]++;
+    });
+
+    return {
+      labels: [
+        "0-9",
+        "10-19",
+        "20-29",
+        "30-39",
+        "40-49",
+        "50-59",
+        "60-69",
+        "70-79",
+        "80-89",
+        "90-100",
+      ],
+      datasets: [
+        {
+          label: "Number of Students",
+          data: distribution,
+          backgroundColor: "rgba(79, 70, 229, 0.6)",
+          borderColor: "rgb(79, 70, 229)",
+          borderWidth: 1,
+        },
+      ],
+    };
+  }, [grades]);
+
+  const options = {
+    responsive: true,
+    plugins: {
+      title: {
+        display: Boolean(title),
+        text: title,
+      },
+      legend: {
+        display: false,
+      },
+      tooltip: {
+        callbacks: {
+          title: (tooltipItems: TooltipItem<"bar">[]) => {
+            const item = tooltipItems[0];
+            return `Grade Range: ${item.label}`;
+          },
+          label: (context: TooltipItem<"bar">) => {
+            return `Students: ${context.raw}`;
+          },
+        },
+      },
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        ticks: {
+          stepSize: 1,
+        },
+      },
+    },
+    onClick: (event: ChartEvent, elements: ActiveElement[]) => {
+      if (elements.length > 0) {
+        const { index } = elements[0];
+        trackInteraction("chart-click", () => {
+          console.log(`Clicked grade range: ${data.labels[index]}`);
+        });
+      }
+    },
+  };
 
   return (
-    <ResponsiveContainer width="100%" height={300}>
-      <PieChart>
-        <Pie
-          data={data}
-          dataKey="value"
-          nameKey="name"
-          cx="50%"
-          cy="50%"
-          outerRadius={100}
-          label={({ name, percent }) => 
-            percent > 0 ? `${name} (${(percent * 100).toFixed(0)}%)` : ''
-          }
-        >
-          {data.map((entry, index) => (
-            <Cell key={index} fill={entry.color} />
-          ))}
-        </Pie>
-        <Tooltip />
-        <Legend />
-      </PieChart>
-    </ResponsiveContainer>
+    <div className="w-full h-[300px]">
+      <Bar data={data} options={options} />
+    </div>
   );
-};
+}

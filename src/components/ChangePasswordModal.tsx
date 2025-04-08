@@ -20,122 +20,116 @@
  * This project is licensed under the MIT License. See the LICENSE file for more details.
  */
 
-import React, { useState } from "react";
-import { X } from "lucide-react";
-import { useAuthStore } from "../store/useAuthStore";
-import toast from "react-hot-toast";
+import React, { useState } from 'react';
+import { validatePassword } from '../utils/validation';
+import { useApiError } from '../hooks/useApiError';
+import { LoadingState } from './LoadingState';
 
-interface ChangePasswordModalProps {
+interface Props {
   onClose: () => void;
+  onSubmit: (oldPassword: string, newPassword: string) => Promise<void>;
 }
 
-const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({
-  onClose,
-}) => {
-  const [oldPassword, setOldPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const { user, changePassword } = useAuthStore();
+export function ChangePasswordModal({ onClose, onSubmit }: Props) {
+  const [oldPassword, setOldPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [validationErrors, setValidationErrors] = useState<string[]>([]);
+  const { handleError } = useApiError();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    if (!user?.email) {
-      toast.error("Error de sesión");
-      return;
-    }
+    setValidationErrors([]);
 
     if (newPassword !== confirmPassword) {
-      toast.error("Las contraseñas no coinciden");
+      setValidationErrors(['New password and confirmation do not match']);
       return;
     }
 
-    if (newPassword.length < 6) {
-      toast.error("La nueva contraseña debe tener al menos 6 caracteres");
+    const { isValid, errors } = validatePassword(newPassword);
+    if (!isValid) {
+      setValidationErrors(errors);
       return;
     }
 
-    const success = changePassword(user.email, oldPassword, newPassword);
-    if (success) {
-      toast.success("Contraseña actualizada exitosamente");
+    try {
+      setLoading(true);
+      await onSubmit(oldPassword, newPassword);
       onClose();
-    } else {
-      toast.error("Contraseña actual incorrecta");
+    } catch (error) {
+      handleError(error);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-lg w-full max-w-md p-6">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-semibold">Cambiar Contraseña</h2>
-          <button
-            onClick={onClose}
-            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-          >
-            <X className="w-5 h-5" />
-          </button>
-        </div>
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+      <div className="bg-white rounded-lg p-6 max-w-md w-full">
+        <h2 className="text-xl font-semibold mb-4">Change Password</h2>
+        
+        {validationErrors.length > 0 && (
+          <div className="mb-4 p-3 bg-red-100 border border-red-400 rounded">
+            {validationErrors.map((error, index) => (
+              <p key={index} className="text-red-700">{error}</p>
+            ))}
+          </div>
+        )}
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Contraseña Actual
-            </label>
+        <form onSubmit={handleSubmit}>
+          <div className="mb-4">
+            <label className="block text-sm font-medium mb-1">Current Password</label>
             <input
               type="password"
-              required
               value={oldPassword}
               onChange={(e) => setOldPassword(e.target.value)}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+              className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500"
+              required
             />
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Nueva Contraseña
-            </label>
+          <div className="mb-4">
+            <label className="block text-sm font-medium mb-1">New Password</label>
             <input
               type="password"
-              required
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+              className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500"
+              required
             />
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Confirmar Nueva Contraseña
-            </label>
+          <div className="mb-6">
+            <label className="block text-sm font-medium mb-1">Confirm New Password</label>
             <input
               type="password"
-              required
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+              className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500"
+              required
             />
           </div>
 
-          <div className="flex justify-end gap-2 mt-6">
+          <div className="flex justify-end gap-3">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
+              className="px-4 py-2 text-gray-600 hover:text-gray-800"
+              disabled={loading}
             >
-              Cancelar
+              Cancel
             </button>
             <button
               type="submit"
-              className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700"
+              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:opacity-50"
+              disabled={loading}
             >
-              Cambiar Contraseña
+              {loading ? <LoadingState size="small" /> : 'Change Password'}
             </button>
           </div>
         </form>
       </div>
     </div>
   );
-};
-
-export default ChangePasswordModal;
+}

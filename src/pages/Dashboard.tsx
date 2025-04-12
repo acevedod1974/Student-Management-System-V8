@@ -35,7 +35,9 @@ export const Dashboard: React.FC = () => {
 
   const userCourses =
     user?.role === "student"
-      ? courses.filter((course) => course.students.includes(user.email))
+      ? courses.filter((course) =>
+          course.students.some((student) => student.email === user.email)
+        )
       : courses;
 
   return (

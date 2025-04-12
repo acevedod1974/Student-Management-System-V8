@@ -22,7 +22,7 @@
 
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { Home, LogOut } from "lucide-react";
+import { Home, LogOut, User, BookOpen } from "lucide-react";
 import { useAuthStore } from "../store/useAuthStore";
 
 export const Navigation: React.FC = () => {
@@ -59,6 +59,24 @@ export const Navigation: React.FC = () => {
               <Home className="w-5 h-5" />
               <span className="ml-2">Inicio</span>
             </button>
+            {user && user.role === "teacher" && (
+              <button
+                onClick={() => navigate("/teacher-dashboard")}
+                className="flex items-center px-4 hover:text-blue-600"
+              >
+                <BookOpen className="w-5 h-5" />
+                <span className="ml-2">Teacher Dashboard</span>
+              </button>
+            )}
+            {user && user.role === "student" && (
+              <button
+                onClick={() => navigate("/student-dashboard")}
+                className="flex items-center px-4 hover:text-blue-600"
+              >
+                <User className="w-5 h-5" />
+                <span className="ml-2">Student Dashboard</span>
+              </button>
+            )}
           </div>
           {user && (
             <div className="flex items-center">

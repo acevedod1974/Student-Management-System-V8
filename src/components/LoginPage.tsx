@@ -25,6 +25,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/useAuthStore";
 import toast from "react-hot-toast";
 import { Lock } from "lucide-react";
+import { signInWithEmail } from "../utils/supabaseClient";
 
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -32,12 +33,16 @@ const LoginPage: React.FC = () => {
   const login = useAuthStore((state) => state.login);
   const navigate = useNavigate();
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (login(email, password)) {
-      toast.success("Login successful");
-      navigate("/dashboard"); // Redirect to the dashboard or appropriate page
-    } else {
+    try {
+      const user = await signInWithEmail(email, password);
+      if (user) {
+        login(email, password);
+        toast.success("Login successful");
+        navigate("/dashboard");
+      }
+    } catch (error) {
       toast.error("Invalid email or password");
     }
   };

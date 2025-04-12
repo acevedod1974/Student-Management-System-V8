@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 import { BlobServiceClient } from "@azure/storage-blob";
 import { supabase } from "../utils/supabaseClient";
 import { Course, Student, Backup, BackupVersion } from "../types";
+import { utils, writeFile } from "xlsx";
 
 const AZURE_STORAGE_CONNECTION_STRING = import.meta.env
   .VITE_AZURE_STORAGE_CONNECTION_STRING;
@@ -192,6 +193,50 @@ export const DataManagement: React.FC = () => {
     }
   };
 
+  const handleExportToCSV = () => {
+    const fullBackup = createFullBackup();
+    const csvData = convertToCSV(fullBackup.courses);
+    const blob = new Blob([csvData], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `backup-${Date.now()}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast.success("Backup exportado como CSV exitosamente");
+  };
+
+  const handleExportToExcel = () => {
+    const fullBackup = createFullBackup();
+    const workbook = utils.book_new();
+    fullBackup.courses.forEach((course) => {
+      const worksheet = utils.json_to_sheet(course.students);
+      utils.book_append_sheet(workbook, worksheet, course.name);
+    });
+    writeFile(workbook, `backup-${Date.now()}.xlsx`);
+    toast.success("Backup exportado como Excel exitosamente");
+  };
+
+  const convertToCSV = (courses: Course[]): string => {
+    const headers = [
+      "Course Name",
+      "Student First Name",
+      "Student Last Name",
+      "Student Email",
+      "Final Grade",
+    ];
+    const rows = courses.flatMap((course) =>
+      course.students.map((student) => [
+        course.name,
+        student.firstName,
+        student.lastName,
+        student.email,
+        student.finalGrade,
+      ])
+    );
+    return [headers, ...rows].map((row) => row.join(",")).join("\n");
+  };
+
   return (
     <div className="flex flex-col gap-4">
       <div className="flex gap-4">
@@ -229,6 +274,22 @@ export const DataManagement: React.FC = () => {
         >
           <Download className="w-4 h-4" />
           Exportar Backup a Supabase
+        </button>
+        <button
+          onClick={handleExportToCSV}
+          className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-purple-600 rounded-md hover:bg-purple-700"
+          title="Exportar Backup como CSV"
+        >
+          <Download className="w-4 h-4" />
+          Exportar CSV
+        </button>
+        <button
+          onClick={handleExportToExcel}
+          className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-orange-600 rounded-md hover:bg-orange-700"
+          title="Exportar Backup como Excel"
+        >
+          <Download className="w-4 h-4" />
+          Exportar Excel
         </button>
       </div>
       {backups.length > 0 && (

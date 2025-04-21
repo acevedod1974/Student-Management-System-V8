@@ -1,0 +1,117 @@
+@startuml Student Management System
+
+' Main application container
+package "App" {
+  [App] as app
+  [Navigation] as navigation
+}
+
+' Pages
+package "Pages" {
+  [Dashboard] as dashboard
+  [CoursePage] as coursePage
+  [StudentDetailsPage] as studentDetailsPage
+}
+
+' Components
+package "Components" {
+  ' Student related components
+  [StudentForm] as studentForm
+  [StudentCard] as studentCard
+  [StudentDetailsModal] as studentDetailsModal
+  
+  ' Course related components
+  [CourseCard] as courseCard
+  [CourseStats] as courseStats
+  
+  ' Grade & Performance related components
+  [GradesTable] as gradesTable
+  [PerformanceMetricsEditor] as performanceMetricsEditor
+  
+  ' Visualization components
+  [GradeDistributionChart] as gradeDistributionChart
+  [ExamPerformanceChart] as examPerformanceChart
+  [CourseOverviewChart] as courseOverviewChart
+  
+  ' Authentication components
+  [LoginPage] as loginPage
+  [ChangePasswordModal] as changePasswordModal
+  [PrivateRoute] as privateRoute
+
+  ' Data management
+  [DataManagement] as dataManagement
+}
+
+' State Management
+package "Store" {
+  [useCourseStore] as courseStore
+  [useAuthStore] as authStore
+  [useStudentStore] as studentStore
+}
+
+' Types
+package "Types" {
+  [course.ts] as courseTypes
+  [student.ts] as studentTypes
+}
+
+' External Services
+package "External Services" {
+  [supabaseClient] as supabaseClient
+}
+
+' Application entry points
+[index.html] as entryPoint
+[main.tsx] as mainEntry
+
+' Relationships
+entryPoint --> mainEntry : loads
+mainEntry --> app : renders
+
+' App relationships
+app --> navigation : includes
+app --> dashboard : routes
+app --> coursePage : routes
+app --> studentDetailsPage : routes
+app --> loginPage : routes
+app --> privateRoute : uses for protection
+
+' Dashboard relationships
+dashboard --> courseStore : uses
+dashboard --> authStore : uses
+dashboard --> courseCard : displays
+dashboard --> courseOverviewChart : displays
+dashboard --> changePasswordModal : shows
+
+' Course page relationships
+coursePage --> courseStore : uses
+coursePage --> courseStats : displays
+coursePage --> gradeDistributionChart : displays
+coursePage --> examPerformanceChart : displays
+coursePage --> gradesTable : displays
+coursePage --> studentForm : shows
+
+' Student details page relationships
+studentDetailsPage --> courseStore : uses
+studentDetailsPage --> authStore : uses
+studentDetailsPage --> performanceMetricsEditor : shows
+
+' Component relationships
+gradesTable --> courseStore : uses
+studentForm --> courseStore : uses
+studentDetailsModal --> courseTypes : uses
+dataManagement --> courseStore : uses
+dataManagement --> authStore : uses
+dataManagement --> supabaseClient : uses
+
+' Store relationships
+courseStore --> courseTypes : uses
+authStore --> studentTypes : uses
+studentStore --> studentTypes : uses
+
+' Login and auth related
+loginPage --> authStore : uses
+changePasswordModal --> authStore : uses
+privateRoute --> authStore : uses
+
+@enduml

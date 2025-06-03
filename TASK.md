@@ -19,4 +19,4 @@
 
 - [ ] Add tooltips to interactive elements.
 - [ ] Improve UI/UX for mobile devices.
-- [ ] Enhance documentation for developers.
+- [ ] Document key architectural decisions (e.g., modular design, Zustand usage) and create basic contribution guidelines.

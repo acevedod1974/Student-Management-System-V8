@@ -32,7 +32,10 @@ import { Navigation } from "./components/Navigation";
 import { Dashboard } from "./pages/Dashboard";
 import { CoursePage } from "./pages/CoursePage";
 import { StudentDetailsPage } from "./pages/StudentDetailsPage";
-import LoginPage from "./components/LoginPage";
+
+// Import from new feature-based structure
+import { LoginPage } from "./features/auth";
+import PrivateRoute from "./shared/components/PrivateRoute";
 
 const App: React.FC = () => {
   return (
@@ -40,13 +43,36 @@ const App: React.FC = () => {
       <Toaster />
       <Navigation />
       <Routes>
-        <Route path="/" element={<Dashboard />} />
-        <Route path="/course/:courseId" element={<CoursePage />} />
+        {/* Public routes */}
+        <Route path="/login" element={<LoginPage />} />
+
+        {/* Protected routes */}
+        <Route
+          path="/"
+          element={
+            <PrivateRoute>
+              <Dashboard />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/course/:courseId"
+          element={
+            <PrivateRoute>
+              <CoursePage />
+            </PrivateRoute>
+          }
+        />
         <Route
           path="/course/:courseId/student/:studentId"
-          element={<StudentDetailsPage />}
+          element={
+            <PrivateRoute>
+              <StudentDetailsPage />
+            </PrivateRoute>
+          }
         />
-        <Route path="/login" element={<LoginPage />} />
+
+        {/* Fallback route */}
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </Router>

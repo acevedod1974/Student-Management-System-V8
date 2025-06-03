@@ -1,6 +1,8 @@
 // filepath: /src/components/GradesTable.test.tsx
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
+import { Router } from "react-router-dom";
+import { createMemoryHistory } from "history";
 import { GradesTable } from "./GradesTable";
 import { useCourseStore } from "../store/useCourseStore";
 import { Course } from "../types/course";
@@ -39,16 +41,24 @@ beforeEach(() => {
     deleteExam: mockDeleteExam,
   });
 });
-
 test("renders GradesTable component", () => {
-  render(<GradesTable course={mockCourse} onDeleteStudent={jest.fn()} />);
+  const history = createMemoryHistory();
+  render(
+    <Router location={history.location} navigator={history}>
+      <GradesTable course={mockCourse} onDeleteStudent={jest.fn()} />
+    </Router>
+  );
   expect(screen.getByText("John Doe")).toBeInTheDocument();
   expect(screen.getByText("Exam 1")).toBeInTheDocument();
   expect(screen.getByText("80")).toBeInTheDocument();
 });
-
 test("allows editing a grade", () => {
-  render(<GradesTable course={mockCourse} onDeleteStudent={jest.fn()} />);
+  const history = createMemoryHistory();
+  render(
+    <Router location={history.location} navigator={history}>
+      <GradesTable course={mockCourse} onDeleteStudent={jest.fn()} />
+    </Router>
+  );
   fireEvent.click(screen.getByText("80"));
   fireEvent.change(screen.getByDisplayValue("80"), { target: { value: "85" } });
   fireEvent.keyDown(screen.getByDisplayValue("85"), { key: "Enter" });
@@ -59,9 +69,13 @@ test("allows editing a grade", () => {
     85
   );
 });
-
 test("adds a new exam", () => {
-  render(<GradesTable course={mockCourse} onDeleteStudent={jest.fn()} />);
+  const history = createMemoryHistory();
+  render(
+    <Router location={history.location} navigator={history}>
+      <GradesTable course={mockCourse} onDeleteStudent={jest.fn()} />
+    </Router>
+  );
   fireEvent.click(screen.getByText("Agregar Examen"));
   fireEvent.change(screen.getByPlaceholderText("Nombre del nuevo examen"), {
     target: { value: "Exam 3" },

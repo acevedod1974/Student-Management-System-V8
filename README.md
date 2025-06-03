@@ -34,8 +34,8 @@ This project is a comprehensive **Student Management System** built using modern
 1. **Clone the repository**:
 
    ```sh
-   git clone https://github.com/acevedod1974/student-management-system-V4.git
-   cd student-management-system-V4
+   git clone https://github.com/acevedod1974/student-management-system-V8.git
+   cd student-management-system-V8
    ```
 
 2. **Install dependencies**:

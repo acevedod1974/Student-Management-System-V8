@@ -13,10 +13,13 @@
 - [x] Implement course and student management.
 - [x] Add password management functionality.
 - [x] Integrate data visualization using `recharts`.
+- [x] Refactor critical components (e.g., GradesTable).
+- [x] Initial accessibility improvements (e.g., aria-labels).
 
 ### Phase 2: Testing and Optimization
 
-- [ ] Set up Jest for unit and integration testing.
+- [~] Set up Jest for unit and integration testing.
+- [~] Write unit tests for critical components.
 - [ ] Optimize rendering performance.
 - [ ] Conduct accessibility audits.
 

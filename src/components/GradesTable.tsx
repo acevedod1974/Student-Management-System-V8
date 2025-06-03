@@ -27,6 +27,30 @@ import { Course } from "../types/course";
 import { useCourseStore } from "../store/useCourseStore";
 import toast from "react-hot-toast";
 
+// Helper function to create save handlers
+const createSaveHandler = <S, V>(
+  getEditingState: () => S | null,
+  validateAndGetValue: (state: S) => V | null, // Returns validated value or null (and handles error toast)
+  performUpdate: (courseId: string, state: S, validatedValue: V) => void,
+  resetEditingState: () => void,
+  successMessage: string,
+  courseId: string
+) => {
+  return () => {
+    const currentEditingState = getEditingState();
+    if (!currentEditingState) return;
+
+    const validatedValue = validateAndGetValue(currentEditingState);
+    if (validatedValue === null) {
+      return;
+    }
+
+    performUpdate(courseId, currentEditingState, validatedValue);
+    resetEditingState();
+    toast.success(successMessage);
+  };
+};
+
 interface GradesTableProps {
   course: Course;
   onDeleteStudent: (studentId: string) => void;
@@ -57,34 +81,41 @@ export const GradesTable: React.FC<GradesTableProps> = ({
     setEditingCell({ studentId, gradeId, currentValue });
   };
 
-  const handleEditSave = () => {
-    if (!editingCell) return;
+  const handleEditSave = createSaveHandler(
+    () => editingCell,
+    (state) => {
+      const newScore = Number(state.currentValue);
+      if (isNaN(newScore) || newScore < 0 || newScore > 100) {
+        toast.error("La calificación debe ser un número entre 0 y 100");
+        return null;
+      }
+      return newScore;
+    },
+    (courseId, state, validatedScore) => {
+      updateGrade(courseId, state.studentId, state.gradeId, validatedScore);
+    },
+    () => setEditingCell(null),
+    "Calificación actualizada",
+    course.id
+  );
 
-    const newScore = Number(editingCell.currentValue);
-    if (isNaN(newScore) || newScore < 0 || newScore > 100) {
-      toast.error("La calificación debe ser un número entre 0 y 100");
-      return;
-    }
-    updateGrade(
-      course.id,
-      editingCell.studentId,
-      editingCell.gradeId,
-      newScore
-    );
-    setEditingCell(null);
-    toast.success("Calificación actualizada");
-  };
-
-  const handleExamEditSave = () => {
-    if (!editingExam) return;
-    if (!editingExam.name.trim()) {
-      toast.error("El nombre del examen no puede estar vacío");
-      return;
-    }
-    updateExamName(course.id, editingExam.index, editingExam.name);
-    setEditingExam(null);
-    toast.success("Nombre del examen actualizado");
-  };
+  const handleExamEditSave = createSaveHandler(
+    () => editingExam,
+    (state) => {
+      const trimmedName = state.name.trim();
+      if (!trimmedName) {
+        toast.error("El nombre del examen no puede estar vacío");
+        return null;
+      }
+      return trimmedName;
+    },
+    (courseId, state, validatedName) => {
+      updateExamName(courseId, state.index, validatedName);
+    },
+    () => setEditingExam(null),
+    "Nombre del examen actualizado",
+    course.id
+  );
 
   const handleAddExam = () => {
     if (!newExamName.trim()) {

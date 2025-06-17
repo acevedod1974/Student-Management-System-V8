@@ -1,5 +1,4 @@
 import { defineConfig } from "vitest/config";
-import CustomReporter from "./customReporter.mjs";
 
 export default defineConfig({
   test: {
@@ -10,6 +9,5 @@ export default defineConfig({
       // Remove this line if it references the deleted test folder
       // "src/tests/**/*.test.tsx",
     ],
-    reporters: [new CustomReporter()],
   },
 });

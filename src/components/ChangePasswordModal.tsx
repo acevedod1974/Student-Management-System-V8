@@ -79,41 +79,53 @@ const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="current-password"
+              className="block text-sm font-medium text-gray-700"
+            >
               Contraseña Actual
             </label>
             <input
-              type="password"
+              id="current-password"
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
               required
+              type="password"
               value={oldPassword}
               onChange={(e) => setOldPassword(e.target.value)}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="new-password"
+              className="block text-sm font-medium text-gray-700"
+            >
               Nueva Contraseña
             </label>
             <input
-              type="password"
+              id="new-password"
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
               required
+              type="password"
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="confirm-password"
+              className="block text-sm font-medium text-gray-700"
+            >
               Confirmar Nueva Contraseña
             </label>
             <input
-              type="password"
+              id="confirm-password"
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
               required
+              type="password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
             />
           </div>
 

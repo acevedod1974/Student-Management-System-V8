@@ -17,7 +17,9 @@ beforeEach(() => {
 
 test("renders ChangePasswordModal component", () => {
   render(<ChangePasswordModal onClose={jest.fn()} />);
-  expect(screen.getByText("Cambiar Contraseña")).toBeInTheDocument();
+  expect(
+    screen.getByRole("heading", { name: "Cambiar Contraseña" })
+  ).toBeInTheDocument();
 });
 
 test("changes password successfully", () => {
@@ -31,7 +33,7 @@ test("changes password successfully", () => {
   fireEvent.change(screen.getByLabelText("Confirmar Nueva Contraseña"), {
     target: { value: "newPassword" },
   });
-  fireEvent.click(screen.getByText("Cambiar Contraseña"));
+  fireEvent.click(screen.getByRole("button", { name: /Cambiar Contraseña/i }));
   expect(mockChangePassword).toHaveBeenCalledWith(
     "test@example.com",
     "oldPassword",

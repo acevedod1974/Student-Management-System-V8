@@ -13,7 +13,7 @@ const CONTAINER_NAME = "backups";
 
 export const DataManagement: React.FC = () => {
   const { exportData, importData } = useCourseStore();
-  const { studentPasswords } = useAuthStore();
+  const { studentPasswords, setStudentPasswords } = useAuthStore(); // <-- FIXED LINE
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [backups, setBackups] = useState<string[]>([]);
 
@@ -163,32 +163,84 @@ export const DataManagement: React.FC = () => {
 
   const handleRetrieve = async (blobName: string) => {
     try {
+      console.log("Attempting to retrieve blob:", blobName);
       const blobServiceClient = BlobServiceClient.fromConnectionString(
         AZURE_STORAGE_CONNECTION_STRING
       );
       const containerClient =
         blobServiceClient.getContainerClient(CONTAINER_NAME);
       const blockBlobClient = containerClient.getBlockBlobClient(blobName);
-      const downloadBlockBlobResponse = await blockBlobClient.download(0);
-      const blobBody = await downloadBlockBlobResponse.blobBody;
-      const downloaded = await blobBody?.text();
+
+      // Check if blob exists
+      const exists = await blockBlobClient.exists();
+      console.log("Blob exists:", exists);
+      if (!exists) {
+        toast.error("El backup no existe en Azure.");
+        return;
+      }
+
+      const downloadBlockBlobResponse = await blockBlobClient.download();
+      const stream = downloadBlockBlobResponse.readableStreamBody;
+      if (!stream) {
+        console.error("Azure blob stream is undefined.");
+        toast.error("No se pudo descargar el backup (stream vacío).");
+        return;
+      }
+
+      // Read the stream into a Uint8Array
+      const reader = stream.getReader();
+      const chunks = []; // <-- changed from let to const
+      let totalLength = 0;
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        if (value) {
+          chunks.push(value);
+          totalLength += value.length;
+        }
+      }
+      if (chunks.length === 0) {
+        console.error("Azure blob stream returned no data.");
+        toast.error("No se pudo descargar el backup (sin datos).");
+        return;
+      }
+
+      // Concatenate all chunks
+      const allChunks = new Uint8Array(totalLength);
+      let position = 0;
+      for (const chunk of chunks) {
+        allChunks.set(chunk, position);
+        position += chunk.length;
+      }
+
+      // Convert to text
+      const downloaded = new TextDecoder().decode(allChunks);
+
       if (downloaded) {
-        const backup = JSON.parse(downloaded);
+        // Restore data in app state
+        const backupData = JSON.parse(downloaded);
+        importData(JSON.stringify(backupData.courses));
+        setStudentPasswords(backupData.studentPasswords);
 
-        if (!backup.courses || !backup.studentPasswords || !backup.version) {
-          throw new Error("Formato de backup inválido");
-        }
-
-        importData(JSON.stringify(backup.courses));
-        if (backup.studentPasswords) {
-          setStudentPasswords(backup.studentPasswords);
-        }
+        // Trigger file download for the user
+        const blob = new Blob([downloaded], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = blobName;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
 
         toast.success("Datos restaurados exitosamente");
+      } else {
+        console.error("Downloaded backup is empty or invalid.");
+        toast.error("No se pudo descargar el backup (descarga vacía).");
       }
     } catch (error) {
       console.error("Error retrieving backup from Azure Blob Storage:", error);
-      toast.error("Error retrieving backup from Azure Blob Storage");
+      toast.error("Error al restaurar el backup.");
     }
   };
 

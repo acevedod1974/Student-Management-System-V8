@@ -1,6 +1,9 @@
 import { defineConfig } from "vitest/config";
 
 export default defineConfig({
+  server: {
+    allowedHosts: true
+  },
   test: {
     globals: true,
     environment: "jsdom",
